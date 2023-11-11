@@ -11,7 +11,7 @@ Team Registration Proposal
 
 ### Project Title (tentative)
 
-Something fun/funny: Visualizing UFO Sightings Across the U.S.
+Aliens Among U.S.: Visualizing UFO Sightings Across the United States
 
 ### Project Motivation
 
