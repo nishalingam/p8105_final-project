@@ -376,7 +376,9 @@ We then selected only reports from the U.S.A.</p>
 <pre class="r"><code>df_reports = 
   read_csv(&quot;data/nuforc_reports.csv&quot;) |&gt; 
   filter(country %in% c(&quot;USA&quot;, &quot;usa&quot;, &quot;U.S.A.&quot;, &quot;United States of America&quot;)) |&gt; 
-  select(-c(summary, country, stats, report_link))</code></pre>
+  select(-c(summary, country, stats, report_link)) |&gt; 
+  drop_na() |&gt; 
+  sample_n(1000)</code></pre>
 <pre><code>## Rows: 141261 Columns: 13
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -394,6 +396,7 @@ wildly in format [examples?]. To resolve this we standardized the time
 using a regex function that pulled both numeric values and time units
 (seconds, minutes, or hours) out of these reports.</p>
 <!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
+<!-- Also doesn't work for decimal times -->
 <pre class="r"><code>time_str = function(str){
   # Pulls numeric values from string
   num = 
@@ -414,13 +417,16 @@ using a regex function that pulled both numeric values and time units
   #  Combines outputs
   return(num * unit)
 }</code></pre>
+<pre class="r"><code>df_reports = 
+  df_reports |&gt; 
+  mutate(duration_clean = map(duration, time_str))</code></pre>
 </div>
 <div id="distance" class="section level3">
 <h3>Distance</h3>
-<p>We wanted to</p>
-<pre class="r"><code># there might be licensing issues with this dataset
-# https://simplemaps.com/data/us-cities
-df_cities &lt;- read_csv(&quot;data/uscities.csv&quot;) |&gt;
+<p>We wanted to examine how distance from urban centers impacted UFO
+reports. To do this, we used a collection of data on U.S. cities from <a href="https://simplemaps.com/data/us-cities">https://simplemaps.com/data/us-cities</a>,
+and selected only cities with a population over 200,000.</p>
+<pre class="r"><code>df_cities &lt;- read_csv(&quot;data/uscities.csv&quot;) |&gt;
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
@@ -432,21 +438,40 @@ df_cities &lt;- read_csv(&quot;data/uscities.csv&quot;) |&gt;
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<p>We then created a function to…</p>
+<p>We then created a function to identify the distance from the UFO
+report to the closest city with a population over 200,000. We are using
+the <a href="https://en.wikipedia.org/wiki/Haversine_formula">haversine
+formula</a> to calculate distance over a sphere using latitude and
+longitude. This is implemented in R using the <code>haversine()</code>
+function from the <code>pracma</code> package.</p>
 <pre class="r"><code>dist_close_city = function(x,y){
+  # pull in cities data from df_cities
   lat = df_cities |&gt; pull(lat)
   lng = df_cities |&gt; pull(lng)
   n = length(lat)
   
+  # calculate distance to all cities
   vec = vector(mode = &quot;numeric&quot;, length = n)
   for (i in 1:n){
     vec[i] = pracma::haversine(c(x,y),c(lat[i],lng[i]))
   }
   
-  out = min(vec)
+  # determine min distance and change from km to miles
+  out = min(vec) * 0.621
   
   return(out)
 }</code></pre>
+<p>This function was then applied to our dataset to calculate the
+distances, and a <code>location</code> variable was added indicating
+whether the report took place within 5 miles of a large U.S. city.</p>
+<pre class="r"><code>df_reports = 
+  df_reports |&gt; 
+  mutate(dist = map2(city_latitude, city_longitude, dist_close_city),
+         location = case_when(
+           dist &lt;= 5 ~ &quot;urban&quot;,
+           dist &gt; 5 ~ &quot;rural&quot;
+         )) |&gt; 
+  unnest(dist)</code></pre>
 </div>
 <div id="export" class="section level3">
 <h3>Export</h3>

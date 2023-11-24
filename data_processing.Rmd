@@ -25,13 +25,16 @@ We began with a collections of UFO reports pulled from the NUFORC by Timothy Ren
 df_reports = 
   read_csv("data/nuforc_reports.csv") |> 
   filter(country %in% c("USA", "usa", "U.S.A.", "United States of America")) |> 
-  select(-c(summary, country, stats, report_link))
+  select(-c(summary, country, stats, report_link)) |> 
+  drop_na() |> 
+  sample_n(1000)
 ```
 
 ### Duration
 The duration data in the reports was not standardized and varied wildly in format [examples?]. To resolve this we standardized the time using a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports.
 
 <!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
+<!-- Also doesn't work for decimal times -->
 ```{r function for times from strings}
 time_str = function(str){
   # Pulls numeric values from string
@@ -55,34 +58,53 @@ time_str = function(str){
 }
 ```
 
+```{r clean duration}
+df_reports = 
+  df_reports |> 
+  mutate(duration_clean = map(duration, time_str))
+```
 
 
 ### Distance
-We wanted to 
+We wanted to examine how distance from urban centers impacted UFO reports. To do this, we used a collection of data on U.S. cities from [https://simplemaps.com/data/us-cities](https://simplemaps.com/data/us-cities), and selected only cities with a population over 200,000.
 ```{r import distance data}
-# there might be licensing issues with this dataset
-# https://simplemaps.com/data/us-cities
 df_cities <- read_csv("data/uscities.csv") |>
   filter(population > 200000) |> 
   select(city,lat,lng)
 ```
 
-We then created a function to...
+We then created a function to identify the distance from the UFO report to the closest city with a population over 200,000. We are using the [haversine formula](https://en.wikipedia.org/wiki/Haversine_formula) to calculate distance over a sphere using latitude and longitude. This is implemented in R using the `haversine()` function from the `pracma` package.
+
 ```{r define distance function}
 dist_close_city = function(x,y){
+  # pull in cities data from df_cities
   lat = df_cities |> pull(lat)
   lng = df_cities |> pull(lng)
   n = length(lat)
   
+  # calculate distance to all cities
   vec = vector(mode = "numeric", length = n)
   for (i in 1:n){
     vec[i] = pracma::haversine(c(x,y),c(lat[i],lng[i]))
   }
   
-  out = min(vec)
+  # determine min distance and change from km to miles
+  out = min(vec) * 0.621
   
   return(out)
 }
+```
+
+This function was then applied to our dataset to calculate the distances, and a `location` variable was added indicating whether the report took place within 5 miles of a large U.S. city.
+```{r add distance variable}
+df_reports = 
+  df_reports |> 
+  mutate(dist = map2(city_latitude, city_longitude, dist_close_city),
+         location = case_when(
+           dist <= 5 ~ "urban",
+           dist > 5 ~ "rural"
+         )) |> 
+  unnest(dist)
 ```
 
 ### Export
