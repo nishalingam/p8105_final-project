@@ -1,0 +1,18 @@
+name: "Yay internet!"
+output_dir: "."
+navbar:
+  title: "Home"
+  left: 
+    - text: "Data Processing"
+      href: data_processing.html
+    - text: "Analyses"
+      menu:
+      - text: "Trends over space"
+        href: xyz.html
+      - text: "Trends over time"
+        href: xyz.html
+    - text: "Dashboard"
+      href: xyz.html
+output:
+  html_document:
+    theme: flatly
