@@ -1,0 +1,92 @@
+---
+title: "Data Processing"
+output: html_document
+---
+### Load packages
+```{r load packages and default options, message = FALSE}
+# Load packages
+library(tidyverse)
+
+
+# Set default figure options
+knitr::opts_chunk$set(
+  fig.width = 6,
+  out.width = "90%"
+)
+
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+
+```
+
+### Initial Data File
+We began with a collections of UFO reports pulled from the NUFORC by Timothy Renner. This CSV, `nuforc_reports.csv` was obtained from [https://data.world/timothyrenner](https://data.world/timothyrenner). We then selected only reports from the U.S.A.
+
+```{r data import}
+df_reports = 
+  read_csv("data/nuforc_reports.csv") |> 
+  filter(country %in% c("USA", "usa", "U.S.A.", "United States of America")) |> 
+  select(-c(summary, country, stats, report_link))
+```
+
+### Duration
+The duration data in the reports was not standardized and varied wildly in format [examples?]. To resolve this we standardized the time using a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports.
+
+<!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
+```{r function for times from strings}
+time_str = function(str){
+  # Pulls numeric values from string
+  num = 
+    gsub("\\D", "", str) |> 
+    as.numeric()
+  
+  # Detects reported units (sec, min, h)
+  if (str_detect(str, "sec")) {
+    unit = 1
+  } else if (str_detect(str, "min")) {
+    unit = 60
+  } else if (str_detect(str, "h")) {
+    unit = 3600
+  } else {
+    unit = NA
+  }
+  
+  #  Combines outputs
+  return(num * unit)
+}
+```
+
+
+
+### Distance
+We wanted to 
+```{r import distance data}
+# there might be licensing issues with this dataset
+# https://simplemaps.com/data/us-cities
+df_cities <- read_csv("data/uscities.csv") |>
+  filter(population > 200000) |> 
+  select(city,lat,lng)
+```
+
+We then created a function to...
+```{r define distance function}
+dist_close_city = function(x,y){
+  lat = df_cities |> pull(lat)
+  lng = df_cities |> pull(lng)
+  n = length(lat)
+  
+  vec = vector(mode = "numeric", length = n)
+  for (i in 1:n){
+    vec[i] = pracma::haversine(c(x,y),c(lat[i],lng[i]))
+  }
+  
+  out = min(vec)
+  
+  return(out)
+}
+```
+
+### Export
+
+
+### Final Dataset Description
+
