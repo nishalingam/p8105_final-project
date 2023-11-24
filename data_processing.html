@@ -377,8 +377,7 @@ We then selected only reports from the U.S.A.</p>
   read_csv(&quot;data/nuforc_reports.csv&quot;) |&gt; 
   filter(country %in% c(&quot;USA&quot;, &quot;usa&quot;, &quot;U.S.A.&quot;, &quot;United States of America&quot;)) |&gt; 
   select(-c(summary, country, stats, report_link)) |&gt; 
-  drop_na() |&gt; 
-  sample_n(1000)</code></pre>
+  drop_na() </code></pre>
 <pre><code>## Rows: 141261 Columns: 13
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -475,9 +474,34 @@ whether the report took place within 5 miles of a large U.S. city.</p>
 </div>
 <div id="export" class="section level3">
 <h3>Export</h3>
+<p>This clean version of the dataset will be used for our analyses on
+other pages.</p>
+<pre class="r"><code>df_reports |&gt; 
+  write_csv(file = &quot;data/ufo_clean.csv&quot;)</code></pre>
 </div>
 <div id="final-dataset-description" class="section level3">
 <h3>Final Dataset Description</h3>
+<p>The variables in our dataset are:</p>
+<ul>
+<li><code>city</code>: The city where the sighting occurred.</li>
+<li><code>state</code>: The state where the sighting occurred.</li>
+<li><code>date_time</code>: The date and time of the sighting.</li>
+<li><code>shape</code>: The shape of the UFO.</li>
+<li><code>duration</code>: The duration of the UFO sighting.</li>
+<li><code>text</code>: The text of the report.</li>
+<li><code>posted</code>: The time that the report was made.</li>
+<li><code>city_latitude</code>: The latitude of where the sighting
+occured.</li>
+<li><code>city_longitude</code>: The longitude of where the sighting
+occured.</li>
+<li><code>duration_clean</code>: The duration in seconds of the UFO
+sighting.</li>
+<li><code>dist</code>: The distance in miles to the closest city with a
+population of 200,000 or more.</li>
+<li><code>location</code>: Whether the sighting was urban or rural.
+Urban was defined as within 5 miles of a city with population in excess
+of 200,000.</li>
+</ul>
 </div>
 
 

@@ -26,8 +26,7 @@ df_reports =
   read_csv("data/nuforc_reports.csv") |> 
   filter(country %in% c("USA", "usa", "U.S.A.", "United States of America")) |> 
   select(-c(summary, country, stats, report_link)) |> 
-  drop_na() |> 
-  sample_n(1000)
+  drop_na() 
 ```
 
 ### Duration
@@ -108,7 +107,24 @@ df_reports =
 ```
 
 ### Export
-
+This clean version of the dataset will be used for our analyses on other pages. 
+```{r export file}
+df_reports |> 
+  write_csv(file = "data/ufo_clean.csv")
+```
 
 ### Final Dataset Description
+The variables in our dataset are:
 
+* `city`: The city where the sighting occurred.
+* `state`: The state where the sighting occurred.
+* `date_time`: The date and time of the sighting.
+* `shape`: The shape of the UFO.
+* `duration`: The duration of the UFO sighting.
+* `text`: The text of the report.
+* `posted`: The time that the report was made.
+* `city_latitude`: The latitude of where the sighting occured.
+* `city_longitude`: The longitude of where the sighting occured.
+* `duration_clean`: The duration in seconds of the UFO sighting.
+* `dist`: The distance in miles to the closest city with a population of 200,000 or more.
+* `location`: Whether the sighting was urban or rural. Urban was defined as within 5 miles of a city with population in excess of 200,000.
