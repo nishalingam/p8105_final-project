@@ -3,7 +3,7 @@ output_dir: "."
 navbar:
   title: "Home"
   left: 
-    - text: "Data Processing"
+    - text: "Data Bank"
       href: data_processing.html
     - text: "Analyses"
       menu:
@@ -11,6 +11,8 @@ navbar:
         href: xyz.html
       - text: "Trends over time"
         href: xyz.html
+    - text: "Project Report"
+      href: report.html
     - text: "Dashboard"
       href: dashboard.html
     - text: "Shiny"
@@ -25,4 +27,5 @@ navbar:
       href: https://github.com/nishalingam/p8105_final-project
 output:
   html_document:
-    theme: flatly
+    theme: spacelab
+  

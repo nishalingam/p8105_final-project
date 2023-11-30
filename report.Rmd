@@ -1,0 +1,66 @@
+---
+title: "Project Report"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+      collapsed: false
+      smooth_scroll: false
+    number_sections: true
+    theme: flatly
+---
+
+# Project Report: Analyzing UFO Sightings
+
+## Motivation
+
+Our project aims to demystify the phenomenon of UFO sightings through data-driven analysis. The goal is to identify patterns, trends, and anomalies in reported sightings worldwide, providing a clearer picture of this intriguing subject.
+
+## Related Work
+
+Inspired by[National UFO Reporting Center](https://nuforc.org/), researches such as [Faculty perceptions of unidentified aerial phenomena] (https://www.nature.com/articles/s41599-023-01746-3), [The Scientific Investigation of Unidentified Aerial Phenomena (UAP) Using Multimodal Ground-Based Observatories](https://www.worldscientific.com/doi/10.1142/S2251171723400068), our project seeks to expand on existing research using advanced statistical methods and R programming.
+
+## Initial Questions
+
+We started with key questions like:
+
+- What are the hotspots for UFO sightings?
+- How have reports of UFO sightings changed over time?
+- Are there common features in these reports that can be quantitatively analyzed?
+
+As our project progressed, we began to explore more nuanced questions, such as the impact of cultural events on sighting reports and the reliability of sources.
+
+## Data
+
+Our data was sourced from multiple online databases, including the National Reporting Center. The data cleaning process involved handling missing values, standardizing formats, and filtering out unreliable entries.
+
+## Exploratory Analysis
+
+Our exploratory analysis included:
+
+- **Visualizations**: we used `ggplot2` to create visualizations, such as heat maps of sightings and time series plots.
+- **Summaries**: Descriptive statistics provided insights into the distribution and frequency of sightings.
+- This phase led to a re-evaluation of our initial hypotheses and a refinement of our questions.
+
+## Additional Analysis
+
+We conducted formal statistical analyses, including:
+
+- **Cluster Analysis**: To identify hotspots.
+- **Time Series Analysis**: To understand trends over time.
+- Each analysis was accompanied by appropriate statistical tests to validate our findings.
+
+## Discussion
+
+Our findings revealed:
+
+- **Key Hotspots**: Certain areas showed a significantly higher number of reports.
+- **temporal Patterns**: Sightings peaked during specific periods, correlating with popular media events.
+- These insights were both expected and surprising, providing a new perspective on the patterns behind UFO sightings.
+
+---
+
+This project represents a significant step in the quantitative analysis of UFO sightings, offering a unique blend of statistical rigor and intriguing subject matter.
+
+[Back to Home](index.html)

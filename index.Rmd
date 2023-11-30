@@ -1,6 +1,50 @@
 ---
-title: "Hompage"
+title: "UFO Sightings Analysis Project"
 output: html_document
 ---
-This is the index page.
+
+# Welcome to the UFO Sightings Analysis Project
+
+## Unraveling the Mysteries of the Skies
+
+![UFO in the Night Sky](images/ufo_night_sky.jpeg)
+
+Explore the world of unidentified flying objects (UFOs) through the lens of data analysis. Our project leverages the power of R programming to dissect, visualize, and understand the patterns and trends in global UFO sightings.
+
+## What We Do
+
+- **Data Collection**: Gathering extensive UFO sighting reports from various credible sources.
+- **Data Analysis**: Using statistical techniques to uncover trends and patterns in sightings.
+- **Visualization**: Presenting our findings through engaging and interactive visualizations.
+
+## Features
+
+- [**Project Overview**](about.html): Learn about the goals, motivation, and methodologies of our project.
+- [**Detailed Reports**](report.html): Dive into our comprehensive reports detailing our findings and analysis.
+- [**Interacttive Visualizations**](shiny_dashboard.html): Explore interactive maps and graphs showcasing UFO sighting trends.
+- [**Meet the Team**](about_us.html): Get to know the team of data scientists and enthusiasts behind this project.
+
+## Latest Insights
+
+- **Sighting Hotspots Identified**: Discover the regions with the most frequent UFO sightings.
+- **Temporal Trends Uncovered**: Learn about how sightings have varied over time.
+
+## Join the Discussion
+
+Are you a UFO enthusiast, researcher, or just curious? [Join our forum](forum.html) to discuss your experiences, theories, and insights with a community of like-minded individuals.
+
+## Stay Updated
+
+Sign up for our newsletter to get the latest updates on our research and findings.
+
+[Subscribe Here](newsletter.html)
+
+---
+
+Embark on this journey with us as we delve into the unknown, one data point at a time.
+
+[Contact Us](contact.html) | [Resources](resources.html)
+
+![Footer Image: Starry Sky](image/starry_sky_footer.jpg)
+
 
