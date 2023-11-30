@@ -9,7 +9,7 @@ output: html_document
 
 ![UFO in the Night Sky](images/ufo_night_sky.jpeg)
 
-Explore the world of unidentified flying objects (UFOs) through the lens of data analysis. Our project leverages the power of R programming to dissect, visualize, and understand the patterns and trends in global UFO sightings.
+Explore the world of unidentified flying objects (UFOs) through the lens of data analysis. Our project leverages the power of R programming to dissect, visualize, and understand the patterns and trends in the U.S. UFO sightings.
 
 ## What We Do
 
@@ -21,7 +21,7 @@ Explore the world of unidentified flying objects (UFOs) through the lens of data
 
 - [**Project Overview**](about.html): Learn about the goals, motivation, and methodologies of our project.
 - [**Detailed Reports**](report.html): Dive into our comprehensive reports detailing our findings and analysis.
-- [**Interacttive Visualizations**](shiny_dashboard.html): Explore interactive maps and graphs showcasing UFO sighting trends.
+- [**Interactive Visualizations**](shiny_dashboard.html): Explore interactive maps and graphs showcasing UFO sighting trends.
 - [**Meet the Team**](about_us.html): Get to know the team of data scientists and enthusiasts behind this project.
 
 ## Latest Insights
@@ -31,19 +31,13 @@ Explore the world of unidentified flying objects (UFOs) through the lens of data
 
 ## Join the Discussion
 
-Are you a UFO enthusiast, researcher, or just curious? [Join our forum](forum.html) to discuss your experiences, theories, and insights with a community of like-minded individuals.
-
-## Stay Updated
-
-Sign up for our newsletter to get the latest updates on our research and findings.
-
-[Subscribe Here](newsletter.html)
+Are you a UFO enthusiast, researcher, or just curious? [Contact Us](xz3173@cumc.columbia.edu) to discuss your experiences, theories, and insights with a community of like-minded individuals.
 
 ---
 
 Embark on this journey with us as we delve into the unknown, one data point at a time.
 
-[Contact Us](contact.html) | [Resources](resources.html)
+[Resources](https://nuforc.org/)
 
 ![Footer Image: Starry Sky](images/starry_sky_footer.jpg)
 
