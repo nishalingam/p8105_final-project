@@ -12,7 +12,7 @@ navbar:
       - text: "Trends over time"
         href: xyz.html
     - text: "Dashboard"
-      href: xyz.html
+      href: dashboard.html
 output:
   html_document:
     theme: flatly
