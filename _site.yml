@@ -17,9 +17,10 @@ navbar:
       href: shiny_dashboard.html
     - text: "About"
       menu:
-      - text: "About Us"
+      - text: "The Project"
+        href: about.html
+      - text: "Us"
         href: about_us.html
-      href: about.html
     - icon: fa-github fa-lg
       href: https://github.com/nishalingam/p8105_final-project
 output:
