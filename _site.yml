@@ -13,6 +13,15 @@ navbar:
         href: xyz.html
     - text: "Dashboard"
       href: dashboard.html
+    - text: "Shiny"
+      href: shiny_dashboard.html
+    - text: "About"
+      menu:
+      - text: "About Us"
+        href: about_us.html
+      href: about.html
+    - icon: fa-github fa-lg
+      href: https://github.com/nishalingam/p8105_final-project
 output:
   html_document:
     theme: flatly
