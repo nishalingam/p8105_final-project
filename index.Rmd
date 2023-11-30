@@ -45,6 +45,6 @@ Embark on this journey with us as we delve into the unknown, one data point at a
 
 [Contact Us](contact.html) | [Resources](resources.html)
 
-![Footer Image: Starry Sky](image/starry_sky_footer.jpg)
+![Footer Image: Starry Sky](images/starry_sky_footer.jpg)
 
 

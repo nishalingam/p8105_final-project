@@ -1,14 +1,6 @@
 ---
 title: "Project Report"
-output:
-  html_document:
-    toc: true
-    toc_depth: 2
-    toc_float: true
-      collapsed: false
-      smooth_scroll: false
-    number_sections: true
-    theme: flatly
+output: html_document
 ---
 
 # Project Report: Analyzing UFO Sightings

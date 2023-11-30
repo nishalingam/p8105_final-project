@@ -27,5 +27,5 @@ navbar:
       href: https://github.com/nishalingam/p8105_final-project
 output:
   html_document:
-    theme: spacelab
+    theme: flatly
   
