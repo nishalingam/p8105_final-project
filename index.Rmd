@@ -1,6 +1,8 @@
 ---
 title: "UFO Sightings Analysis Project"
-output: html_document
+output: 
+  html_document:
+    after_body: footer.html
 ---
 
 # Welcome to the UFO Sightings Analysis Project
@@ -39,6 +41,6 @@ Embark on this journey with us as we delve into the unknown, one data point at a
 
 [Resources](https://nuforc.org/)
 
-![Footer Image: Starry Sky](images/starry_sky_footer.jpg)
+![Starry Sky](images/starry_sky.jpeg)
 
 
