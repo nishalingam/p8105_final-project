@@ -11,7 +11,7 @@ Our project aims to demystify the phenomenon of UFO sightings through data-drive
 
 ## Related Work
 
-Inspired by[National UFO Reporting Center](https://nuforc.org/), researches such as [Faculty perceptions of unidentified aerial phenomena] (https://www.nature.com/articles/s41599-023-01746-3), [The Scientific Investigation of Unidentified Aerial Phenomena (UAP) Using Multimodal Ground-Based Observatories](https://www.worldscientific.com/doi/10.1142/S2251171723400068), our project seeks to expand on existing research using advanced statistical methods and R programming.
+Inspired by[National UFO Reporting Center](https://nuforc.org/), researches such as [Faculty perceptions of unidentified aerial phenomena](https://www.nature.com/articles/s41599-023-01746-3), [The Scientific Investigation of Unidentified Aerial Phenomena (UAP) Using Multimodal Ground-Based Observatories](https://www.worldscientific.com/doi/10.1142/S2251171723400068), our project seeks to expand on existing research using advanced statistical methods and R programming.
 
 ## Initial Questions
 
