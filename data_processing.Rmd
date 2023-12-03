@@ -26,7 +26,9 @@ df_reports =
   read_csv("data/nuforc_reports.csv") |> 
   filter(country %in% c("USA", "usa", "U.S.A.", "United States of America")) |> 
   select(-c(summary, country, stats, report_link)) |> 
-  drop_na() 
+  drop_na() |> 
+  filter(!(state %in% c("AB", "BC", "MB", "NB", "NS", "SK", "ON"))) |> 
+  filter(city_longitude < -30, city_latitude > 10)
 ```
 
 ### Duration
@@ -37,16 +39,19 @@ The duration data in the reports was not standardized and varied wildly in forma
 ```{r function for times from strings}
 time_str = function(str){
   # Pulls numeric values from string
-  num = 
-    gsub("\\D", "", str) |> 
-    as.numeric()
+  if (str_detect(str, "\\:")) {
+    num = NA
+  } else {
+    num = 
+      str_extract("10 to 30 Min","\\d*\\.*\\d+(?= *[s|m|h|S|M|H])") |> 
+      as.numeric()}
   
   # Detects reported units (sec, min, h)
-  if (str_detect(str, "sec")) {
+  if (str_detect(str, "[S|s][E|e][C|c]")) {
     unit = 1
-  } else if (str_detect(str, "min")) {
+  } else if (str_detect(str, "[M|m][I|i][N|n]")) {
     unit = 60
-  } else if (str_detect(str, "h")) {
+  } else if (str_detect(str, "[H|h]")) {
     unit = 3600
   } else {
     unit = NA

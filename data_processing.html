@@ -346,9 +346,11 @@ We then selected only reports from the U.S.A.</p>
   read_csv(&quot;data/nuforc_reports.csv&quot;) |&gt; 
   filter(country %in% c(&quot;USA&quot;, &quot;usa&quot;, &quot;U.S.A.&quot;, &quot;United States of America&quot;)) |&gt; 
   select(-c(summary, country, stats, report_link)) |&gt; 
-  drop_na() </code></pre>
+  drop_na() |&gt; 
+  filter(!(state %in% c(&quot;AB&quot;, &quot;BC&quot;, &quot;MB&quot;, &quot;NB&quot;, &quot;NS&quot;, &quot;SK&quot;, &quot;ON&quot;))) |&gt; 
+  filter(city_longitude &lt; -30, city_latitude &gt; 10)</code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ───────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -367,16 +369,19 @@ using a regex function that pulled both numeric values and time units
 <!-- Also doesn't work for decimal times -->
 <pre class="r"><code>time_str = function(str){
   # Pulls numeric values from string
-  num = 
-    gsub(&quot;\\D&quot;, &quot;&quot;, str) |&gt; 
-    as.numeric()
+  if (str_detect(str, &quot;\\:&quot;)) {
+    num = NA
+  } else {
+    num = 
+      str_extract(&quot;10 to 30 Min&quot;,&quot;\\d*\\.*\\d+(?= *[s|m|h|S|M|H])&quot;) |&gt; 
+      as.numeric()}
   
   # Detects reported units (sec, min, h)
-  if (str_detect(str, &quot;sec&quot;)) {
+  if (str_detect(str, &quot;[S|s][E|e][C|c]&quot;)) {
     unit = 1
-  } else if (str_detect(str, &quot;min&quot;)) {
+  } else if (str_detect(str, &quot;[M|m][I|i][N|n]&quot;)) {
     unit = 60
-  } else if (str_detect(str, &quot;h&quot;)) {
+  } else if (str_detect(str, &quot;[H|h]&quot;)) {
     unit = 3600
   } else {
     unit = NA
@@ -400,7 +405,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ───────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id
