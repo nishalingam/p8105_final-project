@@ -267,7 +267,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="xyz.html">Trends over space</a>
+      <a href="trend_space.html">Trends over space</a>
     </li>
     <li>
       <a href="xyz.html">Trends over time</a>
@@ -348,7 +348,7 @@ We then selected only reports from the U.S.A.</p>
   select(-c(summary, country, stats, report_link)) |&gt; 
   drop_na() </code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -400,7 +400,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id

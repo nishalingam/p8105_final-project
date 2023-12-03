@@ -12,7 +12,7 @@ navbar:
     - text: "Analyses"
       menu:
       - text: "Trends over space"
-        href: xyz.html
+        href: trend_space.html
       - text: "Trends over time"
         href: xyz.html
     - text: "Project Report"

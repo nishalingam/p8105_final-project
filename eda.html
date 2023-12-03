@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -267,7 +267,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="xyz.html">Trends over space</a>
+      <a href="trend_space.html">Trends over space</a>
     </li>
     <li>
       <a href="xyz.html">Trends over time</a>
@@ -324,12 +324,11 @@ $(document).ready(function () {
 <pre class="r"><code>library(tidyverse)
 library(lubridate)</code></pre>
 <pre class="r"><code>ufo = read_csv(&quot;./data/ufo_clean.csv&quot;)</code></pre>
-<pre><code>## Rows: 100820 Columns: 12
-## ── Column specification ─────────────────────────────────
+<pre><code>## Rows: 100820 Columns: 13
+## ── Column specification ───────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr  (6): city, state, shape, duration, text, location
-## dbl  (3): city_latitude, city_longitude, dist
-## lgl  (1): duration_clean
+## chr  (7): city, state, shape, duration, text, closest_city, location
+## dbl  (4): city_latitude, city_longitude, duration_clean, dist
 ## dttm (2): date_time, posted
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
