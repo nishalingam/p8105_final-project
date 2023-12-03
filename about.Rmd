@@ -1,5 +1,5 @@
 ---
-title: "About the Project"
+title: "About our Project"
 output:
   html_document:
     toc: true
@@ -7,13 +7,12 @@ output:
     theme: flatly
 ---
 
-# Unveiling the Unkonwn: A Journey into UFO Sightings
 
-## Project Overview
+### Project Overview
 
 Welcome to our UFO Sightings Analysis Project. Our mission is to explore, analyze, and visualize reports of unidentified flying objects (UFOs) from around the world. Using advanced statistical statistical techniques and R programming, we delve into decades of sighting reports to uncover patterns and insights.
 
-# Our Goals
+### Our Goals
 
 1. **Data Collection**: Compile a comprehensive dataset of UFO sightings from various sources.
 
@@ -23,17 +22,17 @@ Welcome to our UFO Sightings Analysis Project. Our mission is to explore, analyz
 
 4. **Visualization**: Create interactive visualizations to present our findings in an accessible and engaging manner.
 
-## Methodology
+### Methodology
 
 Our approach combines descriptive statistics, geospatial analysis, and time series analysis. We use R pacages like `dplyr`, `tidyverse` for data manipulation, `ggplot2`, `plotly` for visualization, and `leaflet` for interactive mapping.
 
-## Interesting Findings
+### Interesting Findings
 
 - **Hotspots of Activity**: Our analysis has identified several regions with unusually high numbers of sightings.
 - **Temporal Trends**: We've observed significant increases in sightings around specific dates and events.
 - **Common characteristics**: Analysis of descriptions and reports has revealed common features in many sightings.
 
-## Data Visualization
+### Data Visualization
 
 Here are some of our key visualizations:
 
@@ -41,11 +40,11 @@ Here are some of our key visualizations:
 - **Time Series Analysis**: See how sightings have evolved over time.
 - **Categorical Analysis**: Understand the common characteristics of UFO reports.
 
-## The Team
+### The Team
 
-This project is a collaborative effort of first-year master of biostatistics students in Columbia University Mailman School of Public Health.
+This project is a collaborative effort of first-year M.S. biostatistics students at Columbia University Mailman School of Public Health.
 
-## Further Information
+### Further Information
 
 For more detailed information on our methodologies or to access our data and findings, please visit our [Resources page](resources.html) or [National UFO Reporting Center](https://nuforc.org/).
 
