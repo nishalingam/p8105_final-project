@@ -8,6 +8,7 @@ output: html_document
 library(tidyverse)
 library(knitr)
 library(leaflet)
+library(usmap)
 
 # Set default figure options
 knitr::opts_chunk$set(
@@ -69,5 +70,27 @@ df_ufo |>
   ) |> 
   head(10) |> 
   kable()
+```
+
+
+### U.S. Heatmap
+
+```{r us heatmap}
+df_pop = 
+  read_csv("data/us_census.csv") |>
+  rename(state = abbrv) |> 
+  select(state, census_2010)
+
+df_ufo |> 
+  group_by(state) |> 
+  summarize(n_obs = n()) |> 
+  left_join(df_pop, by = join_by(state)) |> 
+  mutate(obs_per = n_obs/census_2010*100000) |> 
+  plot_usmap(data = _, values = "obs_per", color = "#333333") +
+  labs(
+    title = "UFO Reports per 100,000 Population"
+  ) + 
+  scale_fill_continuous(name = "Reports per 100k") +
+  theme(legend.position = "bottom")
 ```
 
