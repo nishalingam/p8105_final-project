@@ -1,0 +1,60 @@
+---
+title: "Trends in Space"
+output: html_document
+---
+### Load packages
+```{r load packages and default options, message = FALSE}
+# Load packages
+library(tidyverse)
+library(knitr)
+library(leaflet)
+
+# Set default figure options
+knitr::opts_chunk$set(
+  fig.width = 6,
+  out.width = "90%"
+)
+
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+
+```{r data import, include = FALSE}
+df_ufo = read_csv("data/ufo_clean.csv")
+```
+
+
+```{r}
+set.seed(1)
+
+df_ufo |> 
+  sample_frac(0.01) |> 
+  leaflet() |> 
+  addProviderTiles(providers$CartoDB.Positron) |> 
+  addCircleMarkers(~city_longitude,~city_latitude, radius = 1) 
+```
+
+
+### Rural vs Urban Differences
+Whether
+```{r urban vs rural}
+df_ufo |> 
+  group_by(location, shape) |> 
+  summarize(n_obs = n()) |> 
+  arrange(desc(n_obs)) |> 
+  pivot_wider(
+    names_from = "location",
+    values_from = "n_obs"
+  ) |> 
+  head(10) |> 
+  kable()
+```
+
