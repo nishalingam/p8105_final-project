@@ -6,9 +6,9 @@ navbar:
     - text: "Data Bank"
       menu:
       - text: "Data Processing"
-      - href: data_processing.html
+      - href: data.processing.html
       - text: "EDA"
-      - href: eda_html
+      - href: eda.html
     - text: "Analyses"
       menu:
       - text: "Trends over space"

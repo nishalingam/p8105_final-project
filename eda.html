@@ -253,11 +253,11 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li class="dropdown-header">Data Processing</li>
     <li>
-      <a href="data_processing.html"></a>
+      <a href="data.processing.html"></a>
     </li>
     <li class="dropdown-header">EDA</li>
     <li>
-      <a href="eda_html"></a>
+      <a href="eda.html"></a>
     </li>
   </ul>
 </li>
@@ -323,7 +323,115 @@ $(document).ready(function () {
 </div>
 
 
+<pre class="r"><code>library(tidyverse)
+library(lubridate)</code></pre>
+<pre class="r"><code>ufo = read_csv(&quot;./data/ufo_clean.csv&quot;)</code></pre>
+<pre><code>## Rows: 100820 Columns: 12
+## ── Column specification ─────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (6): city, state, shape, duration, text, location
+## dbl  (3): city_latitude, city_longitude, dist
+## lgl  (1): duration_clean
+## dttm (2): date_time, posted
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># Create a new subset of data for further analysis
+ufo_subset = ufo |&gt;
+  select(city, state, date_time, shape, city_latitude, city_longitude, dist, location)</code></pre>
+<pre class="r"><code># Create a new column with date only
+ufo_subset = ufo_subset |&gt;
+  mutate(date = as.Date(date_time),
+         year_month = format(date, &quot;%Y-%m&quot;))</code></pre>
+<pre class="r"><code># Creating a year_month column
+monthly_trends = ufo_subset |&gt;
+  count(year_month) |&gt;
+  arrange(year_month)</code></pre>
+<div id="frequency-of-sightings-per-year" class="section level1">
+<h1>Frequency of sightings per year</h1>
+<pre class="r"><code># Convert date to year 
+ufo_subset |&gt;
+  mutate(
+    year = format(as.Date(date), &quot;%y&quot;)) |&gt;
+  count(year) |&gt;
+  ggplot(aes(x = as.numeric(year), y = n)) +
+  geom_line(color = &quot;blue&quot;) +
+  labs(title = &quot;UFO Sightings Per Year&quot;,
+       x = &quot;Year&quot;,
+       y = &quot;Numberof Sightings&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="frequency-of-sightings-per-month" class="section level1">
+<h1>Frequency of sightings per month</h1>
+<pre class="r"><code># Convert date to month
+ufo_subset |&gt;
+  mutate(
+    month = format(as.Date(date_time), &quot;%m&quot;)) |&gt;
+  count(month) |&gt;
+  ggplot(aes(x = as.numeric(month), y = n)) +
+  geom_line(color = &quot;blue&quot;) +
+  labs(title = &quot;UFO Sightings Per Month&quot;,
+       x = &quot;Month&quot;,
+       y = &quot;Numberof Sightings&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="frequency-sightings-by-hour-of-day" class="section level1">
+<h1>Frequency sightings by hour of day</h1>
+<pre class="r"><code>ufo_subset |&gt;
+  mutate(hour = hour(ymd_hms(date_time, quiet = TRUE))) |&gt;
+  filter(!is.na(hour)) |&gt;
+  count(hour) |&gt;
+  ggplot(aes(x = as.factor(hour), y = n, group = 1)) +
+  geom_line(color = &quot;red&quot;) +
+  geom_point(color = &quot;red&quot;) +
+  labs(title = &quot;UFO Sightings by Hour of Day&quot;,
+       x = &quot;Hour of Day&quot;,
+       y = &quot;Number of Sightings&quot;) +
+  theme_minimal() +
+  scale_x_discrete(breaks = 0:23, labels = 0:23)</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="shape-analysis" class="section level1">
+<h1>Shape Analysis</h1>
+<pre class="r"><code>shape_distribution = ufo_subset |&gt;
+  count(shape) |&gt;
+  arrange(desc(n))
 
+ggplot(shape_distribution, aes(x = reorder(shape, n), y = n)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(title = &quot;Distribution of UFO Shapes&quot;, x = &quot;Shape&quot;, y = &quot;Count&quot;) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="distance-analysis" class="section level1">
+<h1>Distance Analysis</h1>
+<pre class="r"><code>ggplot(ufo_subset, aes(x = dist)) +
+  geom_histogram(bins = 30, fill = &quot;blue&quot;, alpha = 0.7) +
+  labs(title = &quot;Distribution of Observation Distances&quot;, x = &quot;Distance&quot;, y = &quot;Count&quot;)</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="distribution-by-state" class="section level1">
+<h1>Distribution by State</h1>
+<pre class="r"><code>ufo_subset |&gt;
+  count(state, name = &quot;count&quot;) |&gt;
+  arrange(desc(count)) |&gt;
+  slice_head(n = 5) |&gt;
+  ggplot(aes(x = reorder(state, count),
+             y = count,
+             fill = state)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(title = &quot;Top 5 States by UFO Sightings&quot;,
+       x = &quot;state&quot;,
+       y = &quot;count&quot;) +
+  theme_minimal() +
+  coord_flip() +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="eda_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code># Export a new csv file
+write.csv(ufo_subset, file = &quot;./data/ufo_subset.csv&quot;, row.names = FALSE)</code></pre>
+</div>
 
 
 
