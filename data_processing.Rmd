@@ -43,7 +43,7 @@ time_str = function(str){
     num = NA
   } else {
     num = 
-      str_extract("10 to 30 Min","\\d*\\.*\\d+(?= *[s|m|h|S|M|H])") |> 
+      str_extract(str,"\\d*\\.*\\d+(?= *[s|m|h|S|M|H])") |> 
       as.numeric()}
   
   # Detects reported units (sec, min, h)

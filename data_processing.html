@@ -373,7 +373,7 @@ using a regex function that pulled both numeric values and time units
     num = NA
   } else {
     num = 
-      str_extract(&quot;10 to 30 Min&quot;,&quot;\\d*\\.*\\d+(?= *[s|m|h|S|M|H])&quot;) |&gt; 
+      str_extract(str,&quot;\\d*\\.*\\d+(?= *[s|m|h|S|M|H])&quot;) |&gt; 
       as.numeric()}
   
   # Detects reported units (sec, min, h)
@@ -394,6 +394,10 @@ using a regex function that pulled both numeric values and time units
   df_reports |&gt; 
   mutate(duration_clean = map(duration, time_str)) |&gt; 
   unnest(duration_clean)</code></pre>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `duration_clean = map(duration, time_str)`.
+## Caused by warning in `.f()`:
+## ! NAs introduced by coercion</code></pre>
 </div>
 <div id="distance" class="section level3">
 <h3>Distance</h3>
