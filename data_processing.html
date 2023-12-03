@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -348,7 +348,7 @@ We then selected only reports from the U.S.A.</p>
   select(-c(summary, country, stats, report_link)) |&gt; 
   drop_na() </code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ─────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -387,7 +387,8 @@ using a regex function that pulled both numeric values and time units
 }</code></pre>
 <pre class="r"><code>df_reports = 
   df_reports |&gt; 
-  mutate(duration_clean = map(duration, time_str))</code></pre>
+  mutate(duration_clean = map(duration, time_str)) |&gt; 
+  unnest(duration_clean)</code></pre>
 </div>
 <div id="distance" class="section level3">
 <h3>Distance</h3>
@@ -399,7 +400,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ─────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id
@@ -417,30 +418,38 @@ function from the <code>pracma</code> package.</p>
   # pull in cities data from df_cities
   lat = df_cities |&gt; pull(lat)
   lng = df_cities |&gt; pull(lng)
+  cities = df_cities |&gt; pull(city)
   n = length(lat)
   
   # calculate distance to all cities
   vec = vector(mode = &quot;numeric&quot;, length = n)
+  cit_vec = vector(mod = &quot;numeric&quot;, length = n)
+  
   for (i in 1:n){
     vec[i] = pracma::haversine(c(x,y),c(lat[i],lng[i]))
   }
   
   # determine min distance and change from km to miles
-  out = min(vec) * 0.621
+  out = tibble(
+    dist_km = min(vec),
+    closest_city = cities[match(dist_km, vec)],
+    dist = dist_km * 0.621
+  ) |&gt; 
+    select(-dist_km)
   
   return(out)
 }</code></pre>
 <p>This function was then applied to our dataset to calculate the
 distances, and a <code>location</code> variable was added indicating
 whether the report took place within 5 miles of a large U.S. city.</p>
-<pre class="r"><code>df_reports = 
+<pre class="r"><code>df_reports =
   df_reports |&gt; 
-  mutate(dist = map2(city_latitude, city_longitude, dist_close_city),
-         location = case_when(
+  mutate(out = map2(city_latitude, city_longitude, dist_close_city)) |&gt; 
+  unnest(out) |&gt; 
+  mutate(location = case_when(
            dist &lt;= 5 ~ &quot;urban&quot;,
            dist &gt; 5 ~ &quot;rural&quot;
-         )) |&gt; 
-  unnest(dist)</code></pre>
+         )) </code></pre>
 </div>
 <div id="export" class="section level3">
 <h3>Export</h3>

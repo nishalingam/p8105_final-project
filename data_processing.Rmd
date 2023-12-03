@@ -60,7 +60,8 @@ time_str = function(str){
 ```{r clean duration}
 df_reports = 
   df_reports |> 
-  mutate(duration_clean = map(duration, time_str))
+  mutate(duration_clean = map(duration, time_str)) |> 
+  unnest(duration_clean)
 ```
 
 
@@ -79,16 +80,24 @@ dist_close_city = function(x,y){
   # pull in cities data from df_cities
   lat = df_cities |> pull(lat)
   lng = df_cities |> pull(lng)
+  cities = df_cities |> pull(city)
   n = length(lat)
   
   # calculate distance to all cities
   vec = vector(mode = "numeric", length = n)
+  cit_vec = vector(mod = "numeric", length = n)
+  
   for (i in 1:n){
     vec[i] = pracma::haversine(c(x,y),c(lat[i],lng[i]))
   }
   
   # determine min distance and change from km to miles
-  out = min(vec) * 0.621
+  out = tibble(
+    dist_km = min(vec),
+    closest_city = cities[match(dist_km, vec)],
+    dist = dist_km * 0.621
+  ) |> 
+    select(-dist_km)
   
   return(out)
 }
@@ -96,14 +105,14 @@ dist_close_city = function(x,y){
 
 This function was then applied to our dataset to calculate the distances, and a `location` variable was added indicating whether the report took place within 5 miles of a large U.S. city.
 ```{r add distance variable}
-df_reports = 
+df_reports =
   df_reports |> 
-  mutate(dist = map2(city_latitude, city_longitude, dist_close_city),
-         location = case_when(
+  mutate(out = map2(city_latitude, city_longitude, dist_close_city)) |> 
+  unnest(out) |> 
+  mutate(location = case_when(
            dist <= 5 ~ "urban",
            dist > 5 ~ "rural"
-         )) |> 
-  unnest(dist)
+         )) 
 ```
 
 ### Export
