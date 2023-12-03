@@ -4,7 +4,11 @@ navbar:
   title: "Home"
   left: 
     - text: "Data Bank"
-      href: data_processing.html
+      menu:
+      - text: "Data Processing"
+      - href: data_processing.html
+      - text: "EDA"
+      - href: eda_html
     - text: "Analyses"
       menu:
       - text: "Trends over space"
