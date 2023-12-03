@@ -1,0 +1,161 @@
+---
+title: "Trend Analysis"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+### Read in cleaned data
+
+```{r}
+## generate date information separately for latter trend analysis
+
+ufo_trend <- read_csv("data/ufo_clean.csv")|>
+  #slice(1:50000)|>
+  mutate(
+    year = year(date_time),
+    month = month(date_time),
+    hour = hour(date_time),
+    weekday = factor(weekdays(date_time),
+                     levels = c("Sunday", 
+                         "Monday", 
+                         "Tuesday" , 
+                         "Wednesday", 
+                         "Thursday", 
+                         "Friday", 
+                         "Saturday"))
+  )
+
+```
+
+### Observations trend of states over years
+
+```{r}
+ufo_trend_plot <- function(variable,data){
+  trend <- data |>
+    group_by(state,variable)|>
+    summarise(
+      obs = n()
+    )|>
+    ungroup()
+
+  trend |>
+    ggplot(aes(x = variable, y = obs))+
+    geom_smooth(color = "red")+
+    geom_line(aes(color = state))+
+    theme(legend.position = "none")+
+    scale_x_continuous(breaks = 1:12, labels = month.abb)
+}
+```
+
+
+```{r}
+ufo_year_trend <- ufo_trend |>
+  group_by(state,year)|>
+  summarise(
+    obs = n()
+  )|>
+  ungroup()
+
+ufo_year_trend |> arrange(desc(obs)) |> pull(state) |> unique()
+
+ufo_year_trend |> group_by(state) |> summarise(obs_sum = sum(obs))|> arrange(desc(obs_sum)) |> head(10) |> pull(obs_sum) |> range()
+
+ufo_year_trend |>
+  ggplot(aes(x = year, y = obs, color = state))+
+  geom_line()+
+  theme(legend.position = "none")
+```
+
+##### From the plot of each state's UFO observations over year, we can see that:
+
+* The total observations of UFO across states went through a rapid increase right after 1995. 
+  * This may result from the rapid development of Internet at the end of 20th century.
+* Most states' observations peaked at around 2014. 
+* There was a sharp decline of observations at year 2018 for almost all states
+* UFO reports in `r ufo_year_trend |> filter(obs == max(obs)) |> pull(state)` was far more than other states in every year after 1995. 
+
+### Observations trend of states over months
+
+```{r}
+ufo_month_trend <- ufo_trend |>
+  group_by(state,month)|>
+  summarise(
+    obs = n()
+  )|>
+  ungroup()
+
+ufo_month_trend |>
+  ggplot(aes(x = month, y = obs))+
+  geom_smooth(color = "red")+
+  geom_line(aes(color = state))+
+  theme(legend.position = "none")+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)
+```
+
+* The smooth line indicating a trend of average UFO observations in all states of each month.
+* The observations slightly went down from January to March, then increased and peaked around Aug, and declined till Dec.
+* For most states, summer is when most UFO observations were reported. However, there are some exceptions. UFO observations in state FL peaked at December.
+
+### Obeservations trend of states over hours
+
+```{r}
+ufo_hour_trend <- ufo_trend |>
+  group_by(state,hour)|>
+  summarise(
+    obs = n()
+  )|>
+  ungroup()
+
+ufo_hour_trend |>
+  ggplot(aes(x = hour, y = obs))+
+  geom_line(aes(color = state))+
+  geom_smooth(color = "red")+
+  theme(legend.position = "none")+
+  labs(
+    title = "Observations trend of states over daily hours"
+  )
+```
+
+* The average observations during 6:00 to 15:00 were relatively low.
+* There was an sharp increase of average observations starting from 15:00 and peaked at around 21:00
+* The average observations started to decline slowly after 21:00  
+
+### Obeservations trend of states over weekdays
+
+```{r}
+ufo_weekday_trend <- ufo_trend |>
+  group_by(state, weekday)|>
+  summarise(
+    obs = n()
+  )|>
+  ungroup()
+
+ufo_weekday_trend |>
+  ggplot(aes(x = weekday, y = obs))+
+  geom_col()+
+  geom_smooth(color = "red")+
+  theme(legend.position = "none")
+```
+
