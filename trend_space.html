@@ -433,25 +433,29 @@ St. Louis is a bit of an outlier in this regard.</p>
 </div>
 <div id="rural-vs-urban-differences" class="section level3">
 <h3>Rural vs Urban Differences</h3>
+<div id="ufo-shape" class="section level4">
+<h4>UFO Shape</h4>
 <p>Whether</p>
-<pre class="r"><code>df_ufo |&gt; 
+<pre class="r"><code>df_loc_shape = 
+  df_ufo |&gt; 
   group_by(location, shape) |&gt; 
   summarize(n_obs = n()) |&gt; 
   arrange(desc(n_obs)) |&gt; 
   pivot_wider(
     names_from = &quot;location&quot;,
     values_from = &quot;n_obs&quot;
-  ) |&gt; 
-  head(10) |&gt; 
-  kable()</code></pre>
+  ) </code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;location&#39;. You can override using the
 ## `.groups` argument.</code></pre>
+<pre class="r"><code>df_loc_shape |&gt; 
+  head(10) |&gt; 
+  kable(col.names = c(&quot;Shape&quot;, &quot;Rural&quot;, &quot;Urban&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">shape</th>
-<th align="right">rural</th>
-<th align="right">urban</th>
+<th align="left">Shape</th>
+<th align="right">Rural</th>
+<th align="right">Urban</th>
 </tr>
 </thead>
 <tbody>
@@ -507,6 +511,58 @@ St. Louis is a bit of an outlier in this regard.</p>
 </tr>
 </tbody>
 </table>
+<p>To analyze whether descriptions of UFOs varied between these groups,
+we conducted a Chi-Squared test of homogeneity.</p>
+<pre class="r"><code>df_loc_shape |&gt; 
+  select(-shape) |&gt; 
+  as.matrix() |&gt; 
+  chisq.test() </code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  as.matrix(select(df_loc_shape, -shape))
+## X-squared = 72.097, df = 22, p-value = 3.082e-07</code></pre>
+<p>We see that there is a significant relationship between the
+<code>shape</code> of the UFO and whether the sighting was in a rural or
+urban setting.</p>
+</div>
+<div id="encounter-duration" class="section level4">
+<h4>Encounter Duration</h4>
+<pre class="r"><code>df_ufo |&gt; 
+  drop_na(duration_clean) |&gt; 
+  #filter(duration_clean &lt;=7200) |&gt;
+  mutate(log_dur = log(duration_clean)) |&gt; 
+  ggplot(aes(x = log_dur, fill = location, color = &quot;black&quot;)) +
+  geom_histogram(alpha = 0.5) </code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 6 rows containing non-finite values (`stat_bin()`).</code></pre>
+<p><img src="trend_space_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+<pre class="r"><code>df_ufo |&gt; 
+  filter(duration_clean &gt;30000) |&gt; 
+  view()</code></pre>
+<pre class="r"><code>df_ufo |&gt; 
+  drop_na(duration_clean) |&gt; 
+  filter(duration_clean &lt;= 7200) |&gt; 
+  t.test(duration_clean ~ location, data = _)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  duration_clean by location
+## t = 6.2378, df = 38429, p-value = 4.485e-10
+## alternative hypothesis: true difference in means between group rural and group urban is not equal to 0
+## 95 percent confidence interval:
+##  38.34605 73.48570
+## sample estimates:
+## mean in group rural mean in group urban 
+##            625.4033            569.4874</code></pre>
+<p>Even though the data are highly right-skewed, there are enough
+observations that it is still valid to compare the data using a t-test.
+The results of this test suggest that there is a significant difference
+between the average duration of the rural UFO sightings and the urban
+UFO sightings. We estimate that sightings in rural areas last for
+approximately one minute longer than sightings in urban areas (10.5
+minutes vs. 9.5 minutes).</p>
+</div>
 </div>
 <div id="u.s.-heatmap" class="section level3">
 <h3>U.S. Heatmap</h3>

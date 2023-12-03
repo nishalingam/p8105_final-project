@@ -58,19 +58,59 @@ df_ufo |>
 The two cities with the most UFO sightings nearby are are Seattle, WA and Portland, OR. These are large cities but not the largest in the U.S. The West Coast seems to have more reports than other areas, though St. Louis is a bit of an outlier in this regard.
 
 ### Rural vs Urban Differences
+
+#### UFO Shape
 Whether
 ```{r urban vs rural}
-df_ufo |> 
+df_loc_shape = 
+  df_ufo |> 
   group_by(location, shape) |> 
   summarize(n_obs = n()) |> 
   arrange(desc(n_obs)) |> 
   pivot_wider(
     names_from = "location",
     values_from = "n_obs"
-  ) |> 
+  ) 
+
+df_loc_shape |> 
   head(10) |> 
-  kable()
+  kable(col.names = c("Shape", "Rural", "Urban"))
 ```
+
+To analyze whether descriptions of UFOs varied between these groups, we conducted a Chi-Squared test of homogeneity.
+
+```{r chisq shape loc}
+df_loc_shape |> 
+  select(-shape) |> 
+  as.matrix() |> 
+  chisq.test() 
+```
+
+We see that there is a significant relationship between the `shape` of the UFO and whether the sighting was in a rural or urban setting.
+
+#### Encounter Duration
+
+```{r}
+df_ufo |> 
+  drop_na(duration_clean) |> 
+  #filter(duration_clean <=7200) |>
+  mutate(log_dur = log(duration_clean)) |> 
+  ggplot(aes(x = log_dur, fill = location, color = "black")) +
+  geom_histogram(alpha = 0.5) 
+
+df_ufo |> 
+  filter(duration_clean >30000) |> 
+  view()
+```
+
+```{r}
+df_ufo |> 
+  drop_na(duration_clean) |> 
+  filter(duration_clean <= 7200) |> 
+  t.test(duration_clean ~ location, data = _)
+```
+
+Even though the data are highly right-skewed, there are enough observations that it is still valid to compare the data using a t-test. The results of this test suggest that there is a significant difference between the average duration of the rural UFO sightings and the urban UFO sightings. We estimate that sightings in rural areas last for approximately one minute longer than sightings in urban areas (10.5 minutes vs. 9.5 minutes).
 
 
 ### U.S. Heatmap
