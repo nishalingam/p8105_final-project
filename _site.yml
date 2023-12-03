@@ -20,7 +20,7 @@ navbar:
     - text: "Dashboard"
       href: dashboard.html
     - text: "Shiny"
-      href: shiny_dashboard.html
+      href: https://xz3173.shinyapps.io/shiny_dashboard/
     - text: "About"
       menu:
       - text: "The Project"
