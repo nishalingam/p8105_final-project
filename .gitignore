@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+data/.DS_Store
+.DS_store
+
+data/nuforc_reports.csv
+data/ufo_clean.csv
