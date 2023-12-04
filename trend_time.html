@@ -11,7 +11,7 @@
 
 
 
-<title>Trend Time</title>
+<title>Trend Over Time</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -316,7 +316,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Trend Time</h1>
+<h1 class="title toc-ignore">Trend Over Time</h1>
 
 </div>
 
@@ -393,7 +393,7 @@ ufo_shape_plot &lt;- function(df,var_time){
 
 ufo_year_trend_plot</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
 <p>From the plot of each state’s UFO observations over year, we can see
 that:</p>
 <ul>
@@ -421,7 +421,7 @@ then.</p>
 
 ufo_year_trend_plot_rm</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
 <p>The overall observations trend changed little compared to the
 previous one.</p>
 </div>
@@ -449,7 +449,7 @@ ufo_month_trend_plot_rm &lt;-
 plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
 ## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 <ul>
 <li>The smooth line indicating a trend of average UFO observations in
 all states of each month.</li>
@@ -484,7 +484,7 @@ ufo_hour_trend_plot_rm &lt;-
 plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;
 ## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <ul>
 <li>The average observations during 6:00 to 15:00 were relatively
 low.</li>
@@ -524,7 +524,7 @@ ufo_weekday_plot_rm&lt;-
 plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
 ## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 <p>The overall trend for all states is not clear. For state CA,the
 observations declined from Sunday to Monday, then increased during
 weekdays and peaked at Saturday.</p>
@@ -544,7 +544,7 @@ observations over weekdays.</p>
   labs(
     title = &quot;Bar plot of observations trend of states over weekdays&quot;
   )</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 <p>The bar plot visualized the trend more clear. The overall
 observations decreased from Sunday to Monday, then increased day by day
 and reached the highest values at Saturday.</p>
@@ -582,7 +582,7 @@ we extract the most observed 10 shapes to see the trend over year.</p>
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
   labs(title = &quot;Spaghetti plot of observations trend of states over years&quot;)</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 <p>For most observed shapes, they have similar trend over year:the
 observations started to increase rapidly in 1990s and, then peaked at
 around 2014, followed by an sharp decrease in 2018 and another peak in
