@@ -11,7 +11,7 @@
 
 
 
-<title>Trend Analysis</title>
+<title>Trend Time</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -244,8 +244,20 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="data_processing.html">Data Bank</a>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Data Bank
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="data_processing.html">Data Processing</a>
+    </li>
+    <li>
+      <a href="eda.html">EDA</a>
+    </li>
+  </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -255,7 +267,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="xyz.html">Trends over space</a>
+      <a href="trend_space.html">Trends over space</a>
     </li>
     <li>
       <a href="xyz.html">Trends over time</a>
@@ -269,7 +281,7 @@ $(document).ready(function () {
   <a href="dashboard.html">Dashboard</a>
 </li>
 <li>
-  <a href="shiny_dashboard.html">Shiny</a>
+  <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Shiny</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -304,13 +316,11 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Trend Analysis</h1>
+<h1 class="title toc-ignore">Trend Time</h1>
 
 </div>
 
 
-<div id="read-in-cleaned-data" class="section level3">
-<h3>Read in cleaned data</h3>
 <pre class="r"><code>## generate date information separately for latter trend analysis
 
 ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
@@ -338,83 +348,107 @@ ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div id="observations-trend-of-states-over-years"
+<div id="trend-over-time-by-states" class="section level2">
+<h2>Trend over time by states</h2>
+<div id="observations-trend-over-years-by-states"
 class="section level3">
-<h3>Observations trend of states over years</h3>
-<pre class="r"><code>ufo_trend_plot &lt;- function(variable,data){
-  trend &lt;- data |&gt;
-    group_by(state,variable)|&gt;
-    summarise(
-      obs = n()
-    )|&gt;
-    ungroup()
-
-  trend |&gt;
-    ggplot(aes(x = variable, y = obs))+
-    geom_smooth(color = &quot;red&quot;)+
-    geom_line(aes(color = state))+
-    theme(legend.position = &quot;none&quot;)+
-    scale_x_continuous(breaks = 1:12, labels = month.abb)
-}</code></pre>
-<pre class="r"><code>ufo_year_trend &lt;- ufo_trend |&gt;
-  group_by(state,year)|&gt;
+<h3>Observations trend over years by states</h3>
+<p>To look into the UFO observations trend over years by states, here we
+take spaghetti plots to view the total observations of each state
+throughout years.</p>
+<pre class="r"><code>## function to generate data for trend analysis  
+ufo_trend_var &lt;- function(df,var1,var2){  
+  tidy_data &lt;- df |&gt;
+  group_by(!!sym(var1), !!sym(var2))|&gt;
   summarise(
     obs = n()
   )|&gt;
-  ungroup()</code></pre>
+  ungroup()
+  
+  return(tidy_data)
+}
+
+ufo_trend_plot &lt;- function(df,var_time,var_group){
+  trendplot &lt;- df|&gt;
+  ggplot(aes(x = !!sym(var_time), y = obs, color = !!sym(var_group)))+
+  geom_line()+
+  theme(legend.position = &quot;none&quot;)+
+  geom_smooth(color = &quot;red&quot;)
+  
+  return(trendplot)
+}
+
+ufo_shape_plot &lt;- function(df,var_time){
+  trendplot &lt;- df|&gt;
+  ggplot(aes(x = !!sym(var_time), y = obs, color = shape))+
+  geom_line()
+  
+  return(trendplot)
+}</code></pre>
+<pre class="r"><code>ufo_year_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;year&quot;)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_year_trend |&gt; arrange(desc(obs)) |&gt; pull(state) |&gt; unique()</code></pre>
-<pre><code>##  [1] &quot;CA&quot; &quot;FL&quot; &quot;WA&quot; &quot;NY&quot; &quot;TX&quot; &quot;OH&quot; &quot;PA&quot; &quot;AZ&quot; &quot;IL&quot; &quot;NC&quot; &quot;SC&quot; &quot;GA&quot; &quot;OR&quot; &quot;MI&quot; &quot;MA&quot;
-## [16] &quot;VA&quot; &quot;CO&quot; &quot;WI&quot; &quot;MO&quot; &quot;CT&quot; &quot;TN&quot; &quot;IN&quot; &quot;NJ&quot; &quot;MN&quot; &quot;MD&quot; &quot;AL&quot; &quot;NM&quot; &quot;ID&quot; &quot;NV&quot; &quot;LA&quot;
-## [31] &quot;IA&quot; &quot;KY&quot; &quot;ME&quot; &quot;UT&quot; &quot;OK&quot; &quot;NH&quot; &quot;MT&quot; &quot;KS&quot; &quot;AR&quot; &quot;WV&quot; &quot;VT&quot; &quot;RI&quot; &quot;AK&quot; &quot;HI&quot; &quot;MS&quot;
-## [46] &quot;NE&quot; &quot;DE&quot; &quot;SD&quot; &quot;WY&quot; &quot;ND&quot; &quot;DC&quot; &quot;AB&quot; &quot;BC&quot; &quot;MB&quot; &quot;NB&quot; &quot;NS&quot; &quot;ON&quot; &quot;SK&quot;</code></pre>
-<pre class="r"><code>ufo_year_trend |&gt; group_by(state) |&gt; summarise(obs_sum = sum(obs))|&gt; arrange(desc(obs_sum)) |&gt; head(10) |&gt; pull(obs_sum) |&gt; range()</code></pre>
-<pre><code>## [1]  2900 12961</code></pre>
-<pre class="r"><code>ufo_year_trend |&gt;
-  ggplot(aes(x = year, y = obs, color = state))+
-  geom_line()+
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
-<div
-id="from-the-plot-of-each-states-ufo-observations-over-year-we-can-see-that"
-class="section level5">
-<h5>From the plot of each state’s UFO observations over year, we can see
-that:</h5>
+<pre class="r"><code>ufo_year_trend_plot &lt;- ufo_trend_plot(ufo_year_trend,&quot;year&quot;,&quot;state&quot;)+
+  labs(title = &quot;Spaghetti plot of observations trend of states over years&quot;)
+
+ufo_year_trend_plot</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+<p>From the plot of each state’s UFO observations over year, we can see
+that:</p>
 <ul>
 <li>The total observations of UFO across states went through a rapid
-increase right after 1995.
-<ul>
-<li>This may result from the rapid development of Internet at the end of
-20th century.</li>
-</ul></li>
-<li>Most states’ observations peaked at around 2014.</li>
+increase right after 1995. This may result from the rapid development of
+Internet at the end of 20th century.</li>
+<li>Most states observations peaked at around 2014 and then started to
+decline.</li>
 <li>There was a sharp decline of observations at year 2018 for almost
-all states</li>
+all states and then went through another sharp increase in 2019 and
+2020.</li>
+<li>The observations within one state varied largely from year to year
+with sharp increase or decrease.</li>
 <li>UFO reports in CA was far more than other states in every year after
-1995.</li>
+1995. This may due to the population effect.</li>
 </ul>
-</div>
+<p>To avoid the influence of the extreme large observations of CA on the
+overall trend, we may filter out this state and see the overall trend
+then.</p>
+<pre class="r"><code>ufo_year_trend_plot_rm &lt;- 
+  ufo_year_trend |&gt;
+  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
+  labs(title = &quot;Spaghetti plot of observations trend of states over years(CA Removed)&quot;)
+
+ufo_year_trend_plot_rm</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+<p>The overall observations trend changed little compared to the
+previous one.</p>
 </div>
 <div id="observations-trend-of-states-over-months"
 class="section level3">
 <h3>Observations trend of states over months</h3>
-<pre class="r"><code>ufo_month_trend &lt;- ufo_trend |&gt;
-  group_by(state,month)|&gt;
-  summarise(
-    obs = n()
-  )|&gt;
-  ungroup()</code></pre>
+<p>Then we group the original data by state and month to see if there if
+any trend through out months.</p>
+<pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_month_trend |&gt;
-  ggplot(aes(x = month, y = obs))+
-  geom_smooth(color = &quot;red&quot;)+
-  geom_line(aes(color = state))+
-  theme(legend.position = &quot;none&quot;)+
-  scale_x_continuous(breaks = 1:12, labels = month.abb)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<pre class="r"><code>ufo_month_trend_plot &lt;- 
+  ufo_month_trend |&gt;
+  ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(title = &quot;Trend over month by states&quot;)
+
+ufo_month_trend_plot_rm &lt;- 
+  ufo_month_trend |&gt;
+  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(title = &quot;Trend over month by states(CA Removed)&quot;)
+
+plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 <ul>
 <li>The smooth line indicating a trend of average UFO observations in
@@ -425,54 +459,146 @@ increased and peaked around Aug, and declined till Dec.</li>
 However, there are some exceptions. UFO observations in state FL peaked
 at December.</li>
 </ul>
+<p>Like what we did in the year trend, we want to reduce the impact of
+outlier. Therefore, we remove observations of CA. The trend is more
+clear that observations in most states peaked at July and then declined
+and reached the lowest at around February.</p>
 </div>
 <div id="obeservations-trend-of-states-over-hours"
 class="section level3">
 <h3>Obeservations trend of states over hours</h3>
-<pre class="r"><code>ufo_hour_trend &lt;- ufo_trend |&gt;
-  group_by(state,hour)|&gt;
-  summarise(
-    obs = n()
-  )|&gt;
-  ungroup()</code></pre>
+<pre class="r"><code>ufo_hour_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;hour&quot;)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_hour_trend |&gt;
-  ggplot(aes(x = hour, y = obs))+
-  geom_line(aes(color = state))+
-  geom_smooth(color = &quot;red&quot;)+
-  theme(legend.position = &quot;none&quot;)+
-  labs(
-    title = &quot;Observations trend of states over daily hours&quot;
-  )</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre class="r"><code>ufo_hour_trend_plot &lt;- 
+  ufo_hour_trend |&gt;
+  ufo_trend_plot(&quot;hour&quot;,&quot;state&quot;)+
+  labs(title = &quot;Trend over hours by states&quot;)
+
+ufo_hour_trend_plot_rm &lt;- 
+  ufo_hour_trend |&gt;
+  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  ufo_trend_plot(&quot;hour&quot;,&quot;state&quot;)+ 
+  labs(title = &quot;Trend over hours by states(CA Removed)&quot;)
+
+plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;
+## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <ul>
 <li>The average observations during 6:00 to 15:00 were relatively
 low.</li>
 <li>There was an sharp increase of average observations starting from
-15:00 and peaked at around 21:00</li>
-<li>The average observations started to decline slowly after 21:00</li>
+15:00 and peaked at around 21:00.</li>
+<li>The average observations started to decline slowly after 21:00.</li>
+<li>People tends to observed UFO during evening than daytime.</li>
 </ul>
+<p>After removing the oulier of CA state, the trend is more clear.</p>
 </div>
 <div id="obeservations-trend-of-states-over-weekdays"
 class="section level3">
 <h3>Obeservations trend of states over weekdays</h3>
-<pre class="r"><code>ufo_weekday_trend &lt;- ufo_trend |&gt;
-  group_by(state, weekday)|&gt;
+<pre class="r"><code>ufo_weekday_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;weekday&quot;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ufo_weekday_plot &lt;- ufo_weekday_trend |&gt;
+  mutate(
+    weekday = as.numeric(weekday)
+  )|&gt;
+  ufo_trend_plot(&quot;weekday&quot;,&quot;state&quot;)+
+  scale_x_continuous(breaks = 1:7, labels = c(&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;))+
+  labs(
+    title = &quot;Trend over weekdays by states&quot;
+  )
+
+ufo_weekday_plot_rm&lt;- 
+  ufo_weekday_trend |&gt;
+  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  mutate(
+    weekday = as.numeric(weekday)
+  )|&gt;
+  ufo_trend_plot(&quot;weekday&quot;,&quot;state&quot;)+
+  scale_x_continuous(breaks = 1:7, labels = c(&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;))+
+  labs(title = &quot;Trend over weekdays by states (CA Removed)&quot;)
+
+plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p>The overall trend for all states is not clear. For state CA,the
+observations declined from Sunday to Monday, then increased during
+weekdays and peaked at Saturday.</p>
+<p>We may remove state CA to check the overall trend again.</p>
+<p>Now we may notice a trend showed by the red smooth line that the
+average observations went through an slow increase started Monday
+through Friday and peaked at Saturday, then reduced during Sunday.</p>
+<p>To make this statement clearer, we can view the bar plot of the
+observations over weekdays.</p>
+<pre class="r"><code>ufo_weekday_trend |&gt;
+  mutate(
+    weekday = as.numeric(weekday)
+  )|&gt;
+  ggplot(aes(x = weekday, y = obs))+
+  geom_col()+
+  scale_x_continuous(breaks = 1:7, labels = c(&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;))+
+  labs(
+    title = &quot;Bar plot of observations trend of states over weekdays&quot;
+  )</code></pre>
+<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<p>The bar plot visualized the trend more clear. The overall
+observations decreased from Sunday to Monday, then increased day by day
+and reached the highest values at Saturday.</p>
+</div>
+</div>
+<div id="trends-over-time-by-shape" class="section level2">
+<h2>Trends over time by shape</h2>
+<div id="trend-over-year-by-shape" class="section level3">
+<h3>Trend over year by shape</h3>
+<pre class="r"><code>obs_shape &lt;- ufo_trend |&gt;
+  group_by(shape)|&gt;
   summarise(
     obs = n()
   )|&gt;
-  ungroup()</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
+  arrange(desc(obs))|&gt;
+  ungroup()
+
+shape10 &lt;- obs_shape |&gt;
+  head(10)|&gt;
+  pull(shape)
+
+ufo_shape &lt;- ufo_trend|&gt;
+  filter(shape %in% shape10)</code></pre>
+<p>In total there are 23 shape categories in the original dataset. Here
+we extract the most observed 10 shapes to see the trend over year.</p>
+<pre class="r"><code>ufo_year_shape &lt;- ufo_trend_var(ufo_shape,var1=&quot;shape&quot;,var2=&quot;year&quot;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;shape&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_weekday_trend |&gt;
-  ggplot(aes(x = weekday, y = obs))+
-  geom_col()+
-  geom_smooth(color = &quot;red&quot;)+
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<pre class="r"><code>ufo_year_shape |&gt; 
+  mutate(
+    shape = factor(shape,levels = shape10)
+  )|&gt;
+  ggplot(aes(x = year, y = obs))+
+  geom_line()+
+  facet_grid(cols = vars(shape))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = &quot;Spaghetti plot of observations trend of states over years&quot;)</code></pre>
+<p><img src="trend_anlaysis_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<p>For most observed shapes, they have similar trend over year:the
+observations started to increase rapidly in 1990s and, then peaked at
+around 2014, followed by an sharp decrease in 2018 and another peak in
+2020.</p>
+<p>Light, circle and triangle were the most observed shape of UFO. The
+light shape had the most sharp change rate of all shapes.</p>
+<p>However, trends of some shapes had different characteristics.</p>
+<p>As for <code>fireball</code>, there was a peak before 2000 and a
+relatively slow increase rate after that compared to others</p>
+<p>As for <code>disk</code>, this is a traditional shape that comes to
+people’s mind when talking about UFO. The observations of disk went
+through an increase in 1970s right after the foundation of NUFORC. And
+the increase rate of disk observations after 1990s was relatively low.
+The highest value of observations in one year of was never over 250. (We
+might consider not taking disk as a classic shape of UFO.)</p>
+</div>
 </div>
 
 

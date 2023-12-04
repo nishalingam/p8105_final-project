@@ -1,11 +1,12 @@
 ---
-title: "Trend Analysis"
+title: "Trend Time"
 output: html_document
 ---
 
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(cowplot)
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -24,11 +25,12 @@ options(
 
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
+
+Sys.setlocale("LC_TIME", "en_US.UTF-8")
 ```
 
-### Read in cleaned data
 
-```{r}
+```{r data_read_in}
 ## generate date information separately for latter trend analysis
 
 ufo_trend <- read_csv("data/ufo_clean.csv")|>
@@ -49,113 +51,228 @@ ufo_trend <- read_csv("data/ufo_clean.csv")|>
 
 ```
 
-### Observations trend of states over years
+## Trend over time by states
+
+### Observations trend over years by states
+
+To look into the UFO observations trend over years by states, here we take spaghetti plots to view the total observations of each state throughout years. 
 
 ```{r}
-ufo_trend_plot <- function(variable,data){
-  trend <- data |>
-    group_by(state,variable)|>
-    summarise(
-      obs = n()
-    )|>
-    ungroup()
+## function to generate data for trend analysis  
+ufo_trend_var <- function(df,var1,var2){  
+  tidy_data <- df |>
+  group_by(!!sym(var1), !!sym(var2))|>
+  summarise(
+    obs = n()
+  )|>
+  ungroup()
+  
+  return(tidy_data)
+}
 
-  trend |>
-    ggplot(aes(x = variable, y = obs))+
-    geom_smooth(color = "red")+
-    geom_line(aes(color = state))+
-    theme(legend.position = "none")+
-    scale_x_continuous(breaks = 1:12, labels = month.abb)
+ufo_trend_plot <- function(df,var_time,var_group){
+  trendplot <- df|>
+  ggplot(aes(x = !!sym(var_time), y = obs, color = !!sym(var_group)))+
+  geom_line()+
+  theme(legend.position = "none")+
+  geom_smooth(color = "red")
+  
+  return(trendplot)
+}
+
+ufo_shape_plot <- function(df,var_time){
+  trendplot <- df|>
+  ggplot(aes(x = !!sym(var_time), y = obs, color = shape))+
+  geom_line()
+  
+  return(trendplot)
 }
 ```
 
 
 ```{r}
-ufo_year_trend <- ufo_trend |>
-  group_by(state,year)|>
-  summarise(
-    obs = n()
-  )|>
-  ungroup()
+ufo_year_trend <- ufo_trend_var(ufo_trend,var1="state",var2="year")
 
-ufo_year_trend |> arrange(desc(obs)) |> pull(state) |> unique()
+ufo_year_trend_plot <- ufo_trend_plot(ufo_year_trend,"year","state")+
+  labs(title = "Spaghetti plot of observations trend of states over years")
 
-ufo_year_trend |> group_by(state) |> summarise(obs_sum = sum(obs))|> arrange(desc(obs_sum)) |> head(10) |> pull(obs_sum) |> range()
-
-ufo_year_trend |>
-  ggplot(aes(x = year, y = obs, color = state))+
-  geom_line()+
-  theme(legend.position = "none")
+ufo_year_trend_plot
 ```
 
-##### From the plot of each state's UFO observations over year, we can see that:
+From the plot of each state's UFO observations over year, we can see that:
 
-* The total observations of UFO across states went through a rapid increase right after 1995. 
-  * This may result from the rapid development of Internet at the end of 20th century.
-* Most states' observations peaked at around 2014. 
-* There was a sharp decline of observations at year 2018 for almost all states
-* UFO reports in `r ufo_year_trend |> filter(obs == max(obs)) |> pull(state)` was far more than other states in every year after 1995. 
+* The total observations of UFO across states went through a rapid increase right after 1995. This may result from the rapid development of Internet at the end of 20th century.
+* Most states observations peaked at around 2014 and then started to decline. 
+* There was a sharp decline of observations at year 2018 for almost all states and then went through another sharp increase in 2019 and 2020.
+* The observations within one state varied largely from year to year with sharp increase or decrease. 
+* UFO reports in `r ufo_year_trend |> filter(obs == max(obs)) |> pull(state)` was far more than other states in every year after 1995. This may due to the population effect.
+
+To avoid the influence of the extreme large observations of `r ufo_year_trend |> filter(obs == max(obs)) |> pull(state)` on the overall trend, we may filter out this state and see the overall trend then.
+
+```{r}
+ufo_year_trend_plot_rm <- 
+  ufo_year_trend |>
+  filter(!(state %in% c("CA")) )|>
+  ufo_trend_plot("year","state")+
+  labs(title = "Spaghetti plot of observations trend of states over years(CA Removed)")
+
+ufo_year_trend_plot_rm
+```
+
+The overall observations trend changed little compared to the previous one.
 
 ### Observations trend of states over months
 
-```{r}
-ufo_month_trend <- ufo_trend |>
-  group_by(state,month)|>
-  summarise(
-    obs = n()
-  )|>
-  ungroup()
+Then we group the original data by state and month to see if there if any trend through out months.
 
-ufo_month_trend |>
-  ggplot(aes(x = month, y = obs))+
-  geom_smooth(color = "red")+
-  geom_line(aes(color = state))+
-  theme(legend.position = "none")+
-  scale_x_continuous(breaks = 1:12, labels = month.abb)
+```{r}
+ufo_month_trend <- ufo_trend_var(ufo_trend,var1="state",var2="month")
+
+ufo_month_trend_plot <- 
+  ufo_month_trend |>
+  ufo_trend_plot("month","state")+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(title = "Trend over month by states")
+
+ufo_month_trend_plot_rm <- 
+  ufo_month_trend |>
+  filter(!(state %in% c("CA")) )|>
+  ufo_trend_plot("month","state")+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(title = "Trend over month by states(CA Removed)")
+
+plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)
 ```
 
 * The smooth line indicating a trend of average UFO observations in all states of each month.
 * The observations slightly went down from January to March, then increased and peaked around Aug, and declined till Dec.
 * For most states, summer is when most UFO observations were reported. However, there are some exceptions. UFO observations in state FL peaked at December.
 
+Like what we did in the year trend, we want to reduce the impact of outlier. Therefore, we remove observations of CA. The trend is more clear that observations in most states peaked at July and then declined and reached the lowest at around February. 
+
 ### Obeservations trend of states over hours
 
 ```{r}
-ufo_hour_trend <- ufo_trend |>
-  group_by(state,hour)|>
-  summarise(
-    obs = n()
-  )|>
-  ungroup()
+ufo_hour_trend <- ufo_trend_var(ufo_trend,var1="state",var2="hour")
 
-ufo_hour_trend |>
-  ggplot(aes(x = hour, y = obs))+
-  geom_line(aes(color = state))+
-  geom_smooth(color = "red")+
-  theme(legend.position = "none")+
-  labs(
-    title = "Observations trend of states over daily hours"
-  )
+ufo_hour_trend_plot <- 
+  ufo_hour_trend |>
+  ufo_trend_plot("hour","state")+
+  labs(title = "Trend over hours by states")
+
+ufo_hour_trend_plot_rm <- 
+  ufo_hour_trend |>
+  filter(!(state %in% c("CA")) )|>
+  ufo_trend_plot("hour","state")+ 
+  labs(title = "Trend over hours by states(CA Removed)")
+
+plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)
 ```
 
 * The average observations during 6:00 to 15:00 were relatively low.
-* There was an sharp increase of average observations starting from 15:00 and peaked at around 21:00
-* The average observations started to decline slowly after 21:00  
+* There was an sharp increase of average observations starting from 15:00 and peaked at around 21:00.
+* The average observations started to decline slowly after 21:00.
+* People tends to observed UFO during evening than daytime.
+
+After removing the oulier of CA state, the trend is more clear. 
 
 ### Obeservations trend of states over weekdays
 
 ```{r}
-ufo_weekday_trend <- ufo_trend |>
-  group_by(state, weekday)|>
+ufo_weekday_trend <- ufo_trend_var(ufo_trend,var1="state",var2="weekday")
+
+
+ufo_weekday_plot <- ufo_weekday_trend |>
+  mutate(
+    weekday = as.numeric(weekday)
+  )|>
+  ufo_trend_plot("weekday","state")+
+  scale_x_continuous(breaks = 1:7, labels = c("Sun","Mon","Tue","Wed","Thur","Fri","Sat"))+
+  labs(
+    title = "Trend over weekdays by states"
+  )
+
+ufo_weekday_plot_rm<- 
+  ufo_weekday_trend |>
+  filter(!(state %in% c("CA")) )|>
+  mutate(
+    weekday = as.numeric(weekday)
+  )|>
+  ufo_trend_plot("weekday","state")+
+  scale_x_continuous(breaks = 1:7, labels = c("Sun","Mon","Tue","Wed","Thur","Fri","Sat"))+
+  labs(title = "Trend over weekdays by states (CA Removed)")
+
+plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)
+```
+
+The overall trend for all states is not clear. For state CA,the observations declined from Sunday to Monday, then increased during weekdays and peaked at Saturday.
+
+We may remove state CA to check the overall trend again.
+
+Now we may notice a trend showed by the red smooth line that the average observations went through an slow increase started Monday through Friday and peaked at Saturday, then reduced during Sunday. 
+
+To make this statement clearer, we can view the bar plot of the observations over weekdays.
+
+```{r}
+ufo_weekday_trend |>
+  mutate(
+    weekday = as.numeric(weekday)
+  )|>
+  ggplot(aes(x = weekday, y = obs))+
+  geom_col()+
+  scale_x_continuous(breaks = 1:7, labels = c("Sun","Mon","Tue","Wed","Thur","Fri","Sat"))+
+  labs(
+    title = "Bar plot of observations trend of states over weekdays"
+  )
+```
+
+The bar plot visualized the trend more clear. The overall observations decreased from Sunday to Monday, then increased day by day and reached the highest values at Saturday.
+
+
+## Trends over time by shape
+
+### Trend over year by shape
+
+```{r}
+obs_shape <- ufo_trend |>
+  group_by(shape)|>
   summarise(
     obs = n()
   )|>
+  arrange(desc(obs))|>
   ungroup()
 
-ufo_weekday_trend |>
-  ggplot(aes(x = weekday, y = obs))+
-  geom_col()+
-  geom_smooth(color = "red")+
-  theme(legend.position = "none")
+shape10 <- obs_shape |>
+  head(10)|>
+  pull(shape)
+
+ufo_shape <- ufo_trend|>
+  filter(shape %in% shape10)
 ```
 
+In total there are `r ufo_trend |> pull(shape) |> unique() |> length()` shape categories in the original dataset. Here we extract the most observed 10 shapes to see the trend over year.
+
+```{r}
+ufo_year_shape <- ufo_trend_var(ufo_shape,var1="shape",var2="year")
+
+ufo_year_shape |> 
+  mutate(
+    shape = factor(shape,levels = shape10)
+  )|>
+  ggplot(aes(x = year, y = obs))+
+  geom_line()+
+  facet_grid(cols = vars(shape))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+  labs(title = "Spaghetti plot of observations trend of states over years")
+```
+
+
+For most observed shapes, they have similar trend over year:the observations started to increase rapidly in 1990s  and, then peaked at around 2014, followed by an sharp decrease in 2018 and another peak in 2020.
+
+Light, circle and triangle were the most observed shape of UFO. The light shape had the most sharp change rate of all shapes.
+
+However, trends of some shapes had different characteristics. 
+
+As for `fireball`, there was a peak before 2000 and a relatively slow increase rate after that compared to others
+
+As for `disk`, this is a traditional shape that comes to people's mind when talking about UFO. The observations of disk went through an increase in 1970s right after the foundation of NUFORC. And the increase rate of disk observations after 1990s was relatively low. The highest value of observations in one year of was never over 250. (We might consider not taking disk as a classic shape of UFO.)
