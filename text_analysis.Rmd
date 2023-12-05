@@ -1,0 +1,237 @@
+---
+title: "Text Analysis"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+
+```{r message = FALSE}
+library(tidyverse)
+library(readr)
+library(tidytext)
+library(stringr)
+library(purrr)
+library(quanteda)
+library(leaflet)
+
+library(wordcloud)
+library(RColorBrewer)
+library(wordcloud2)
+
+# Guide to set up Spacyr
+# See full guide: https://cran.r-project.org/web/packages/spacyr/readme/README.html
+# ---------------------------------
+# Note: SpacyR is a wrapper to Python package Spacy.
+# 0. Download Python
+# 1. Download Spacy in Python: https://spacy.io/usage
+# 2. Download Spacy in R: In CRAN console, use install.packages("spacyr")
+# 3. In terminal, use the command to download language model through Python or Python3: 
+#    a. python -m spacy download en
+#    b. python3 -m spacy download en
+library(spacyr)
+```
+```{r}
+clean_string = function(string){
+  # Detect and replace '&#44'(comma) and `&#46`(period) from the string
+  new_str = gsub("&#44", ",", string)
+  new_str = gsub("&#46", ".", new_str)
+  new_str = gsub("&#[0-9]+|&quot|\\(|\\)"," ", new_str)
+  return(new_str)
+}
+
+df_ufo = read.csv("data/ufo_clean.csv") |>
+  janitor::clean_names() |>
+  drop_na(text, shape, duration_clean) |>
+  filter(text != '', length(c) > 0)
+
+txt = c("i saw a large fireball falling to earth in the early morning hours on  Oct.11&#442003 in Kentucky",
+         "My older brother and twin sister were leaving the only Edna theater at about 9 PM&#44...we had our bikes and I took a different route home",
+         "1949 Lackland AFB&#44 TX.  Lights racing across the sky &amp; making 90 degree turns on a dime.")
+
+# process documents and obtain a data.table
+
+
+cleaned_df =  df_ufo |>
+  head(100) |>
+  pull(text) |> 
+  map(clean_string) |>
+  data_frame() |>
+  rename(text = 1)
+
+```
+
+
+
+More ideas:
+Words used by older generation vs newer generation (2000s vs 2010s vs 2020s)
+Duration vs colors
+Duration vs the usuage of "bright"
+
+```{r}
+library(tictoc)
+library(foreach)
+library(iterators)
+```
+
+
+```{r}
+result = 0
+for(i in 1:100){
+tic("Parse Text - map")
+spacy_initialize(model = "en_core_web_sm")
+
+text_df = cleaned_df |>
+  mutate(
+    parsedtxt = map(text, spacy_parse)
+  ) |>
+  unnest(parsedtxt) |>
+  mutate(
+    lemma = map(lemma, \(txt) str_extract(txt, "[:alpha:]+")) |>
+      tolower()
+  )
+
+spacy_finalize()
+toc()
+k = toc()
+result = result + k$toc - k$tic
+}
+result/100
+```
+
+```{r}
+result = 0
+for(i in 1:100){
+tic("Parse Text - map")
+spacy_initialize(model = "en_core_web_sm")
+
+text_df = cleaned_df |>
+  mutate(
+    parsedtxt = sapply(text, spacy_parse, simplify = FALSE)
+  ) |>
+  unnest(parsedtxt) |>
+  mutate(
+    lemma = sapply(lemma, \(txt) str_extract(txt, "[:alpha:]+"), simplify = FALSE) |>
+      tolower()
+  )
+
+spacy_finalize()
+k = toc()
+result = result + k$toc - k$tic
+}
+result/100
+```
+
+```{r}
+k$tic - k$toc
+```
+
+
+```{r}
+result = 0
+for(i in 1:100){
+tic("Parse Text - foreach")
+spacy_initialize(model = "en_core_web_sm")
+
+text_df = foreach(text = iter(cleaned_df$text, by = 'row'), .combine = rbind, .packages = c("spacyr")) %dopar% {
+      spacy_parse(text)
+      
+} |>
+  mutate(
+    lemma = map(lemma, \(txt) str_extract(txt, "[:alpha:]+")) |>
+      tolower()
+  )
+
+spacy_finalize()
+k = toc()
+result = result + k$toc - k$tic
+}
+result/100
+```
+
+
+```{r}
+text_df |>
+  distinct(lemma) |>
+  nrow()
+```
+
+```{r}
+
+adj_df = text_df |>
+  filter(pos == "ADJ") |>
+  group_by(lemma) |>
+  summarize(n = n()) |>
+  arrange(desc(n))
+
+noun_df = text_df |>
+  filter(pos == "NOUN") |>
+  group_by(lemma) |>
+  summarize(n = n()) |>
+  arrange(desc(n))
+
+verb_df = text_df |>
+  filter(pos == "VERB") |>
+  group_by(lemma) |>
+  summarize(n = n()) |>
+  arrange(desc(n))
+#tokens = map(cleaned_txt, spacy_tokenize, what = "sentence")
+
+#parsedtxt
+#nouns
+#tokens
+
+
+```
+
+```{r}
+colors = colors()[grepl("[[:alpha:]]$", colors())]
+
+
+color_df = df_ufo |>
+  head(5000) |>
+  mutate(
+    color = map(text, \(str) str_extract(str, gsub(" ", "", paste("(?<![:alpha:])", colors, "(?![:alpha:])", collapse="|"))))
+  )|>
+  filter(length(color) == 0 | !is.na(color) | color != '')
+
+```
+
+```{r}
+map = 
+  color_df |>
+  leaflet() |>
+  addTiles() |>
+  addCircleMarkers(as.numeric(color_df$longitude), as.numeric(color_df$latitude), color = color_df$color)
+
+map
+```
+
+```{r}
+color_df |>
+  group_by(shape) |>
+  summarize(n = n())
+```
+
+
+
+```{r}
+noun_wcloud = wordcloud(words = noun_df$lemma, freq = noun_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+adj_wcloud = wordcloud(words = adj_df$lemma, freq = adj_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+verb_wcloud = wordcloud(words = verb_df$lemma, freq = verb_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+
+noun_wcloud
+adj_wcloud
+verb_wcloud
+```
+
+
+
+
+
+
