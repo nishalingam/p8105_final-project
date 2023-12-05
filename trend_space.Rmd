@@ -1,14 +1,24 @@
 ---
 title: "Trends in Space"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
-### Load packages
+
+In this page we will explore where UFO sightings are reported in the United States. First we will visualize where throughout the U.S. these reports are being made, and then compare reports made in urban/suburban areas (i.e. close to major cities), and those made in rural areas (i.e. far from major cities). We separate these two groups using a cutoff criteria of being within 5 miles of a city with more than 200,000 residents.
+
 ```{r load packages and default options, message = FALSE}
+## Default packages & settings
 # Load packages
 library(tidyverse)
 library(knitr)
 library(leaflet)
 library(usmap)
+
+# Set seed for reproducibility
+set.seed(1)
 
 # Set default figure options
 knitr::opts_chunk$set(
@@ -25,26 +35,65 @@ options(
 
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
-```
 
-
-```{r data import, include = FALSE}
+## Data import
+# Import UFO data
 df_ufo = read_csv("data/ufo_clean.csv")
+
+# Add population data
+df_pop = 
+  read_csv("data/us_census.csv") |>
+  rename(state = abbrv) |> 
+  select(state, census_2010)
 ```
 
-Where are UFO sightings reported? We plotted 1% of the reports and where they occurred throughout the U.S.
+To begin, we simply visualize a random 2% of these reports to get a sense of where these sightings are throughout the country.
 
-```{r}
-set.seed(1)
-
+```{r 10 percent plot}
 df_ufo |> 
-  sample_frac(0.01) |> 
+  sample_frac(0.02) |> 
   leaflet() |> 
   addProviderTiles(providers$CartoDB.Positron) |> 
   addCircleMarkers(~city_longitude,~city_latitude, radius = 1) 
 ```
 
-Most common closest city
+## Reports across the U.S.
+At first glance, these reports seem to cluster along the coasts and in other regions of high population density. So, we will adjust for population at the state level and re-visualize the results.
+
+```{r us heatmap}
+df_ufo |> 
+  group_by(state) |> 
+  summarize(n_obs = n()) |> 
+  left_join(df_pop, by = join_by(state)) |> 
+  mutate(obs_per = n_obs/census_2010*100000) |> 
+  plot_usmap(data = _, values = "obs_per", color = "#333333") +
+  labs(
+    title = "UFO Reports per 100,000 Population"
+  ) + 
+  scale_fill_continuous(name = "Reports per 100k") +
+  theme(legend.position = "bottom") 
+```
+
+This heatmap reveals three clusters with particularly high per-capita UFO reports. The Northwest, including Washington, Oregon, Idaho, Montana, and Alaska are the 5 states with the highest per-capita UFO reports ranging from 66 (AK) to 81 (WA) UFO reports per 100,000 residents. Next is northern New England, with New Hampshire, Vermont, and Maine taking positions 6-8 in the list. These states have between 61 (ME) and 66 (NH) UFO reports per 100,000. Rounding out the top 10, we have Arizona and New Mexico, with 61 and 59 reports per 100,000 residents, respectively.
+
+
+```{r per capita table}
+## Table form
+df_ufo |> 
+  group_by(state) |> 
+  summarize(n_obs = n()) |> 
+  left_join(df_pop, by = join_by(state)) |> 
+  mutate(obs_per = n_obs/census_2010*100000) |> 
+  arrange(desc(obs_per)) |> 
+  head(10) |> 
+  kable(
+    col.names = c("State", "Number of UFO Sightings",
+                  "Population (2010 census)", "UFO sightings per 100k"),
+    digits = 1)
+```
+
+
+If we cluster the number of observations by nearest large city, we see a similar result.
 
 #### Table 1. Cities with most sightings nearby
 ```{r table with close cities}
@@ -56,6 +105,9 @@ df_ufo |>
   kable()
 ```
 The two cities with the most UFO sightings nearby are are Seattle, WA and Portland, OR. These are large cities but not the largest in the U.S. The West Coast seems to have more reports than other areas, though St. Louis is a bit of an outlier in this regard.
+
+
+<!-- put a histogram with of dist -->
 
 ### Rural vs Urban Differences
 
@@ -115,22 +167,4 @@ Even though the data are highly right-skewed, there are enough observations that
 
 ### U.S. Heatmap
 
-```{r us heatmap}
-df_pop = 
-  read_csv("data/us_census.csv") |>
-  rename(state = abbrv) |> 
-  select(state, census_2010)
-
-df_ufo |> 
-  group_by(state) |> 
-  summarize(n_obs = n()) |> 
-  left_join(df_pop, by = join_by(state)) |> 
-  mutate(obs_per = n_obs/census_2010*100000) |> 
-  plot_usmap(data = _, values = "obs_per", color = "#333333") +
-  labs(
-    title = "UFO Reports per 100,000 Population"
-  ) + 
-  scale_fill_continuous(name = "Reports per 100k") +
-  theme(legend.position = "bottom")
-```
 
