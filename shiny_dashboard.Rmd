@@ -287,7 +287,7 @@ server <- shinyServer(function(input, output) {
   })
   output$ufo <- renderPlot({
     plotReport_Duration
-  })
+  }) 
   
   # plot after click
   observeEvent(input$clickMap, {
