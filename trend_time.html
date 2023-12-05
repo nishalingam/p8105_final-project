@@ -270,15 +270,12 @@ $(document).ready(function () {
       <a href="trend_space.html">Trends over space</a>
     </li>
     <li>
-      <a href="xyz.html">Trends over time</a>
+      <a href="trend_time.html">Trends over time</a>
     </li>
   </ul>
 </li>
 <li>
   <a href="report.html">Project Report</a>
-</li>
-<li>
-  <a href="dashboard.html">Dashboard</a>
 </li>
 <li>
   <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Shiny</a>
@@ -338,12 +335,11 @@ ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
                          &quot;Friday&quot;, 
                          &quot;Saturday&quot;))
   )</code></pre>
-<pre><code>## Rows: 100820 Columns: 12
+<pre><code>## Rows: 100802 Columns: 13
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr  (6): city, state, shape, duration, text, location
-## dbl  (3): city_latitude, city_longitude, dist
-## lgl  (1): duration_clean
+## chr  (7): city, state, shape, duration, text, closest_city, location
+## dbl  (4): city_latitude, city_longitude, duration_clean, dist
 ## dttm (2): date_time, posted
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.

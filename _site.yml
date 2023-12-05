@@ -14,11 +14,9 @@ navbar:
       - text: "Trends over space"
         href: trend_space.html
       - text: "Trends over time"
-        href: xyz.html
+        href: trend_time.html
     - text: "Project Report"
       href: report.html
-    - text: "Dashboard"
-      href: dashboard.html
     - text: "Shiny"
       href: https://xz3173.shinyapps.io/shiny_dashboard/
     - text: "About"
