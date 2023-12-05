@@ -1,0 +1,92 @@
+---
+title: "Regression Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(corrplot)
+```
+
+```{r}
+ufo = read_csv("./data/ufo_clean.csv")
+
+summary(ufo)
+
+str(ufo)
+```
+
+```{r}
+ufo_subset = ufo |>
+  mutate(year = format(date_time, "%Y"),
+         month = format(date_time, "%m"),
+         sightings = n(),
+         location = factor(location, levels = c("urban", "rural")),
+         location = as.numeric(location) - 1,
+         duration_clean = as.numeric(duration_clean),
+         year = as.numeric(year),
+         month = as.numeric(month),
+         sightings = as.numeric(sightings)) |>
+  filter(!is.na(duration_clean)) |>
+  select(city_latitude, city_longitude, duration_clean, dist, location, year, month, sightings)
+
+```
+
+
+```{r}
+pairs(ufo_subset)
+```
+
+```{r}
+corrplot(cor(ufo_subset), type = "upper", diag = FALSE)
+```
+
+```{r}
+# Boxplots for each variable
+par(mfrow = c(2, 4))
+boxplot(ufo_subset$city_latitude, main = 'city_latitude')
+boxplot(ufo_subset$city_longitude, main = 'city_longitude')
+boxplot(ufo_subset$duration_clean, main = 'duration_clean')
+boxplot(ufo_subset$dist, main = 'dist')
+boxplot(ufo_subset$location, main = 'location')
+boxplot(ufo_subset$year, main = 'year')
+boxplot(ufo_subset$month, main = 'month')
+boxplot(ufo_subset$sightings, main = 'sightings')
+```
+
+```{r}
+# fit regression using all predictors
+mult.fit = lm(sightings ~., data = ufo_subset)
+summary(mult.fit)
+```
+
+
+# Backwards elimination
+
+```{r}
+# Take out non-significant variables one at a time starting with the highest p-value
+
+# No dist
+step1 = update(mult.fit, . ~ . -dist)
+summary(step1)
+
+# No month
+step2 = update(step1, . ~ . -month)
+summary(step2)
+
+# No city_latitude
+step3 = update(step2, . ~ . -city_latitude)
+summary(step3)
+
+# No year
+step4 = update(step3, . ~ . -year)
+summary(step4)
+```
+
+
+```{r}
+# just use one function
+step(mult.fit, direction = 'backward')
+```
+
+

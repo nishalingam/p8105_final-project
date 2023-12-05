@@ -136,15 +136,10 @@ ufo_subset |>
 
 
 
-
-
-
-
-
-
-
 ```{r}
 # Export a new csv file
 write.csv(ufo_subset, file = "./data/ufo_subset.csv", row.names = FALSE)
 ```
+
+
 

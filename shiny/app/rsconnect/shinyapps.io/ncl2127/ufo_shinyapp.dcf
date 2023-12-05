@@ -1,0 +1,12 @@
+name: ufo_shinyapp
+title: ufo_shinyapp
+username: ncl2127
+account: ncl2127
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10726825
+bundleId: 8011924
+url: https://ncl2127.shinyapps.io/ufo_shinyapp/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

@@ -17,10 +17,16 @@ navbar:
         href: trend_time.html
       - text: "Text Analysis"
         href: text_analysis.html
+      - text: "Regression Analysis"
+        href: regression_analysis.html
     - text: "Project Report"
       href: report.html
     - text: "Shiny"
-      href: https://xz3173.shinyapps.io/shiny_dashboard/
+      menu:
+      - text: "Dashboard"
+        href: https://xz3173.shinyapps.io/shiny_dashboard/
+      - text: "Interactive Map"
+        href: xyz.html
     - text: "About"
       menu:
       - text: "The Project"
