@@ -47,6 +47,8 @@ df_pop =
   select(state, census_2010)
 ```
 
+## Reports across the U.S.
+### Raw Data
 To begin, we simply visualize a random 2% of these reports to get a sense of where these sightings are throughout the country.
 
 ```{r 10 percent plot}
@@ -57,9 +59,10 @@ df_ufo |>
   addCircleMarkers(~city_longitude,~city_latitude, radius = 1) 
 ```
 
-## Reports across the U.S.
+
 At first glance, these reports seem to cluster along the coasts and in other regions of high population density. So, we will adjust for population at the state level and re-visualize the results.
 
+### Per-capita distribution
 ```{r us heatmap}
 df_ufo |> 
   group_by(state) |> 
@@ -76,7 +79,7 @@ df_ufo |>
 
 This heatmap reveals three clusters with particularly high per-capita UFO reports. The Northwest, including Washington, Oregon, Idaho, Montana, and Alaska are the 5 states with the highest per-capita UFO reports ranging from 66 (AK) to 81 (WA) UFO reports per 100,000 residents. Next is northern New England, with New Hampshire, Vermont, and Maine taking positions 6-8 in the list. These states have between 61 (ME) and 66 (NH) UFO reports per 100,000. Rounding out the top 10, we have Arizona and New Mexico, with 61 and 59 reports per 100,000 residents, respectively.
 
-
+#### Table 1. States with highest per-capita reports
 ```{r per capita table}
 ## Table form
 df_ufo |> 
@@ -93,9 +96,9 @@ df_ufo |>
 ```
 
 
-If we cluster the number of observations by nearest large city, we see a similar result.
+If we cluster the number of observations by nearest large city, we see a similar result. The two cities with the most UFO sightings nearby are are Seattle, WA and Portland, OR. These are large cities but not the largest in the U.S. The West Coast seems to have more reports than other areas, though St. Louis is a bit of an outlier in this regard.
 
-#### Table 1. Cities with most sightings nearby
+#### Table 2. Cities with most sightings nearby
 ```{r table with close cities}
 df_ufo |> 
   group_by(closest_city) |> 
@@ -104,15 +107,32 @@ df_ufo |>
   head(10) |> 
   kable()
 ```
-The two cities with the most UFO sightings nearby are are Seattle, WA and Portland, OR. These are large cities but not the largest in the U.S. The West Coast seems to have more reports than other areas, though St. Louis is a bit of an outlier in this regard.
+
+## Distance to cities
+We also plotted the distribution of the `dist` variable, the distance to the nearest city of at least 200,000 residents. This histogram shows that the most reports occur close to large cities, but there is a long tail of reports that were made further away. There are also `r df_ufo |> filter(dist > 200) |> pull(dist) |> length()` reports that were made further than 200 miles from a large city, and `r df_ufo |> filter(dist > 400) |> pull(dist) |> length()` that were more than 400 miles away. 
+
+```{r distance histogram}
+df_ufo |> 
+  filter(dist <= 200) |> 
+  ggplot(aes(x = dist)) +
+  geom_histogram(bins = 21, alpha = 0.7, col = I("black")) +
+  labs(
+    title = "Distribution of reports by distance",
+    y = "Number of reports",
+    x = "Distance to large city (miles)"
+  ) 
+```
 
 
 <!-- put a histogram with of dist -->
 
-### Rural vs Urban Differences
 
-#### UFO Shape
-Whether
+
+## Rural vs Urban Differences
+With this preliminary understanding of the geographic distribution of UFO reports, we wanted to explore if the distance from large cities is related to characteristics of the report. To do this, we separate reports into `urban/suburban` and `rural` categories, using a cutoff value of 5 miles  to a large city. This is not a perfect division, as this distinction should really be done by population density, but should be servicable to identify major differences, as will be seen below.
+
+### UFO Shape
+Our first question was whether the type of object reported differed between these group, as determined by the shape of the UFO.
 ```{r urban vs rural}
 df_loc_shape = 
   df_ufo |> 
@@ -126,10 +146,10 @@ df_loc_shape =
 
 df_loc_shape |> 
   head(10) |> 
-  kable(col.names = c("Shape", "Rural", "Urban"))
+  kable(col.names = c("Shape", "Rural", "Urban/Suburban"))
 ```
 
-To analyze whether descriptions of UFOs varied between these groups, we conducted a Chi-Squared test of homogeneity.
+To analyze whether descriptions of UFOs varied between these groups, we conducted a Chi-Squared test of homogeneity. This revealed that the distribution of shapes did differ significantly between the urban/suburban and rural categories.
 
 ```{r chisq shape loc}
 df_loc_shape |> 
@@ -138,21 +158,25 @@ df_loc_shape |>
   chisq.test() 
 ```
 
-We see that there is a significant relationship between the `shape` of the UFO and whether the sighting was in a rural or urban setting.
-
-#### Encounter Duration
+### Encounter Duration
 
 ```{r}
 df_ufo |> 
   drop_na(duration_clean) |> 
-  #filter(duration_clean <=7200) |>
-  mutate(log_dur = log(duration_clean)) |> 
-  ggplot(aes(x = log_dur, fill = location, color = "black")) +
-  geom_histogram(alpha = 0.5) 
-
-df_ufo |> 
-  filter(duration_clean >30000) |> 
-  view()
+  filter(duration_clean != 0) |>
+  ggplot(aes(x = duration_clean, fill = location)) +
+  geom_histogram(alpha = 0.5, bins = 41, col = I("black")) +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))
+                     ) +
+  labs(
+    title = "Distribution of encounter duration",
+    y = "Number of reports",
+    x = "Encounter Duration (seconds)",
+    fill = "Location"
+  )
 ```
 
 ```{r}
@@ -163,8 +187,4 @@ df_ufo |>
 ```
 
 Even though the data are highly right-skewed, there are enough observations that it is still valid to compare the data using a t-test. The results of this test suggest that there is a significant difference between the average duration of the rural UFO sightings and the urban UFO sightings. We estimate that sightings in rural areas last for approximately one minute longer than sightings in urban areas (10.5 minutes vs. 9.5 minutes).
-
-
-### U.S. Heatmap
-
 
