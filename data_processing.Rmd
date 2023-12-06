@@ -141,4 +141,5 @@ The variables in our dataset are:
 * `city_longitude`: The longitude of where the sighting occured.
 * `duration_clean`: The duration in seconds of the UFO sighting.
 * `dist`: The distance in miles to the closest city with a population of 200,000 or more.
+* `closest_city`: The closest city with a population of 200,000 or more.
 * `location`: Whether the sighting was urban or rural. Urban was defined as within 5 miles of a city with population in excess of 200,000.

@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -365,7 +365,7 @@ We then selected only reports from the U.S.A.</p>
   filter(!(state %in% c(&quot;AB&quot;, &quot;BC&quot;, &quot;MB&quot;, &quot;NB&quot;, &quot;NS&quot;, &quot;SK&quot;, &quot;ON&quot;))) |&gt; 
   filter(city_longitude &lt; -30, city_latitude &gt; 10)</code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -410,8 +410,7 @@ using a regex function that pulled both numeric values and time units
   mutate(duration_clean = map(duration, time_str)) |&gt; 
   unnest(duration_clean)</code></pre>
 <pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `duration_clean = map(duration,
-##   time_str)`.
+## ℹ In argument: `duration_clean = map(duration, time_str)`.
 ## Caused by warning in `.f()`:
 ## ! NAs introduced by coercion</code></pre>
 </div>
@@ -425,7 +424,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id
@@ -502,6 +501,8 @@ occured.</li>
 sighting.</li>
 <li><code>dist</code>: The distance in miles to the closest city with a
 population of 200,000 or more.</li>
+<li><code>closest_city</code>: The closest city with a population of
+200,000 or more.</li>
 <li><code>location</code>: Whether the sighting was urban or rural.
 Urban was defined as within 5 miles of a city with population in excess
 of 200,000.</li>
