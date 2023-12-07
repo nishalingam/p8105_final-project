@@ -26,7 +26,7 @@ navbar:
       - text: "Dashboard"
         href: https://xz3173.shinyapps.io/shiny_dashboard/
       - text: "Interactive Map"
-        href: xyz.html
+        href: https://ncl2127.shinyapps.io/shiny_app/
     - text: "About"
       menu:
       - text: "The Project"
