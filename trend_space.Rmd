@@ -124,16 +124,12 @@ df_ufo |>
 ```
 
 
-<!-- put a histogram with of dist -->
-
-
-
 ## Rural vs Urban Differences
 With this preliminary understanding of the geographic distribution of UFO reports, we wanted to explore if the distance from large cities is related to characteristics of the report. To do this, we separate reports into `urban/suburban` and `rural` categories, using a cutoff value of 5 miles  to a large city. This is not a perfect division, as this distinction should really be done by population density, but should be servicable to identify major differences, as will be seen below.
 
 ### UFO Shape
 Our first question was whether the type of object reported differed between these group, as determined by the shape of the UFO.
-```{r urban vs rural}
+```{r urban vs rural, message = FALSE}
 df_loc_shape = 
   df_ufo |> 
   group_by(location, shape) |> 
@@ -149,7 +145,7 @@ df_loc_shape |>
   kable(col.names = c("Shape", "Rural", "Urban/Suburban"))
 ```
 
-To analyze whether descriptions of UFOs varied between these groups, we conducted a Chi-Squared test of homogeneity. This revealed that the distribution of shapes did differ significantly between the urban/suburban and rural categories.
+Both rural and urban reports look similar, with the same ranking of the reported shapes. The most common descriptor of the UFO was just a `light`, followed by either `circle` or `triangle`. To analyze whether descriptions of UFOs varied between these groups, we conducted a Chi-Squared test of homogeneity. This revealed that the distribution of shapes did differ significantly between the urban/suburban and rural categories. 
 
 ```{r chisq shape loc}
 df_loc_shape |> 
@@ -158,9 +154,12 @@ df_loc_shape |>
   chisq.test() 
 ```
 
-### Encounter Duration
+This result is not being influenced by the comparatively few observations for some shapes. If the data set is restricted to only the top 10 or top 15 shapes, the p-value is still far below 0.05.
 
-```{r}
+### Encounter Duration
+Next, we wish to consider whether the length of UFO encounters is different between the urban/suburban and rural groups. First, we will look at the data, which skewed right (more observations on the second scale than the minute scale, and more on the minute scale than the hour scale). So to understand the distribution, we will look at the data on the log scale.
+
+```{r log histogram duration}
 df_ufo |> 
   drop_na(duration_clean) |> 
   filter(duration_clean != 0) |>
@@ -179,12 +178,15 @@ df_ufo |>
   )
 ```
 
-```{r}
+Even though the data are highly right-skewed, there are enough observations that it is still valid to compare the data using a t-test. There are `r df_ufo |> drop_na(duration_clean) |> filter(duration_clean > 7200) |> pull(state) |> length()` reports with a duration over 2 hours, comprising about 1% of the sample. These reports range from several hours to several months. I will restrict the comparison of the data to those with encounters lasting at most hours.
+
+```{r duration t test}
 df_ufo |> 
   drop_na(duration_clean) |> 
   filter(duration_clean <= 7200) |> 
   t.test(duration_clean ~ location, data = _)
 ```
 
-Even though the data are highly right-skewed, there are enough observations that it is still valid to compare the data using a t-test. The results of this test suggest that there is a significant difference between the average duration of the rural UFO sightings and the urban UFO sightings. We estimate that sightings in rural areas last for approximately one minute longer than sightings in urban areas (10.5 minutes vs. 9.5 minutes).
+The results of this test suggest that there is a significant difference between the average duration of the rural UFO sightings and the urban UFO sightings. We estimate that sightings in rural areas last for approximately one minute longer than sightings in urban areas (10.5 minutes vs. 9.5 minutes).
+
 
