@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -275,13 +355,28 @@ $(document).ready(function () {
     <li>
       <a href="text_analysis.html">Text Analysis</a>
     </li>
+    <li>
+      <a href="regression_analysis.html">Regression Analysis</a>
+    </li>
   </ul>
 </li>
 <li>
   <a href="report.html">Project Report</a>
 </li>
-<li>
-  <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Shiny</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Shiny
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Dashboard</a>
+    </li>
+    <li>
+      <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
+    </li>
+  </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -314,6 +409,14 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Trend Over Time</h1>
@@ -321,10 +424,50 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>## generate date information separately for latter trend analysis
+<p>In this page, we are going to discuss the UFO sightings trend over
+time. First we will look into the pattern of sightings by states over
+years, months, weekdays and hours.To get rid off the population effect,
+we also discuss calculate the sightings per 1 million of each states and
+then examine the trend over year and month.Then we will explore the
+sightings by shape over years.</p>
+<pre class="r"><code>library(tidyverse)
+library(cowplot)</code></pre>
+<pre><code>## Warning: package &#39;cowplot&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(
+    warning = FALSE,
+    fig.width = 8, 
+  fig.height = 6,
+  out.width = &quot;90%&quot;
+)
+
+theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+
+options(
+  ggplot2.continuous.colour = &quot;viridis&quot;,
+  ggplot2.continuous.fill = &quot;viridis&quot;
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+Sys.setlocale(&quot;LC_TIME&quot;, &quot;en_US.UTF-8&quot;)</code></pre>
+<pre><code>## [1] &quot;en_US.UTF-8&quot;</code></pre>
+<pre class="r"><code>## read in census data for state and population
+
+census &lt;- read_csv(&quot;./data/us_census.csv&quot;)|&gt;
+  rename(state = abbrv)|&gt;
+  mutate(
+    state_pop = (census_2000+census_2010+census_2020)/3
+  )|&gt;
+  select(state,state_pop)
+
+## get state for 51 states
+state_us &lt;- census|&gt;pull(state)|&gt;unique()
+
+## generate date information separately for latter trend analysis
 
 ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
-  #slice(1:50000)|&gt;
+  filter(state %in% state_us)|&gt;
   mutate(
     year = year(date_time),
     month = month(date_time),
@@ -338,22 +481,12 @@ ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
                          &quot;Friday&quot;, 
                          &quot;Saturday&quot;))
   )</code></pre>
-<pre><code>## Rows: 100802 Columns: 13
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (7): city, state, shape, duration, text, closest_city, location
-## dbl  (4): city_latitude, city_longitude, duration_clean, dist
-## dttm (2): date_time, posted
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <div id="trend-over-time-by-states" class="section level2">
 <h2>Trend over time by states</h2>
-<div id="observations-trend-over-years-by-states"
-class="section level3">
-<h3>Observations trend over years by states</h3>
-<p>To look into the UFO observations trend over years by states, here we
-take spaghetti plots to view the total observations of each state
+<div id="sightings-trend-over-years-by-states" class="section level3">
+<h3>sightings trend over years by states</h3>
+<p>To look into the UFO sightings trend over years by states, here we
+take spaghetti plots to view the total sightings of each state
 throughout years.</p>
 <pre class="r"><code>## function to generate data for trend analysis  
 ufo_trend_var &lt;- function(df,var1,var2){  
@@ -383,50 +516,64 @@ ufo_shape_plot &lt;- function(df,var_time){
   geom_line()
   
   return(trendplot)
-}</code></pre>
-<pre class="r"><code>ufo_year_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;year&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_year_trend_plot &lt;- ufo_trend_plot(ufo_year_trend,&quot;year&quot;,&quot;state&quot;)+
-  labs(title = &quot;Spaghetti plot of observations trend of states over years&quot;)
+}
 
-ufo_year_trend_plot</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+ufo_per_trend &lt;- function(df){
+  df_per_trend &lt;- df|&gt;
+  left_join(census,by = &quot;state&quot;)|&gt;
+  mutate(
+    obs = obs/state_pop*1000000
+  )
+  
+  return(df_per_trend)
+}</code></pre>
+<pre class="r"><code>ufo_year_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;year&quot;)
+
+ufo_year_trend_plot &lt;- ufo_trend_plot(ufo_year_trend,&quot;year&quot;,&quot;state&quot;)+
+  labs(title = &quot;Spaghetti plot of sightings trend of states over years&quot;)
+
+ufo_year_trend_plot_rm &lt;- 
+  ufo_year_trend |&gt;
+  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
+  labs(title = &quot;Spaghetti plot of sightings trend of states over years(CA Removed)&quot;)
+
+ufo_year_trend_plot_rm</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
-<p>From the plot of each state’s UFO observations over year, we can see
+<pre class="r"><code>ufo_year_trend_plot</code></pre>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-2-2.png" width="90%" /></p>
+<p>From the plot of each state’s UFO sightings over year, we can see
 that:</p>
 <ul>
-<li>The total observations of UFO across states went through a rapid
+<li>The total sightings of UFO across states went through a rapid
 increase right after 1995. This may result from the rapid development of
 Internet at the end of 20th century.</li>
-<li>Most states observations peaked at around 2014 and then started to
+<li>Most states sightings peaked at around 2014 and then started to
 decline.</li>
-<li>There was a sharp decline of observations at year 2018 for almost
-all states and then went through another sharp increase in 2019 and
+<li>There was a sharp decline of sightings at year 2018 for almost all
+states and then went through another sharp increase in 2019 and
 2020.</li>
-<li>The observations within one state varied largely from year to year
-with sharp increase or decrease.</li>
-<li>UFO reports in CA was far more than other states in every year after
-1995. This may due to the population effect.</li>
+<li>The sightings within one state varied largely from year to year with
+sharp increase or decrease.</li>
+<li>UFO reports in California was far more than other states in every
+year after 1995. This may due to the population effect.</li>
 </ul>
-<p>To avoid the influence of the extreme large observations of CA on the
+<p>To avoid the influence of the extreme large sightings of CA on the
 overall trend, we may filter out this state and see the overall trend
 then.</p>
 <pre class="r"><code>ufo_year_trend_plot_rm &lt;- 
   ufo_year_trend |&gt;
   filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
   ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
-  labs(title = &quot;Spaghetti plot of observations trend of states over years(CA Removed)&quot;)
+  labs(title = &quot;Spaghetti plot of sightings trend of states over years(CA Removed)&quot;)
 
 ufo_year_trend_plot_rm</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
-<p>The overall observations trend changed little compared to the
-previous one.</p>
+<p>The overall sightings trend changed little compared to the previous
+one.</p>
 </div>
-<div id="observations-trend-of-states-over-months"
-class="section level3">
-<h3>Observations trend of states over months</h3>
+<div id="sightings-trend-of-states-over-months" class="section level3">
+<h3>sightings trend of states over months</h3>
 <p>Then we group the original data by state and month to see if there if
 any trend through out months.</p>
 <pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)</code></pre>
@@ -436,13 +583,17 @@ any trend through out months.</p>
   ufo_month_trend |&gt;
   ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  scale_color_manual(name = &quot;state&quot;, values = c(&quot;FL&quot; = &quot;orange&quot;,&quot;CA&quot; = &quot;blue&quot;,&quot;WA&quot;=&quot;yellow&quot;)) +
+  theme(legend.position = &quot;bottom&quot;)+
   labs(title = &quot;Trend over month by states&quot;)
 
 ufo_month_trend_plot_rm &lt;- 
   ufo_month_trend |&gt;
-  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
+  filter(!(state %in% c(&quot;CA&quot;)))|&gt;
   ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  scale_color_manual(name = &quot;state&quot;, values = c(&quot;FL&quot; = &quot;orange&quot;,&quot;WA&quot;=&quot;yellow&quot;)) +
+  theme(legend.position = &quot;bottom&quot;)+
   labs(title = &quot;Trend over month by states(CA Removed)&quot;)
 
 plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
@@ -450,26 +601,28 @@ plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
 ## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 <ul>
-<li>The smooth line indicating a trend of average UFO observations in
+<li>The red smooth line indicating a trend of average UFO sightings in
 all states of each month.</li>
-<li>The observations slightly went down from January to March, then
-increased and peaked around Aug, and declined till Dec.</li>
-<li>For most states, summer is when most UFO observations were reported.
-However, there are some exceptions. UFO observations in state FL peaked
-at December.</li>
+<li>The sightings slightly went down from January to March, then
+increased and peaked around August, and declined till December.</li>
+<li>For most states, summer is when most UFO sightings were reported.
+However, there are some exceptions. UFO sightings in state Florida
+peaked at December, as shown by the orange line in the plot.</li>
+<li>The sightings in Washington aggregately went through the most rapid
+increase started from May and then a rapid decrease right after Jul. WA
+state has the high range of sightings by month.</li>
 </ul>
 <p>Like what we did in the year trend, we want to reduce the impact of
-outlier. Therefore, we remove observations of CA. The trend is more
-clear that observations in most states peaked at July and then declined
-and reached the lowest at around February.</p>
+outlier. Therefore, we remove sightings of California. The trend is more
+clear that sightings in most states peaked at July and then declined and
+reached the lowest at around February.</p>
 </div>
 <div id="obeservations-trend-of-states-over-hours"
 class="section level3">
 <h3>Obeservations trend of states over hours</h3>
-<pre class="r"><code>ufo_hour_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;hour&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_hour_trend_plot &lt;- 
+<pre class="r"><code>ufo_hour_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;hour&quot;)
+
+ufo_hour_trend_plot &lt;- 
   ufo_hour_trend |&gt;
   ufo_trend_plot(&quot;hour&quot;,&quot;state&quot;)+
   labs(title = &quot;Trend over hours by states&quot;)
@@ -481,26 +634,24 @@ ufo_hour_trend_plot_rm &lt;-
   labs(title = &quot;Trend over hours by states(CA Removed)&quot;)
 
 plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;
-## `geom_smooth()` using method = &#39;gam&#39; and formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <ul>
-<li>The average observations during 6:00 to 15:00 were relatively
-low.</li>
-<li>There was an sharp increase of average observations starting from
-15:00 and peaked at around 21:00.</li>
-<li>The average observations started to decline slowly after 21:00.</li>
+<li>The average sightings during 6:00 to 15:00 were relatively low.</li>
+<li>There was an sharp increase of average sightings starting from 15:00
+and peaked at around 21:00.</li>
+<li>The average sightings started to decline slowly after 21:00.</li>
 <li>People tends to observed UFO during evening than daytime.</li>
 </ul>
-<p>After removing the oulier of CA state, the trend is more clear.</p>
+<p>After removing the outlier of California state, the trend is more
+clear.</p>
 </div>
 <div id="obeservations-trend-of-states-over-weekdays"
 class="section level3">
 <h3>Obeservations trend of states over weekdays</h3>
-<pre class="r"><code>ufo_weekday_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;weekday&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_weekday_plot &lt;- ufo_weekday_trend |&gt;
+<pre class="r"><code>ufo_weekday_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;weekday&quot;)
+
+
+ufo_weekday_plot &lt;- ufo_weekday_trend |&gt;
   mutate(
     weekday = as.numeric(weekday)
   )|&gt;
@@ -521,18 +672,16 @@ ufo_weekday_plot_rm&lt;-
   labs(title = &quot;Trend over weekdays by states (CA Removed)&quot;)
 
 plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
-## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
-<p>The overall trend for all states is not clear. For state CA,the
-observations declined from Sunday to Monday, then increased during
-weekdays and peaked at Saturday.</p>
-<p>We may remove state CA to check the overall trend again.</p>
+<p>The overall trend for all states is not clear. For California,the
+sightings declined from Sunday to Monday, then increased during weekdays
+and peaked at Saturday.</p>
+<p>We may remove state California to check the overall trend again.</p>
 <p>Now we may notice a trend showed by the red smooth line that the
-average observations went through an slow increase started Monday
-through Friday and peaked at Saturday, then reduced during Sunday.</p>
+average sightings went through an slow increase started Monday through
+Friday and peaked at Saturday, then reduced during Sunday.</p>
 <p>To make this statement clearer, we can view the bar plot of the
-observations over weekdays.</p>
+sightings over weekdays.</p>
 <pre class="r"><code>ufo_weekday_trend |&gt;
   mutate(
     weekday = as.numeric(weekday)
@@ -541,12 +690,97 @@ observations over weekdays.</p>
   geom_col()+
   scale_x_continuous(breaks = 1:7, labels = c(&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;))+
   labs(
-    title = &quot;Bar plot of observations trend of states over weekdays&quot;
+    title = &quot;Bar plot of sightings trend of states over weekdays&quot;
   )</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
-<p>The bar plot visualized the trend more clear. The overall
-observations decreased from Sunday to Monday, then increased day by day
-and reached the highest values at Saturday.</p>
+<p>The bar plot visualized the trend more clear. The overall sightings
+decreased from Sunday to Monday, then increased day by day and reached
+the highest values at Saturday.</p>
+</div>
+</div>
+<div id="trend-per-population-by-state-over-time"
+class="section level2">
+<h2>Trend per population by state over time</h2>
+<p>In the previous part of this page, we discuss about the population
+effect on the overall trend over year. Here, we take the average of
+population of 2000,2010,2020 of each state, and use this average
+population to calculate the sightings per one million from 1995 to 2022
+to get rid of the population effect, then we examine the average trend
+over time. We mainly discuss the trend of sightings per 1 million
+population over year and month here.</p>
+<div id="trend-per-population-by-state-over-year"
+class="section level3">
+<h3>Trend per population by state over year</h3>
+<pre class="r"><code>ufo_per &lt;- ufo_trend|&gt;
+  filter(
+    year &gt;= 1995
+  )
+
+ufo_year_per &lt;- ufo_trend_var(ufo_per,&quot;state&quot;,&quot;year&quot;)|&gt;
+  ufo_per_trend()
+
+ufo_year_per_plot &lt;- ufo_year_per|&gt;
+  ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
+  labs(
+    title = &quot;sightings by states over years(per 1M)&quot;,
+    y = &quot;obs per 1M&quot;   )
+
+ufo_year_per_plot_spec &lt;- ufo_year_per|&gt;
+  filter(state %in% c(&quot;VT&quot;,&quot;CA&quot;))|&gt;
+  ggplot(aes(y = obs,x = year, color = state))+
+  geom_line()+
+  labs(title = &quot;sightings of VT and CA over years(per 1M)&quot;,
+       y = &quot;obs per 1M&quot;)
+
+plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)</code></pre>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+<ul>
+<li>For sightings per 1M population, the trend looks a slightly
+different from the aggregate sightings trend.</li>
+<li>We can still see the fast increase right after 1995, but the
+increase rate after 2002 is relatively slow.</li>
+<li>There is a rapid increase after 2008 and then peaked at 2014, then
+decreased till around 2017.</li>
+<li>The sightings remained stable for a short period after 2017 then
+decreased to a relatively low level.</li>
+<li>The state with most sightings per 1M is Vermont. After taking
+population into account, the sightings in California varied in an
+average pace.</li>
+</ul>
+</div>
+<div id="trend-per-population-by-state-over-month"
+class="section level3">
+<h3>Trend per population by state over month</h3>
+<pre class="r"><code>ufo_month_per &lt;- ufo_trend_var(ufo_per,&quot;state&quot;,&quot;month&quot;)|&gt;
+  ufo_per_trend()
+
+ufo_month_per_plot &lt;- ufo_month_per|&gt;
+  ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(
+    title = &quot;sightings over months(per 1M)&quot;,
+    y = &quot;obs per 1M&quot;   )
+
+ufo_month_per_plot_spec &lt;- ufo_month_per|&gt;
+  filter(state %in% c(&quot;CA&quot;,&quot;FL&quot;,&quot;AK&quot;))|&gt;
+  ggplot(aes(y = obs,x = month, color = state))+
+  geom_line()+
+  scale_x_continuous(breaks = 1:12, labels = month.abb)+
+  labs(title = &quot;sightings over months of3 states(per 1M)&quot;,
+       y = &quot;obs per 1M&quot;)
+
+plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)</code></pre>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<ul>
+<li>The sightings trend over month change little after adjusting for
+population.</li>
+<li>However, there were some certain states that went against the
+average trend. State Alaska had the most sightings per 1M in winter and
+the lowest sightings in summer. This may due to the polar night in
+winter.</li>
+<li>Also, we can see that the change rate of California over months was
+relatively stable.</li>
+</ul>
 </div>
 </div>
 <div id="trends-over-time-by-shape" class="section level2">
@@ -569,10 +803,9 @@ ufo_shape &lt;- ufo_trend|&gt;
   filter(shape %in% shape10)</code></pre>
 <p>In total there are 23 shape categories in the original dataset. Here
 we extract the most observed 10 shapes to see the trend over year.</p>
-<pre class="r"><code>ufo_year_shape &lt;- ufo_trend_var(ufo_shape,var1=&quot;shape&quot;,var2=&quot;year&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;shape&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_year_shape |&gt; 
+<pre class="r"><code>ufo_year_shape &lt;- ufo_trend_var(ufo_shape,var1=&quot;shape&quot;,var2=&quot;year&quot;)
+
+ufo_year_shape |&gt; 
   mutate(
     shape = factor(shape,levels = shape10)
   )|&gt;
@@ -580,10 +813,10 @@ we extract the most observed 10 shapes to see the trend over year.</p>
   geom_line()+
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  labs(title = &quot;Spaghetti plot of observations trend of states over years&quot;)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+  labs(title = &quot;Spaghetti plot of sightings trend of states over years&quot;)</code></pre>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
 <p>For most observed shapes, they have similar trend over year:the
-observations started to increase rapidly in 1990s and, then peaked at
+sightings started to increase rapidly in 1990s and, then peaked at
 around 2014, followed by an sharp decrease in 2018 and another peak in
 2020.</p>
 <p>Light, circle and triangle were the most observed shape of UFO. The
@@ -592,16 +825,18 @@ light shape had the most sharp change rate of all shapes.</p>
 <p>As for <code>fireball</code>, there was a peak before 2000 and a
 relatively slow increase rate after that compared to others</p>
 <p>As for <code>disk</code>, this is a traditional shape that comes to
-people’s mind when talking about UFO. The observations of disk went
-through an increase in 1970s right after the foundation of NUFORC. And
-the increase rate of disk observations after 1990s was relatively low.
-The highest value of observations in one year of was never over 250. (We
-might consider not taking disk as a classic shape of UFO.)</p>
+people’s mind when talking about UFO. The sightings of disk went through
+an increase in 1970s right after the foundation of NUFORC. And the
+increase rate of disk sightings after 1990s was relatively low. The
+highest value of sightings in one year of was never over 250. (We might
+consider not taking disk as a classic shape of UFO.)</p>
 </div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -633,7 +868,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
