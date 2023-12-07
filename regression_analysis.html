@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -294,7 +294,7 @@ $(document).ready(function () {
       <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Dashboard</a>
     </li>
     <li>
-      <a href="xyz.html">Interactive Map</a>
+      <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
     </li>
   </ul>
 </li>
@@ -338,7 +338,7 @@ $(document).ready(function () {
 
 <pre class="r"><code>ufo = read_csv(&quot;./data/ufo_clean.csv&quot;)</code></pre>
 <pre><code>## Rows: 100802 Columns: 13
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (7): city, state, shape, duration, text, closest_city, location
 ## dbl  (4): city_latitude, city_longitude, duration_clean, dist
@@ -454,7 +454,7 @@ summary(mult.fit)</code></pre>
 ##                  Estimate Std. Error    t value Pr(&gt;|t|)    
 ## (Intercept)     1.008e+05  1.402e-07  7.192e+11  &lt; 2e-16 ***
 ## city_latitude  -1.038e-10  1.191e-10 -8.720e-01 0.383307    
-## city_longitude -4.995e-11  3.601e-11 -1.387e+00 0.165490    
+## city_longitude -4.995e-11  3.602e-11 -1.387e+00 0.165490    
 ## duration_clean -5.162e-13  1.381e-13 -3.738e+00 0.000186 ***
 ## dist           -7.763e-13  1.592e-11 -4.900e-02 0.961115    
 ## location        3.020e-09  1.622e-09  1.862e+00 0.062601 .  
@@ -484,12 +484,12 @@ summary(step1)</code></pre>
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error    t value Pr(&gt;|t|)    
-## (Intercept)     1.008e+05  1.401e-07  7.193e+11  &lt; 2e-16 ***
+## (Intercept)     1.008e+05  1.402e-07  7.192e+11  &lt; 2e-16 ***
 ## city_latitude  -1.048e-10  1.173e-10 -8.940e-01 0.371414    
 ## city_longitude -4.974e-11  3.577e-11 -1.391e+00 0.164344    
 ## duration_clean -5.163e-13  1.381e-13 -3.739e+00 0.000185 ***
 ## location        2.991e-09  1.507e-09  1.984e+00 0.047274 *  
-## year           -7.801e-11  6.962e-11 -1.121e+00 0.262462    
+## year           -7.802e-11  6.962e-11 -1.121e+00 0.262462    
 ## month           5.558e-11  1.972e-10  2.820e-01 0.778095    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
@@ -511,7 +511,7 @@ summary(step2)</code></pre>
 ## 
 ## Coefficients:
 ##                  Estimate Std. Error    t value Pr(&gt;|t|)    
-## (Intercept)     1.008e+05  1.401e-07  7.198e+11  &lt; 2e-16 ***
+## (Intercept)     1.008e+05  1.401e-07  7.197e+11  &lt; 2e-16 ***
 ## city_latitude  -1.041e-10  1.172e-10 -8.880e-01 0.374531    
 ## city_longitude -4.948e-11  3.576e-11 -1.384e+00 0.166424    
 ## duration_clean -5.164e-13  1.381e-13 -3.739e+00 0.000185 ***
@@ -563,7 +563,7 @@ summary(step4)</code></pre>
 ## Coefficients:
 ##                  Estimate Std. Error    t value Pr(&gt;|t|)    
 ## (Intercept)     1.008e+05  3.686e-09  2.735e+13  &lt; 2e-16 ***
-## city_longitude -4.740e-11  3.558e-11 -1.332e+00 0.182785    
+## city_longitude -4.741e-11  3.558e-11 -1.332e+00 0.182785    
 ## duration_clean -5.131e-13  1.381e-13 -3.716e+00 0.000202 ***
 ## location        2.808e-09  1.498e-09  1.874e+00 0.060880 .  
 ## ---
@@ -574,71 +574,71 @@ summary(step4)</code></pre>
 ## F-statistic: 2.976e+04 on 3 and 89276 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># just use one function
 step(mult.fit, direction = &#39;backward&#39;)</code></pre>
-<pre><code>## Start:  AIC=-2762254
+<pre><code>## Start:  AIC=-2762251
 ## sightings ~ city_latitude + city_longitude + duration_clean + 
 ##     dist + location + year + month</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## - dist            1 9.0000e-17 3.2655e-09 -2762256
-## - month           1 2.9000e-15 3.2655e-09 -2762256
-## - city_latitude   1 2.7800e-14 3.2655e-09 -2762255
-## - year            1 4.5990e-14 3.2655e-09 -2762254
-## - city_longitude  1 7.0350e-14 3.2655e-09 -2762254
-## &lt;none&gt;                         3.2655e-09 -2762254
-## - location        1 1.2683e-13 3.2656e-09 -2762252
-## - duration_clean  1 5.1101e-13 3.2660e-09 -2762242
+## - dist            1 9.0000e-17 3.2656e-09 -2762253
+## - month           1 2.9000e-15 3.2656e-09 -2762253
+## - city_latitude   1 2.7800e-14 3.2656e-09 -2762252
+## - year            1 4.5990e-14 3.2656e-09 -2762251
+## - city_longitude  1 7.0360e-14 3.2656e-09 -2762251
+## &lt;none&gt;                         3.2656e-09 -2762251
+## - location        1 1.2683e-13 3.2657e-09 -2762249
+## - duration_clean  1 5.1103e-13 3.2661e-09 -2762239
 ## 
-## Step:  AIC=-2762256
+## Step:  AIC=-2762253
 ## sightings ~ city_latitude + city_longitude + duration_clean + 
 ##     location + year + month</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## - month           1 2.9000e-15 3.2655e-09 -2762258
-## - city_latitude   1 2.9220e-14 3.2655e-09 -2762257
-## - year            1 4.5930e-14 3.2655e-09 -2762256
-## - city_longitude  1 7.0740e-14 3.2655e-09 -2762256
-## &lt;none&gt;                         3.2655e-09 -2762256
-## - location        1 1.4396e-13 3.2656e-09 -2762254
-## - duration_clean  1 5.1129e-13 3.2660e-09 -2762244
+## - month           1 2.9000e-15 3.2656e-09 -2762255
+## - city_latitude   1 2.9220e-14 3.2656e-09 -2762254
+## - year            1 4.5930e-14 3.2656e-09 -2762253
+## - city_longitude  1 7.0740e-14 3.2656e-09 -2762253
+## &lt;none&gt;                         3.2656e-09 -2762253
+## - location        1 1.4397e-13 3.2657e-09 -2762251
+## - duration_clean  1 5.1131e-13 3.2661e-09 -2762241
 ## 
-## Step:  AIC=-2762258
+## Step:  AIC=-2762255
 ## sightings ~ city_latitude + city_longitude + duration_clean + 
 ##     location + year</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## - city_latitude   1 2.8840e-14 3.2655e-09 -2762259
-## - year            1 4.6600e-14 3.2655e-09 -2762258
-## - city_longitude  1 7.0040e-14 3.2655e-09 -2762258
-## &lt;none&gt;                         3.2655e-09 -2762258
-## - location        1 1.4398e-13 3.2656e-09 -2762256
-## - duration_clean  1 5.1146e-13 3.2660e-09 -2762246
+## - city_latitude   1 2.8850e-14 3.2656e-09 -2762256
+## - year            1 4.6610e-14 3.2656e-09 -2762255
+## - city_longitude  1 7.0050e-14 3.2656e-09 -2762255
+## &lt;none&gt;                         3.2656e-09 -2762255
+## - location        1 1.4399e-13 3.2657e-09 -2762253
+## - duration_clean  1 5.1148e-13 3.2661e-09 -2762243
 ## 
-## Step:  AIC=-2762259
+## Step:  AIC=-2762256
 ## sightings ~ city_longitude + duration_clean + location + year</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## - year            1 4.5870e-14 3.2655e-09 -2762260
-## - city_longitude  1 6.2260e-14 3.2655e-09 -2762259
-## &lt;none&gt;                         3.2655e-09 -2762259
-## - location        1 1.3197e-13 3.2656e-09 -2762257
-## - duration_clean  1 5.1124e-13 3.2660e-09 -2762247
+## - year            1 4.5870e-14 3.2656e-09 -2762256
+## - city_longitude  1 6.2260e-14 3.2657e-09 -2762256
+## &lt;none&gt;                         3.2656e-09 -2762256
+## - location        1 1.3198e-13 3.2657e-09 -2762254
+## - duration_clean  1 5.1126e-13 3.2661e-09 -2762244
 ## 
-## Step:  AIC=-2762260
+## Step:  AIC=-2762256
 ## sightings ~ city_longitude + duration_clean + location</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## - city_longitude  1 6.4920e-14 3.2656e-09 -2762260
-## &lt;none&gt;                         3.2655e-09 -2762260
-## - location        1 1.2851e-13 3.2657e-09 -2762258
-## - duration_clean  1 5.0519e-13 3.2660e-09 -2762248
+## - city_longitude  1 6.4920e-14 3.2657e-09 -2762257
+## &lt;none&gt;                         3.2656e-09 -2762256
+## - location        1 1.2852e-13 3.2658e-09 -2762255
+## - duration_clean  1 5.0521e-13 3.2661e-09 -2762245
 ## 
-## Step:  AIC=-2762260
+## Step:  AIC=-2762257
 ## sightings ~ duration_clean + location</code></pre>
 <pre><code>## Warning: attempting model selection on an essentially perfect fit is nonsense</code></pre>
 <pre><code>##                  Df  Sum of Sq        RSS      AIC
-## &lt;none&gt;                         3.2656e-09 -2762260
-## - location        1 1.1983e-13 3.2657e-09 -2762258
-## - duration_clean  1 5.0499e-13 3.2661e-09 -2762248</code></pre>
+## &lt;none&gt;                         3.2657e-09 -2762257
+## - location        1 1.1983e-13 3.2658e-09 -2762255
+## - duration_clean  1 5.0501e-13 3.2662e-09 -2762245</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = sightings ~ duration_clean + location, data = ufo_subset)
