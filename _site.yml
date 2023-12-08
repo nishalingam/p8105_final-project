@@ -28,5 +28,7 @@ navbar:
       href: https://github.com/nishalingam/p8105_final-project
 output:
   html_document:
+    include:
+      in_header: header.html
     theme: flatly
   
