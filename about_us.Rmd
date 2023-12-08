@@ -29,7 +29,7 @@ Welcome to our project! Meet the team behind the scenes, dedicated to making thi
 
 ## Xue Zhang (xz3173)
 
-![Xue Zhang]()
+![Xue Zhang](images/xz.jpg)
 
 
 ## Contact Us
