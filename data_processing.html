@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -350,7 +350,7 @@ We then selected only reports from the U.S.A.</p>
   filter(!(state %in% c(&quot;AB&quot;, &quot;BC&quot;, &quot;MB&quot;, &quot;NB&quot;, &quot;NS&quot;, &quot;SK&quot;, &quot;ON&quot;))) |&gt; 
   filter(city_longitude &lt; -30, city_latitude &gt; 10)</code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -361,12 +361,14 @@ We then selected only reports from the U.S.A.</p>
 </div>
 <div id="duration" class="section level3">
 <h3>Duration</h3>
-<p>The duration data in the reports was not standardized and varied
-wildly in format [examples?]. To resolve this we standardized the time
-using a regex function that pulled both numeric values and time units
-(seconds, minutes, or hours) out of these reports.</p>
-<!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
-<!-- Also doesn't work for decimal times -->
+<p>The <code>duration</code> data in the reports was not standardized
+and varied wildly in format. Examples include “~8 minutes”, “30 SECS”,
+or “3 hours or more”. To resolve this we standardized the time by
+writing a regex function that pulled both numeric values and time units
+(seconds, minutes, or hours) out of these reports. Our output was a
+value in seconds, and was obtained for about 90% of these reports. The
+missing 10% came from <code>duration</code> values such as “Few minutes”
+or “18:00” which were not interpretable in a standard fashion.</p>
 <pre class="r"><code>time_str = function(str){
   # Pulls numeric values from string
   if (str_detect(str, &quot;\\:&quot;)) {
@@ -395,8 +397,7 @@ using a regex function that pulled both numeric values and time units
   mutate(duration_clean = map(duration, time_str)) |&gt; 
   unnest(duration_clean)</code></pre>
 <pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `duration_clean = map(duration,
-##   time_str)`.
+## ℹ In argument: `duration_clean = map(duration, time_str)`.
 ## Caused by warning in `.f()`:
 ## ! NAs introduced by coercion</code></pre>
 </div>
@@ -410,7 +411,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id

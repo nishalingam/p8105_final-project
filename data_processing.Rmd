@@ -32,10 +32,8 @@ df_reports =
 ```
 
 ### Duration
-The duration data in the reports was not standardized and varied wildly in format [examples?]. To resolve this we standardized the time using a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports.
+The `duration` data in the reports was not standardized and varied wildly in format. Examples include “~8 minutes”, “30 SECS”, or “3 hours or more”. To resolve this we standardized the time by writing a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports. Our output was a value in seconds, and was obtained for about 90% of these reports. The missing 10% came from `duration` values such as "Few minutes" or "18:00" which were not interpretable in a standard fashion. 
 
-<!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
-<!-- Also doesn't work for decimal times -->
 ```{r function for times from strings}
 time_str = function(str){
   # Pulls numeric values from string
