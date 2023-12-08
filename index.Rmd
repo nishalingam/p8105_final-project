@@ -4,36 +4,49 @@ output:
   html_document:
     toc: true
     toc_float: true
-    toc_depth: 2
-    after_body: footer.html
 ---
+```{css, echo = FALSE}
+.video-container { 
+  position: relative; 
+  padding-bottom: 56.25%; 
+  padding-top: 30px; 
+  height: 0; 
+  overflow: hidden; 
+}
+
+.video-container iframe, .video-container object, .video-container embed { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+```
 
 
-## Unraveling the Mysteries of the Skies
+### Unraveling the Mysteries of the Skies
+Our project explores the reporting of unidentified flying objects (UFOs) throughout the U.S. UFOs, by their very nature, leave unanswered questions, some of which we hope to explore through this project. With the wealth of information gathered about these phenomena and motivated by the [congressional hearings](https://www.cnn.com/2023/07/26/politics/ufo-house-hearing-congress/index.html) [earlier this year](https://www.pbs.org/newshour/politics/analysis-whistleblower-testimonies-did-not-change-our-basic-understanding-of-ufos), we wanted to create a resource to understand the data on UFO encounters. Our project addresses three key components to provide this understanding: *when* the encounters happened, *where* the encounters happened, and *what* was encountered.
 
-![UFO in the Night Sky](images/ufo_night_sky.jpeg)
+### Project Overview
+<!--this is just a placeholder video -->
+<div class="video-container">
+<iframe src="https://www.youtube.com/embed/HJQoZtn9C3w?si=pZIF0ScSvAC5p66b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
 
-Explore the world of unidentified flying objects (UFOs) through the lens of data analysis. Our project leverages the power of R programming to dissect, visualize, and understand the patterns and trends in the U.S. UFO sightings.
+### What We Do
 
-## What We Do
-
-- **Data Collection**: Gathering extensive UFO sighting reports from various credible sources.
+- **Data Cleaning**: Carefully turning messy reports into insightful data sets.
 - **Data Analysis**: Using statistical techniques to uncover trends and patterns in sightings.
 - **Visualization**: Presenting our findings through engaging and interactive visualizations.
 
-## Features
+### Features
 
-- [**Project Overview**](about.html): Learn about the goals, motivation, and methodologies of our project.
+- [**Data Processing**](data_processing.html): Explore the steps taken to transform thousands of UFO sightings into tangible data.
 - [**Detailed Reports**](report.html): Dive into our comprehensive reports detailing our findings and analysis.
 - [**Interactive Visualizations**](shiny_dashboard.html): Explore interactive maps and graphs showcasing UFO sighting trends.
 - [**Meet the Team**](about_us.html): Get to know the team of data scientists and enthusiasts behind this project.
 
-## Latest Insights
-
-- **Sighting Hotspots Identified**: Discover the regions with the most frequent UFO sightings.
-- **Temporal Trends Uncovered**: Learn about how sightings have varied over time.
-
-## Join the Discussion
+### Join the Discussion
 
 Are you a UFO enthusiast, researcher, or just curious? [Contact Us](xz3173@cumc.columbia.edu) to discuss your experiences, theories, and insights with a community of like-minded individuals.
 

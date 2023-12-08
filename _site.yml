@@ -22,12 +22,8 @@ navbar:
     - text: "Project Report"
       href: report.html
   right:
-    - text: "About"
-      menu:
-      - text: "About the Project"
-        href: about.html
-      - text: "About our Team"
-        href: about_us.html
+    - text: "About the Team"
+      href: about_us.html
     - icon: fa-github fa-lg
       href: https://github.com/nishalingam/p8105_final-project
 output:

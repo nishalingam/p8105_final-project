@@ -10,7 +10,7 @@ output:
 
 ### Project Overview
 
-Welcome to our UFO Sightings Analysis Project. Our mission is to explore, analyze, and visualize reports of unidentified flying objects (UFOs) from around the world. Using advanced statistical statistical techniques and R programming, we delve into decades of sighting reports to uncover patterns and insights.
+Welcome to Aliens Among U.S., our UFO Sightings Analysis Project. Our mission is to explore, analyze, and visualize reports of unidentified flying objects (UFOs) from around the world. Using advanced statistical statistical techniques and R programming, we delve into decades of sighting reports to uncover patterns and insights.
 
 ### Our Goals
 
@@ -24,7 +24,7 @@ Welcome to our UFO Sightings Analysis Project. Our mission is to explore, analyz
 
 ### Methodology
 
-Our approach combines descriptive statistics, geospatial analysis, and time series analysis. We use R pacages like `dplyr`, `tidyverse` for data manipulation, `ggplot2`, `plotly` for visualization, and `leaflet` for interactive mapping.
+Our approach combines descriptive statistics, geospatial analysis, and time series analysis. We use R packages, including `tidyverse` for data manipulation, `ggplot2` and `plotly` for visualization, and `leaflet` for interactive mapping.
 
 ### Interesting Findings
 
