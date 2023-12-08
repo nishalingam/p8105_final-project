@@ -19,6 +19,8 @@ navbar:
         href: https://xz3173.shinyapps.io/shiny_dashboard/
       - text: "Interactive Map"
         href: https://ncl2127.shinyapps.io/shiny_app/
+      - text: "State UFO Stats: Wrapped"
+        href: https://ncl2127.shinyapps.io/shiny_app_2/
     - text: "Project Report"
       href: report.html
   right:
