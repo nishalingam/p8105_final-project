@@ -5,7 +5,6 @@ navbar:
   left: 
     - text: "Data Processing"
       href: data_processing.html
-
     - text: "Analyses"
       menu:
       - text: "Trends over space"
@@ -14,19 +13,20 @@ navbar:
         href: trend_time.html
       - text: "Text Analysis"
         href: text_analysis.html
-    - text: "Project Report"
-      href: report.html
     - text: "Shiny"
       menu:
       - text: "EDA Dashboard"
         href: https://xz3173.shinyapps.io/shiny_dashboard/
       - text: "Interactive Map"
         href: https://ncl2127.shinyapps.io/shiny_app/
+    - text: "Project Report"
+      href: report.html
+  right:
     - text: "About"
       menu:
-      - text: "The Project"
+      - text: "About the Project"
         href: about.html
-      - text: "Us"
+      - text: "About our Team"
         href: about_us.html
     - icon: fa-github fa-lg
       href: https://github.com/nishalingam/p8105_final-project

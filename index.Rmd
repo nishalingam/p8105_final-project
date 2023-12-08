@@ -1,13 +1,13 @@
 ---
-title: "UFO Sightings Analysis Project"
+title: "Aliens Among U.S."
 output: 
   html_document:
     toc: true
+    toc_float: true
     toc_depth: 2
     after_body: footer.html
 ---
 
-# Welcome to the UFO Sightings Analysis Project
 
 ## Unraveling the Mysteries of the Skies
 
@@ -43,6 +43,5 @@ Embark on this journey with us as we delve into the unknown, one data point at a
 
 [Resources](https://nuforc.org/)
 
-![Starry Sky](images/starry_sky.jpeg)
 
 
