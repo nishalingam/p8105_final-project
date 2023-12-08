@@ -29,11 +29,15 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -314,6 +394,14 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Data Processing</h1>
@@ -321,20 +409,6 @@ $(document).ready(function () {
 </div>
 
 
-<div id="load-packages" class="section level3">
-<h3>Load packages</h3>
-<pre class="r"><code># Load packages
-library(tidyverse)
-
-
-# Set default figure options
-knitr::opts_chunk$set(
-  fig.width = 6,
-  out.width = &quot;90%&quot;
-)
-
-theme_set(theme_bw() + theme(legend.position = &quot;bottom&quot;))</code></pre>
-</div>
 <div id="initial-data-file" class="section level3">
 <h3>Initial Data File</h3>
 <p>We began with a collections of UFO reports pulled from the NUFORC by
@@ -349,24 +423,17 @@ We then selected only reports from the U.S.A.</p>
   drop_na() |&gt; 
   filter(!(state %in% c(&quot;AB&quot;, &quot;BC&quot;, &quot;MB&quot;, &quot;NB&quot;, &quot;NS&quot;, &quot;SK&quot;, &quot;ON&quot;))) |&gt; 
   filter(city_longitude &lt; -30, city_latitude &gt; 10)</code></pre>
-<pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
-## dbl  (2): city_latitude, city_longitude
-## dttm (2): date_time, posted
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div id="duration" class="section level3">
 <h3>Duration</h3>
-<p>The duration data in the reports was not standardized and varied
-wildly in format [examples?]. To resolve this we standardized the time
-using a regex function that pulled both numeric values and time units
-(seconds, minutes, or hours) out of these reports.</p>
-<!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
-<!-- Also doesn't work for decimal times -->
+<p>The <code>duration</code> data in the reports was not standardized
+and varied wildly in format. Examples include “~8 minutes”, “30 SECS”,
+or “3 hours or more”. To resolve this we standardized the time by
+writing a regex function that pulled both numeric values and time units
+(seconds, minutes, or hours) out of these reports. Our output was a
+value in seconds, and was obtained for about 90% of these reports. The
+missing 10% came from <code>duration</code> values such as “Few minutes”
+or “18:00” which were not interpretable in a standard fashion.</p>
 <pre class="r"><code>time_str = function(str){
   # Pulls numeric values from string
   if (str_detect(str, &quot;\\:&quot;)) {
@@ -394,11 +461,6 @@ using a regex function that pulled both numeric values and time units
   df_reports |&gt; 
   mutate(duration_clean = map(duration, time_str)) |&gt; 
   unnest(duration_clean)</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `duration_clean = map(duration,
-##   time_str)`.
-## Caused by warning in `.f()`:
-## ! NAs introduced by coercion</code></pre>
 </div>
 <div id="distance" class="section level3">
 <h3>Distance</h3>
@@ -409,15 +471,6 @@ and selected only cities with a population over 200,000.</p>
 <pre class="r"><code>df_cities &lt;- read_csv(&quot;data/uscities.csv&quot;) |&gt;
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
-<pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
-## dbl (6): lat, lng, population, density, ranking, id
-## lgl (2): military, incorporated
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <p>We then created a function to identify the distance from the UFO
 report to the closest city with a population over 200,000. We are using
 the <a href="https://en.wikipedia.org/wiki/Haversine_formula">haversine
@@ -460,13 +513,13 @@ whether the report took place within 5 miles of a large U.S. city.</p>
            dist &lt;= 5 ~ &quot;urban&quot;,
            dist &gt; 5 ~ &quot;rural&quot;
          )) </code></pre>
-</div>
-<div id="export" class="section level3">
-<h3>Export</h3>
-<p>This clean version of the dataset will be used for our analyses on
-other pages.</p>
+<div id="export" class="section level4">
+<h4>Export</h4>
+<p>This clean version of the dataset will be exported and used for our
+analyses on other pages.</p>
 <pre class="r"><code>df_reports |&gt; 
   write_csv(file = &quot;data/ufo_clean.csv&quot;)</code></pre>
+</div>
 </div>
 <div id="final-dataset-description" class="section level3">
 <h3>Final Dataset Description</h3>
@@ -497,6 +550,8 @@ of 200,000.</li>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -528,7 +583,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
