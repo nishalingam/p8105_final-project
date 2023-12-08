@@ -361,20 +361,8 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    About
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="about.html">About the Project</a>
-    </li>
-    <li>
-      <a href="about_us.html">About our Team</a>
-    </li>
-  </ul>
+        <li>
+  <a href="about_us.html">About the Team</a>
 </li>
 <li>
   <a href="https://github.com/nishalingam/p8105_final-project">
@@ -396,33 +384,64 @@ div.tocify {
 </div>
 
 
-<div id="unraveling-the-mysteries-of-the-skies" class="section level2">
-<h2>Unraveling the Mysteries of the Skies</h2>
-<div class="float">
-<img src="images/ufo_night_sky.jpeg" alt="UFO in the Night Sky" />
-<div class="figcaption">UFO in the Night Sky</div>
+<style type="text/css">
+.video-container { 
+  position: relative; 
+  padding-bottom: 56.25%; 
+  padding-top: 30px; 
+  height: 0; 
+  overflow: hidden; 
+}
+
+.video-container iframe, .video-container object, .video-container embed { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+</style>
+<div id="unraveling-the-mysteries-of-the-skies" class="section level3">
+<h3>Unraveling the Mysteries of the Skies</h3>
+<p>Our project explores the reporting of unidentified flying objects
+(UFOs) throughout the U.S. UFOs, by their very nature, leave unanswered
+questions, some of which we hope to explore through this project. With
+the wealth of information gathered about these phenomena and motivated
+by the <a
+href="https://www.cnn.com/2023/07/26/politics/ufo-house-hearing-congress/index.html">congressional
+hearings</a> <a
+href="https://www.pbs.org/newshour/politics/analysis-whistleblower-testimonies-did-not-change-our-basic-understanding-of-ufos">earlier
+this year</a>, we wanted to create a resource to understand the data on
+UFO encounters. Our project addresses three key components to provide
+this understanding: <em>when</em> the encounters happened,
+<em>where</em> the encounters happened, and <em>what</em> was
+encountered.</p>
 </div>
-<p>Explore the world of unidentified flying objects (UFOs) through the
-lens of data analysis. Our project leverages the power of R programming
-to dissect, visualize, and understand the patterns and trends in the
-U.S. UFO sightings.</p>
+<div id="project-overview" class="section level3">
+<h3>Project Overview</h3>
+<!--this is just a placeholder video -->
+<div class="video-container">
+<iframe src="https://www.youtube.com/embed/HJQoZtn9C3w?si=pZIF0ScSvAC5p66b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
 </div>
-<div id="what-we-do" class="section level2">
-<h2>What We Do</h2>
+</div>
+<div id="what-we-do" class="section level3">
+<h3>What We Do</h3>
 <ul>
-<li><strong>Data Collection</strong>: Gathering extensive UFO sighting
-reports from various credible sources.</li>
+<li><strong>Data Cleaning</strong>: Carefully turning messy reports into
+insightful data sets.</li>
 <li><strong>Data Analysis</strong>: Using statistical techniques to
 uncover trends and patterns in sightings.</li>
 <li><strong>Visualization</strong>: Presenting our findings through
 engaging and interactive visualizations.</li>
 </ul>
 </div>
-<div id="features" class="section level2">
-<h2>Features</h2>
+<div id="features" class="section level3">
+<h3>Features</h3>
 <ul>
-<li><a href="about.html"><strong>Project Overview</strong></a>: Learn
-about the goals, motivation, and methodologies of our project.</li>
+<li><a href="data_processing.html"><strong>Data Processing</strong></a>:
+Explore the steps taken to transform thousands of UFO sightings into
+tangible data.</li>
 <li><a href="report.html"><strong>Detailed Reports</strong></a>: Dive
 into our comprehensive reports detailing our findings and analysis.</li>
 <li><a href="shiny_dashboard.html"><strong>Interactive
@@ -433,17 +452,8 @@ know the team of data scientists and enthusiasts behind this
 project.</li>
 </ul>
 </div>
-<div id="latest-insights" class="section level2">
-<h2>Latest Insights</h2>
-<ul>
-<li><strong>Sighting Hotspots Identified</strong>: Discover the regions
-with the most frequent UFO sightings.</li>
-<li><strong>Temporal Trends Uncovered</strong>: Learn about how
-sightings have varied over time.</li>
-</ul>
-</div>
-<div id="join-the-discussion" class="section level2">
-<h2>Join the Discussion</h2>
+<div id="join-the-discussion" class="section level3">
+<h3>Join the Discussion</h3>
 <p>Are you a UFO enthusiast, researcher, or just curious? <a
 href="xz3173@cumc.columbia.edu">Contact Us</a> to discuss your
 experiences, theories, and insights with a community of like-minded
@@ -503,7 +513,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
