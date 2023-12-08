@@ -3,12 +3,9 @@ output_dir: "."
 navbar:
   title: "Home"
   left: 
-    - text: "Data Bank"
-      menu:
-      - text: "Data Processing"
-        href: data_processing.html
-      - text: "EDA"
-        href: eda.html
+    - text: "Data Processing"
+      href: data_processing.html
+
     - text: "Analyses"
       menu:
       - text: "Trends over space"
@@ -17,13 +14,11 @@ navbar:
         href: trend_time.html
       - text: "Text Analysis"
         href: text_analysis.html
-      - text: "Regression Analysis"
-        href: regression_analysis.html
     - text: "Project Report"
       href: report.html
     - text: "Shiny"
       menu:
-      - text: "Dashboard"
+      - text: "EDA Dashboard"
         href: https://xz3173.shinyapps.io/shiny_dashboard/
       - text: "Interactive Map"
         href: https://ncl2127.shinyapps.io/shiny_app/

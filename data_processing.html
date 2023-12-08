@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -244,20 +244,8 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Data Bank
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="data_processing.html">Data Processing</a>
-    </li>
-    <li>
-      <a href="eda.html">EDA</a>
-    </li>
-  </ul>
+        <li>
+  <a href="data_processing.html">Data Processing</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,9 +263,6 @@ $(document).ready(function () {
     <li>
       <a href="text_analysis.html">Text Analysis</a>
     </li>
-    <li>
-      <a href="regression_analysis.html">Regression Analysis</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -291,7 +276,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Dashboard</a>
+      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">EDA Dashboard</a>
     </li>
     <li>
       <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
@@ -365,7 +350,7 @@ We then selected only reports from the U.S.A.</p>
   filter(!(state %in% c(&quot;AB&quot;, &quot;BC&quot;, &quot;MB&quot;, &quot;NB&quot;, &quot;NS&quot;, &quot;SK&quot;, &quot;ON&quot;))) |&gt; 
   filter(city_longitude &lt; -30, city_latitude &gt; 10)</code></pre>
 <pre><code>## Rows: 141261 Columns: 13
-## ── Column specification ────────────────────────────────────────
+## ── Column specification ────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr  (9): summary, country, city, state, shape, duration, stats, report_link...
 ## dbl  (2): city_latitude, city_longitude
@@ -410,7 +395,8 @@ using a regex function that pulled both numeric values and time units
   mutate(duration_clean = map(duration, time_str)) |&gt; 
   unnest(duration_clean)</code></pre>
 <pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `duration_clean = map(duration, time_str)`.
+## ℹ In argument: `duration_clean = map(duration,
+##   time_str)`.
 ## Caused by warning in `.f()`:
 ## ! NAs introduced by coercion</code></pre>
 </div>
@@ -424,7 +410,7 @@ and selected only cities with a population over 200,000.</p>
   filter(population &gt; 200000) |&gt; 
   select(city,lat,lng)</code></pre>
 <pre><code>## Rows: 30844 Columns: 17
-## ── Column specification ────────────────────────────────────────
+## ── Column specification ────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (9): city, city_ascii, state_id, state_name, county_fips, county_name, s...
 ## dbl (6): lat, lng, population, density, ranking, id
