@@ -246,7 +246,7 @@ Shorter duration sightings tend to report general (clear, large, high) and evide
 
 **Findings:**
 
-The goal of our initial question was to locate UFO sighting hotspots. By using k-means clustering analysis, we were able to determine that sightings are more common in particularly isolated locales as well as heavily populated urban areas. This implies that while the probability of sighting reports rises with the number of possible witnesses, specific topographical characteristics or other unidentified factors can influence the locations of UFO sightings.
+The goal of our initial question was to locate areas where UFO reports were common. According to the data, sightings occur more frequently in remote locations and crowded urban areas. This implies that the more possible observers there are, the more likely it is that sighting reports will occur. But it also suggests that some geographical characteristics or other unidentified factors can contribute to the frequency of UFO encounters.
 
 Regarding the typical features of UFO reports, our research showed various observed forms and actions. But reports of "lights," "circles," and "discs" were standard, and they fit with the traditional UFO imagery that has been widely accepted in the media and popular culture.  
 
