@@ -1,0 +1,179 @@
+---
+title: "interactive_map"
+output: html_document
+date: "2023-12-09"
+---
+
+The following commented code was used in an app.R file to create the ShinyApp titled "Interactive Map" on our website.
+
+<!-- ## - map show -->
+<!-- library(ggplot2) -->
+<!-- library(tidyverse) -->
+<!-- library(dplyr) -->
+<!-- library(maps) -->
+<!-- library(ggrepel) -->
+<!-- library(shinythemes) -->
+<!-- library(shinyWidgets) -->
+<!-- library(stringr) -->
+<!-- library(shinyjs) -->
+
+<!-- usaMap <- map_data("state") -->
+
+<!-- clean_df = read_csv("ufo_clean_fin.csv") |> -->
+<!--   drop_na() |> -->
+<!--   group_by(state) |> -->
+<!--   summarize(report_freq = n(), avg_duration = mean(duration_clean)) -->
+
+<!-- cen_df = read_csv("us_census.csv") |>  -->
+<!--   select(abbrv, census_2010, census_2020) |>  -->
+<!--   rename(state = abbrv) -->
+
+<!-- clean_df_combined = left_join(clean_df, cen_df, by = c("state")) |> -->
+<!--   mutate(report_freq_per_100k = (report_freq / census_2010)*100000) |> -->
+<!--   rename(abbrev = state) -->
+
+<!-- state_names = read_csv("table-data.csv") |> select(state, code) |> -->
+<!--   rename(abbrev = code) -->
+
+<!-- fin_clean_df = left_join(clean_df_combined, state_names, by = c("abbrev")) |>  -->
+<!--   select("state", everything()) |> -->
+<!--   mutate(census_2010 = census_2010 / 100000) |> -->
+<!--   mutate(report_freq_per_100k = round(report_freq_per_100k, digits = 2), -->
+<!--          avg_duration = round(avg_duration, digits = 2)) -->
+
+
+<!-- which_state <- function(mapData, long, lat) { -->
+<!--   # This function decide the state being clicked.  -->
+<!--   # -->
+<!--   # Args: -->
+<!--   #   mapData: The map data has a column "long" and a column "lat" to determine -->
+<!--   #       state borders.  -->
+<!--   #   long, lat: longitude and latitude of the clicked point. They are actually -->
+<!--   #       input$clickMap$x and input$clickMap$y assuming click = "clickMap". -->
+<!--   # -->
+<!--   # Returns:  -->
+<!--   #   The name of the state containing the point (long, lat). -->
+
+<!--   # calculate the difference in long and lat of the border with respect to this point -->
+<!--   mapData$long_diff <- mapData$long - long -->
+<!--   mapData$lat_diff <- mapData$lat - lat -->
+
+<!--   # only compare borders near the clicked point to save computing time -->
+<!--   mapData <- mapData[abs(mapData$long_diff) < 20 & abs(mapData$lat_diff) < 15, ] -->
+
+<!--   # calculate the angle between the vector from this clicked point to border and c(1, 0) -->
+<!--   vLong <- mapData$long_diff -->
+<!--   vLat <- mapData$lat_diff -->
+<!--   mapData$angle <- acos(vLong / sqrt(vLong^2 + vLat^2)) -->
+
+<!--   # calculate range of the angle and select the state with largest range -->
+<!--   rangeAngle <- tapply(mapData$angle, mapData$region, function(x) max(x) - min(x)) -->
+<!--   return(names(sort(rangeAngle, decreasing = TRUE))[1]) -->
+<!-- } -->
+
+<!-- # build the app -->
+<!-- library(shiny) -->
+
+<!-- plotMap <- ggplot(usaMap, aes(x = long, y = lat, group = group)) +  -->
+<!--   geom_polygon(fill = "white", color = "black") -->
+
+<!-- plotReport_Duration <- ggplot(fin_clean_df, aes(x = report_freq_per_100k, y = avg_duration)) +  -->
+<!--   geom_point(aes(size = census_2010, color = census_2010)) +  -->
+<!--   scale_size(limits = c(1, 500)) + -->
+<!--   labs(x = "report frequency per 100k people",  -->
+<!--        y = "average duration of sighting", size = "", color = str_wrap("population (hundreds of thousands)", 20)) -->
+
+<!-- # Define UI for application that draws a histogram -->
+<!-- ui <- shinyUI(fluidPage( -->
+<!--   shinyjs::useShinyjs(), -->
+<!--   setBackgroundImage( -->
+<!--     src = "https://images2.alphacoders.com/678/678913.jpg", -->
+<!--     shinydashboard = FALSE -->
+
+<!--   ), -->
+
+<!--   column( -->
+<!--     width = 6, -->
+<!--     plotOutput("map", click = "clickMap", width = 430, height = 275) -->
+<!--   ), -->
+<!--   column( -->
+<!--     width = 6, -->
+<!--     plotOutput("ufo", width = 430, height = 275) -->
+<!--   ), -->
+
+<!--   mainPanel( -->
+<!--     tags$head( -->
+<!--       tags$style(type='text/css',  -->
+<!--                  ".nav-tabs {font-size: 20px} "), -->
+<!--       tabsetPanel( -->
+<!--         tabPanel( -->
+<!--           "Welcome! Click on a state to identify its place on the following frequency x duration plot")), -->
+<!--     ), -->
+<!--     uiOutput(outputId = "data") -->
+<!--   ) -->
+
+<!-- )) -->
+
+<!-- # Define server logic required to draw a histogram -->
+<!-- server <- shinyServer(function(input, output) { -->
+<!--   # initial plots -->
+<!--   output$map <- renderPlot({ -->
+<!--     plotMap -->
+<!--   }, height = 350, width = 575) -->
+<!--   output$ufo <- renderPlot({ -->
+<!--     plotReport_Duration -->
+<!--   }, height = 350, width = 720) -->
+
+<!--   # plot after click -->
+<!--   observeEvent(input$clickMap, { -->
+<!--     xClick <- input$clickMap$x -->
+<!--     yClick <- input$clickMap$y -->
+<!--     state <- which_state(usaMap, xClick, yClick) -->
+<!--     output$map <- renderPlot({ -->
+<!--       plotMap +  -->
+<!--         geom_polygon(data = usaMap[usaMap$region == state,], fill = "yellow") + -->
+<!--         annotate("text", x = xClick, y = yClick, label = state, color = "red") -->
+<!--     }, height = 350, width = 575) -->
+<!--     output$ufo <- renderPlot({ -->
+<!--       plotReport_Duration + -->
+<!--         geom_point(data = fin_clean_df[tolower(fin_clean_df$state) == state,], -->
+<!--                    size = 8, shape = 1, color = "red") -->
+<!--     }, height = 350, width = 720) -->
+
+<!--     output$data <- renderUI({ -->
+<!--       dat <- paste( -->
+<!--         fin_clean_df[tolower(fin_clean_df$state) == state,]$report_freq_per_100k[1], -->
+<!--         fin_clean_df[tolower(fin_clean_df$state) == state,]$avg_duration[1], -->
+<!--         sep = ", ") -->
+
+<!--       # Create a style tag dynamically -->
+<!--       style <- tags$style(HTML(sprintf( -->
+<!--         "#data {  -->
+<!--         position: absolute !important;  -->
+<!--         top: 100px !important;  -->
+<!--         left: 100px !important;  -->
+<!--         color: white !important; -->
+<!--         font_size: 18px !important; -->
+<!--         } -->
+
+<!--         #data h3 { -->
+<!--         font-size: 18px !important;  -->
+<!--         }" -->
+
+<!--       ))) -->
+
+<!--       # Combine the style tag with the text -->
+<!--       div(style, h3("frequency, average duration:"), p(dat), id = "data") -->
+
+
+
+<!--       }) -->
+
+<!--   }) -->
+
+<!-- }) -->
+
+
+<!-- # Run the application  -->
+<!-- shinyApp(ui = ui, server = server) -->
+

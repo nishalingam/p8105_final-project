@@ -1,0 +1,155 @@
+---
+title: "state_stats_wrapped"
+output: html_document
+date: "2023-12-09"
+---
+
+The following commented code was used in an app.R file to create the ShinyApp titled "State UFO Stats: Wrapped" on our website.
+
+<!-- library(dplyr) -->
+<!-- library(tidyverse) -->
+<!-- library(tidyr) -->
+<!-- library(data.table) -->
+<!-- library(shinyWidgets) -->
+<!-- library(DT) -->
+
+<!-- states = read_csv("table-data.csv") |> filter(state != "District of Columbia")  -->
+<!-- filt = read_csv("ufo_clean.csv") |> select(state, date_time, shape, duration_clean) |> -->
+<!--   filter(state != "District of Columbia") |> -->
+<!--   mutate(year = as.numeric(format(date_time, '%Y')))|> -->
+<!--   rename(code = state) |> -->
+<!--   drop_na() -->
+
+<!-- filt = left_join(filt, states) -->
+
+<!-- top_df = filt |> -->
+<!--   group_by(state, year) |> -->
+<!--   summarize(n_obs = n()) |> -->
+<!--   drop_na() -->
+
+<!-- duration = filt |> -->
+<!--   group_by(state) |> -->
+<!--   summarize(max_dur = max(duration_clean)) -->
+
+<!-- shape = filt |> -->
+<!--   group_by(state, shape)|> -->
+<!--   summarize(pop_shape = n()) -->
+
+<!-- copy = filt |> -->
+<!--   group_by(state, shape)|> -->
+<!--   summarize(pop_shape = n()) |> -->
+<!--   slice(1) -->
+
+<!-- library(shiny) -->
+
+<!-- # Define UI for application that draws a histogram -->
+<!-- ui <- fluidPage( -->
+
+<!--   setBackgroundImage( -->
+<!--     src = "https://wallpapercave.com/wp/wp4990451.jpg", -->
+<!--     shinydashboard = FALSE -->
+
+<!--   ), -->
+
+<!--   tags$head( -->
+<!--     tags$style( -->
+<!--       HTML(" -->
+<!--            /* Add your custom CSS code here */ -->
+<!--            .well{ -->
+<!--               background-color: rgba(0,0,0,0) !important; -->
+<!--            } -->
+<!--            body { -->
+<!--              color: white; -->
+<!--              font-family:'Courier New'; -->
+<!--              font-weight: bold; -->
+<!--            } -->
+
+<!--            .dataTables_wrapper { -->
+<!--           color: white; /* Set text color */ -->
+<!--         } -->
+
+<!--            .dataTables thead th { -->
+<!--           background-color: rgba(255,255,255,0) !important; /* Set header background color */ -->
+<!--           color: white !important; /* Set header text color */ -->
+<!--         } -->
+
+<!--         .dataTables tbody tr { -->
+<!--           background-color: rgba(255,255,255,0) !important; /* Set row background color */ -->
+<!--           color: black !important; /* Set row text color */ -->
+<!--         } -->
+
+<!--         .dataTables_filter label, .dataTables_paginate, .dataTables_info { -->
+<!--           color: white !important; /* Set filter, pagination, and info text color */ -->
+<!--         } -->
+
+<!--       ") -->
+<!--     ) -->
+<!--   ), -->
+
+<!--     # Application title -->
+<!--     titlePanel("Top Year, Duration, and UFO Shape by State"), -->
+
+<!--     sidebarLayout( -->
+<!--       sidebarPanel( -->
+<!--         tags$style( -->
+<!--           type="text/css", ".span8 .well { background-color: #000000; }"), -->
+
+<!--         selectizeInput(inputId= "state_", label= "State",  -->
+<!--                        choices= states,  -->
+<!--                        selected= states[1], -->
+<!--                        multiple=F), -->
+<!--       ), -->
+
+<!--       mainPanel( -->
+<!--         tags$style(HTML(" -->
+<!--     #mytable tbody tr { -->
+<!--       background-color: black; -->
+<!--     } -->
+<!--   ")), -->
+<!--         dataTableOutput('table'), -->
+<!--       ) -->
+<!--     ) -->
+<!-- ) -->
+
+<!-- # Define server logic required to draw a histogram -->
+<!-- server <- function(input, output, session) { -->
+
+<!--   data <- data.table(top_df) -->
+<!--   dur <- data.table(duration) -->
+<!--   shap <- data.table(shape) -->
+
+<!--   sorted <- reactive({ -->
+<!--     data |> -->
+<!--       filter(state == input$state_)|> -->
+<!--       arrange(desc(n_obs))|> -->
+<!--       select(-state) |> -->
+<!--       rename(number_of_reports = n_obs, -->
+<!--              year_with_max_reports = year)|> -->
+<!--       slice(1) -->
+<!--   }) -->
+
+<!--   sorted_2 <- reactive({ -->
+<!--     dur |> -->
+<!--       filter(state == input$state_) |> -->
+<!--       select(-state) |> -->
+<!--       rename(max_duration = max_dur)|> -->
+<!--       slice(1) -->
+<!--   }) -->
+
+<!--   sorted_3 <- reactive({ -->
+<!--     shap |> -->
+<!--       filter(state == input$state_) |> -->
+<!--       arrange(desc(pop_shape)) |> -->
+<!--       select(-state, -pop_shape) |> -->
+<!--       rename(most_popular_shape = shape)|> -->
+<!--       slice(1) -->
+<!--   }) -->
+
+<!--   output$table <- renderDataTable({ -->
+<!--     cbind(sorted(), sorted_2(), sorted_3()) -->
+<!--   }) -->
+
+<!-- } -->
+
+<!-- # Run the application  -->
+<!-- shinyApp(ui = ui, server = server) -->
