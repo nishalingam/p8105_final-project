@@ -6,31 +6,62 @@ output:
     toc_float: true
     theme: flatly
 ---
-
+```{css, echo = FALSE}
+img.portrait{
+  width:60%;
+  float:bottom;
+  float:right;
+}
+```
 # Our Team
 
 Welcome to our project! Meet the team behind the scenes, dedicated to making this project a success.
 
-## Derek Lamb (drl2168)
+```{=html}
+<table style="width:90%">
+  <tr>
+    <td><h3>Derek Lamb</h3></td>
+    <td rowspan="2"><img src="images/drl.jpg" class="portrait"></td>
+  </tr>
+  <tr>
+    <td><a href="https://lambdr.github.io">Derek Lamb</a> is a first year student pursuing his masters in biostatistics. While not thinking about UFOs, Derek enjoys board games and attending theatre performances.</td>
 
-![Derek Lamb](images/drl.jpg)
-
-## Hongzhu Ren (hr2569)
-
-![Hongzhu Ren](images/tony.jpg)
-
-## Jessie Li (jkl2195) 
-
-![Jessie Li](images/jessie.jpg)
-
-## Nisha Lingam (ncl2127) 
-
-![Nisha Lingam](images/nl.jpg)
-
-## Xue Zhang (xz3173)
-
-![Xue Zhang](images/xz.jpg)
-
+    
+  </tr>
+  <tr>
+    <td><h3>Hongzhu Ren</h3></td>
+    <td rowspan="2"><img src="images/tony.jpg" class="portrait"></td>
+  </tr>
+  <tr>
+    <td>Hongzhu is...</td>
+  </tr>
+  
+  <tr>
+    <td><h3>Jessie Li</h3></td>
+    <td rowspan="2"><img src="images/jessie.jpg" class="portrait"></td>
+  </tr>
+  <tr>
+    <td><a href="https://jessie-k-li.github.io/">Jessie Li</a> is a Biostatistics student who loves exploring all data visualization out there. Jessie loves to doodle some anime art in her freetime.</td>
+  </tr>
+  
+  <tr>
+    <td><h3>Nisha Lingham</h3></td>
+    <td rowspan="2"><img src="images/nl.jpg" class="portrait"></td>
+  </tr>
+  <tr>
+    <td>Nisha is...</td>
+  </tr>
+  
+  <tr>
+    <td><h3>Xue Zhang</h3></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/xz3173">Xue Zhang</a> is a student currently pursuing a master's in biostatistics. Xue finds joy in playing the kalimba, its soothing notes offering a peaceful escape. Xue is also a hiker, always eager to explore new trails and immerse herself in the beauty of nature.</td>
+    <td><img src="images/xz.jpg" class="portrait"></td>
+  </tr>
+</table>
+```
 
 ## Contact Us
 
