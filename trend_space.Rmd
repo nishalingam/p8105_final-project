@@ -62,7 +62,7 @@ df_ufo |>
 
 At first glance, these reports seem to cluster along the coasts and in other regions of high population density. So, we will adjust for population at the state level and re-visualize the results.
 
-### Per-capita distribution
+### Population-adjusted reports
 ```{r us heatmap}
 df_ufo |> 
   group_by(state) |> 
@@ -77,10 +77,10 @@ df_ufo |>
   theme(legend.position = "bottom") 
 ```
 
-This heatmap reveals three clusters with particularly high per-capita UFO reports. The Northwest, including Washington, Oregon, Idaho, Montana, and Alaska are the 5 states with the highest per-capita UFO reports ranging from 66 (AK) to 81 (WA) UFO reports per 100,000 residents. Next is northern New England, with New Hampshire, Vermont, and Maine taking positions 6-8 in the list. These states have between 61 (ME) and 66 (NH) UFO reports per 100,000. Rounding out the top 10, we have Arizona and New Mexico, with 61 and 59 reports per 100,000 residents, respectively.
+This heatmap reveals three clusters with particularly high UFO reports. The Northwest, including Washington, Oregon, Idaho, Montana, and Alaska are the 5 states with the highest population-adjusted UFO reports ranging from 66 (AK) to 81 (WA) UFO reports per 100,000 residents. Next is northern New England, with New Hampshire, Vermont, and Maine taking positions 6-8 in the list. These states have between 61 (ME) and 66 (NH) UFO reports per 100,000. Rounding out the top 10, we have Arizona and New Mexico, with 61 and 59 reports per 100,000 residents, respectively.
 
-#### Table 1. States with highest per-capita reports
-```{r per capita table}
+#### Table 1. States with highest reports per 100,000 population
+```{r pop normalized table}
 ## Table form
 df_ufo |> 
   group_by(state) |> 
