@@ -55,23 +55,13 @@ As our project progressed, we began to explore more nuanced questions.
 
 ## Data
 
-Our primary work was on data collected by the National UFO Reporting Center (NUFORC). Timothy Renner pulled and hosted the data version we used separately. We restricted our analysis to UFO reports made within the U.S.A. and removed reports that contained inconsistent locations (some reported U.S. but showed longitudes and latitudes in South America, Europe, or Canada) or were missing fundamental values. This left us with 100,820 reports from an initial set of 141,261 reports.
+Our primary work was on data collected by the National UFO Reporting Center (NUFORC). [Timothy Renner](https://data.world/timothyrenner) pulled and hosted the data version we used separately. We restricted our analysis to UFO reports made within the U.S.A. and removed reports that contained inconsistent locations (some reported U.S. but showed longitudes and latitudes in South America, Europe, or Canada) or were missing fundamental values. This left us with 100,820 reports from an initial set of 141,261 reports.
 
 The duration of the UFO encounter was reported in the text and had inconsistent formatting, as well as unexpected special characters, e.g., “~8 minutes," “30 SECS," or “3 hours or more.”. We wrote a function to identify numeric time values within these strings and the appropriate time units (seconds, minutes, and hours) and convert these reports to numbers of seconds. While this approach wasn’t perfect, it allowed us to perform subsequent analyses on most of the data.
 
-We incorporated data from a few additional sources as well. To locate cities that were near the location of UFO reports, we utilized a U.S. city dataset from simple maps. We used decennial census data from the U.S. Census Bureau to control for differing populations across states. We also incorporated basic information about U.S. geography from R and the GeoJSON dataset.
+We incorporated data from a few additional sources as well. To locate cities that were near the location of UFO reports, we utilized a U.S. city dataset from [simple maps](https://simplemaps.com/data/us-cities). We used decennial census data from the [U.S. Census Bureau](https://www2.census.gov/programs-surveys/popest/datasets/) to control for differing populations across states. We also incorporated basic information about U.S. geography from R and the [GeoJSON dataset](https://geojson.org/).
 
 We also created new variables using packages such as stringr and spacyr. The spacyr package helps to dissect long comments into words. These words are automatically processed into their root word, or lemma, and are tagged by their parts of speech. Due to the size of the dataset, only 5000 random samples are used in the dataset. We created two other variables: color, which extracts the first appearance of color given by the report, and adj, which records the appearance of the top 20 adjectives in the comments in binary form. The color analysis uses keywords generated from R's built-in function color(), and the adjective analysis uses keywords by filtering the top 20 from the spacyr data frame.
-
-
-### Source:
-
-* timothy renner
-* Simple US cities data
-* census
-* us states + abbrev data
-* GeoJSON
-* NUFORC
 
 ## Exploratory Analysis
 
