@@ -11,7 +11,7 @@
 
 
 
-<title>UFO Sightings Analysis Project</title>
+<title>Aliens Among U.S.</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,11 +29,19 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<html>
+<head>
+<link rel="shortcut icon" href="images/favicon.png" />
+</head>
+</html>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -221,6 +229,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -228,6 +299,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -244,20 +325,8 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Data Bank
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="data_processing.html">Data Processing</a>
-    </li>
-    <li>
-      <a href="eda.html">EDA</a>
-    </li>
-  </ul>
+        <li>
+  <a href="data_processing.html">Data Processing</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,13 +344,7 @@ $(document).ready(function () {
     <li>
       <a href="text_analysis.html">Text Analysis</a>
     </li>
-    <li>
-      <a href="regression_analysis.html">Regression Analysis</a>
-    </li>
   </ul>
-</li>
-<li>
-  <a href="report.html">Project Report</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -291,27 +354,20 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Dashboard</a>
+      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">EDA Dashboard</a>
     </li>
     <li>
-      <a href="xyz.html">Interactive Map</a>
+      <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    About
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="about.html">The Project</a>
-    </li>
-    <li>
-      <a href="about_us.html">Us</a>
-    </li>
-  </ul>
+<li>
+  <a href="report.html">Project Report</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about_us.html">About the Team</a>
 </li>
 <li>
   <a href="https://github.com/nishalingam/p8105_final-project">
@@ -319,9 +375,6 @@ $(document).ready(function () {
      
   </a>
 </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -331,41 +384,69 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">UFO Sightings Analysis Project</h1>
+<h1 class="title toc-ignore">Aliens Among U.S.</h1>
 
 </div>
 
 
-<div id="welcome-to-the-ufo-sightings-analysis-project"
-class="section level1">
-<h1>Welcome to the UFO Sightings Analysis Project</h1>
-<div id="unraveling-the-mysteries-of-the-skies" class="section level2">
-<h2>Unraveling the Mysteries of the Skies</h2>
-<div class="float">
-<img src="images/ufo_night_sky.jpeg" alt="UFO in the Night Sky" />
-<div class="figcaption">UFO in the Night Sky</div>
+<style type="text/css">
+.video-container { 
+  position: relative; 
+  padding-bottom: 56.25%; 
+  padding-top: 30px; 
+  height: 0; 
+  overflow: hidden; 
+}
+
+.video-container iframe, .video-container object, .video-container embed { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+</style>
+<div id="unraveling-the-mysteries-of-the-skies" class="section level3">
+<h3>Unraveling the Mysteries of the Skies</h3>
+<p>Our project explores the reporting of unidentified flying objects
+(UFOs) throughout the U.S. UFOs, by their very nature, leave unanswered
+questions, some of which we hope to explore through this project. With
+the wealth of information gathered about these phenomena and motivated
+by the <a
+href="https://www.cnn.com/2023/07/26/politics/ufo-house-hearing-congress/index.html">congressional
+hearings</a> <a
+href="https://www.pbs.org/newshour/politics/analysis-whistleblower-testimonies-did-not-change-our-basic-understanding-of-ufos">earlier
+this year</a>, we wanted to create a resource to understand the data on
+UFO encounters. Our project addresses three key components to provide
+this understanding: <em>when</em> the encounters happened,
+<em>where</em> the encounters happened, and <em>what</em> was
+encountered.</p>
 </div>
-<p>Explore the world of unidentified flying objects (UFOs) through the
-lens of data analysis. Our project leverages the power of R programming
-to dissect, visualize, and understand the patterns and trends in the
-U.S. UFO sightings.</p>
+<div id="project-overview" class="section level3">
+<h3>Project Overview</h3>
+<!--this is just a placeholder video -->
+<div class="video-container">
+<iframe src="https://www.youtube.com/embed/A4hyxOaxfc4?si=DiUaSYteV97oJbef" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
 </div>
-<div id="what-we-do" class="section level2">
-<h2>What We Do</h2>
+</div>
+<div id="what-we-do" class="section level3">
+<h3>What We Do</h3>
 <ul>
-<li><strong>Data Collection</strong>: Gathering extensive UFO sighting
-reports from various credible sources.</li>
+<li><strong>Data Cleaning</strong>: Carefully turning messy reports into
+insightful data sets.</li>
 <li><strong>Data Analysis</strong>: Using statistical techniques to
 uncover trends and patterns in sightings.</li>
 <li><strong>Visualization</strong>: Presenting our findings through
 engaging and interactive visualizations.</li>
 </ul>
 </div>
-<div id="features" class="section level2">
-<h2>Features</h2>
+<div id="features" class="section level3">
+<h3>Features</h3>
 <ul>
-<li><a href="about.html"><strong>Project Overview</strong></a>: Learn
-about the goals, motivation, and methodologies of our project.</li>
+<li><a href="data_processing.html"><strong>Data Processing</strong></a>:
+Explore the steps taken to transform thousands of UFO sightings into
+tangible data.</li>
 <li><a href="report.html"><strong>Detailed Reports</strong></a>: Dive
 into our comprehensive reports detailing our findings and analysis.</li>
 <li><a href="shiny_dashboard.html"><strong>Interactive
@@ -376,17 +457,8 @@ know the team of data scientists and enthusiasts behind this
 project.</li>
 </ul>
 </div>
-<div id="latest-insights" class="section level2">
-<h2>Latest Insights</h2>
-<ul>
-<li><strong>Sighting Hotspots Identified</strong>: Discover the regions
-with the most frequent UFO sightings.</li>
-<li><strong>Temporal Trends Uncovered</strong>: Learn about how
-sightings have varied over time.</li>
-</ul>
-</div>
-<div id="join-the-discussion" class="section level2">
-<h2>Join the Discussion</h2>
+<div id="join-the-discussion" class="section level3">
+<h3>Join the Discussion</h3>
 <p>Are you a UFO enthusiast, researcher, or just curious? <a
 href="xz3173@cumc.columbia.edu">Contact Us</a> to discuss your
 experiences, theories, and insights with a community of like-minded
@@ -395,15 +467,12 @@ individuals.</p>
 <p>Embark on this journey with us as we delve into the unknown, one data
 point at a time.</p>
 <p><a href="https://nuforc.org/">Resources</a></p>
-<div class="float">
-<img src="images/starry_sky.jpeg" alt="Starry Sky" />
-<div class="figcaption">Starry Sky</div>
-</div>
-</div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -436,6 +505,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

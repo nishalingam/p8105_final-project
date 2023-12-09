@@ -36,8 +36,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -324,20 +324,8 @@ div.tocify {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Data Bank
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="data_processing.html">Data Processing</a>
-    </li>
-    <li>
-      <a href="eda.html">EDA</a>
-    </li>
-  </ul>
+        <li>
+  <a href="data_processing.html">Data Processing</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -355,13 +343,7 @@ div.tocify {
     <li>
       <a href="text_analysis.html">Text Analysis</a>
     </li>
-    <li>
-      <a href="regression_analysis.html">Regression Analysis</a>
-    </li>
   </ul>
-</li>
-<li>
-  <a href="report.html">Project Report</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -371,14 +353,19 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">Dashboard</a>
+      <a href="https://xz3173.shinyapps.io/shiny_dashboard/">EDA Dashboard</a>
     </li>
     <li>
       <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
     </li>
   </ul>
 </li>
-<li class="dropdown">
+<li>
+  <a href="report.html">Project Report</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     About
      
@@ -386,10 +373,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="about.html">The Project</a>
+      <a href="about.html">About the Project</a>
     </li>
     <li>
-      <a href="about_us.html">Us</a>
+      <a href="about_us.html">About our Team</a>
     </li>
   </ul>
 </li>
@@ -399,9 +386,6 @@ div.tocify {
      
   </a>
 </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -431,9 +415,22 @@ we also calculate the sightings per 1 million of each states and then
 examine the trend over year and month. Then we will explore the
 sightings by shape over years.</p>
 <pre class="r"><code>library(tidyverse)
+<<<<<<< HEAD
 library(cowplot)</code></pre>
 <pre><code>## Warning: package &#39;cowplot&#39; was built under R version 4.3.2</code></pre>
 <pre class="r"><code>theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+=======
+library(cowplot)
+
+knitr::opts_chunk$set(
+    warning = FALSE,
+    fig.width = 8, 
+  fig.height = 6,
+  out.width = &quot;90%&quot;
+)
+
+theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+>>>>>>> df6fa67d77e137be18faa5b7eebd20a204c893e2
 
 options(
   ggplot2.continuous.colour = &quot;viridis&quot;,
@@ -558,10 +555,18 @@ one.</p>
 <div id="trend-over-months-by-states" class="section level3">
 <h3>Trend over months by states</h3>
 <p>Then we group the original data by state and month to see if there if
+<<<<<<< HEAD
 any trend throughout months.</p>
 <pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)
 
 ufo_month_trend_plot &lt;- 
+=======
+any trend through out months.</p>
+<pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override
+## using the `.groups` argument.</code></pre>
+<pre class="r"><code>ufo_month_trend_plot &lt;- 
+>>>>>>> df6fa67d77e137be18faa5b7eebd20a204c893e2
   ufo_month_trend |&gt;
   ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+

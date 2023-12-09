@@ -1,9 +1,12 @@
 ---
 title: "Data Processing"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
-### Load packages
-```{r load packages and default options, message = FALSE}
+```{r load packages and default options, include = FALSE}
 # Load packages
 library(tidyverse)
 
@@ -21,7 +24,7 @@ theme_set(theme_bw() + theme(legend.position = "bottom"))
 ### Initial Data File
 We began with a collections of UFO reports pulled from the NUFORC by Timothy Renner. This CSV, `nuforc_reports.csv` was obtained from [https://data.world/timothyrenner](https://data.world/timothyrenner). We then selected only reports from the U.S.A.
 
-```{r data import}
+```{r data import, message = FALSE}
 df_reports = 
   read_csv("data/nuforc_reports.csv") |> 
   filter(country %in% c("USA", "usa", "U.S.A.", "United States of America")) |> 
@@ -32,10 +35,8 @@ df_reports =
 ```
 
 ### Duration
-The duration data in the reports was not standardized and varied wildly in format [examples?]. To resolve this we standardized the time using a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports.
+The `duration` data in the reports was not standardized and varied wildly in format. Examples include “~8 minutes”, “30 SECS”, or “3 hours or more”. To resolve this we standardized the time by writing a regex function that pulled both numeric values and time units (seconds, minutes, or hours) out of these reports. Our output was a value in seconds, and was obtained for about 90% of these reports. The missing 10% came from `duration` values such as "Few minutes" or "18:00" which were not interpretable in a standard fashion. 
 
-<!-- Should still find a way to handle the "-" times, e.g. "10-15 seconds" -->
-<!-- Also doesn't work for decimal times -->
 ```{r function for times from strings}
 time_str = function(str){
   # Pulls numeric values from string
@@ -62,7 +63,7 @@ time_str = function(str){
 }
 ```
 
-```{r clean duration}
+```{r clean duration, warning = FALSE}
 df_reports = 
   df_reports |> 
   mutate(duration_clean = map(duration, time_str)) |> 
@@ -72,7 +73,7 @@ df_reports =
 
 ### Distance
 We wanted to examine how distance from urban centers impacted UFO reports. To do this, we used a collection of data on U.S. cities from [https://simplemaps.com/data/us-cities](https://simplemaps.com/data/us-cities), and selected only cities with a population over 200,000.
-```{r import distance data}
+```{r import distance data, message = FALSE}
 df_cities <- read_csv("data/uscities.csv") |>
   filter(population > 200000) |> 
   select(city,lat,lng)
@@ -120,8 +121,8 @@ df_reports =
          )) 
 ```
 
-### Export
-This clean version of the dataset will be used for our analyses on other pages. 
+#### Export
+This clean version of the dataset will be exported and used for our analyses on other pages. 
 ```{r export file}
 df_reports |> 
   write_csv(file = "data/ufo_clean.csv")
