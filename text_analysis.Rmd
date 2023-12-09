@@ -6,20 +6,56 @@ output:
     toc_float: true
     code_folding: hide
 ---
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(
+  warning = FALSE, 
+  message = FALSE,
+	echo = TRUE,
+  fig.width = 6,
+  fig.asp = .8,
+  out.width = "90%"
+) 
+```
 
+# Description
+
+[Text analysis](https://monkeylearn.com/text-mining/#\:~\:text=Text%20mining%20\(also%20known%20as,Mine%20unstructured%20data%20for%20insights), or text mining, is an effective analysis of extracting underlying patterns from unstructured text. It is an important topic in Data Analysis, Deep Learning, Artificial Intelligence. From the dataset, users are able to report on average of 100-200 words along with other clean identification of the alien sightings. This page will identify how the use of words for alien sightings relates to other variables such as `duration`, `time of day`, `location(urban vs rural)`, and `shape`. 
+
+There are two approaches getting the text variables: 
+
+1. Color Analysis: first color they mentioned in the text
+2. Text Analysis: which of the top 20 adjectives mentioned from the overall text are mentioned in the individual comments.
+
+Each section has its own exploratory analysis and regression analysis.
+
+This analysis uses the help of [Spacyr](https://spacyr.quanteda.io) package. A wrapper of the Python package [Spacy](https://spacy.io).
 
 ```{r message = FALSE}
 library(tidyverse)
 library(readr)
+
+# Text Analysis
 library(tidytext)
 library(stringr)
 library(purrr)
-library(quanteda)
-library(leaflet)
+library(rlang)
+library(data.table)
 
+# Regression
+library(glmnet)
+library(modelr)
+library(mgcv)
+
+# Visuals
+library(kableExtra)
+library(leaps)
 library(wordcloud)
 library(RColorBrewer)
-library(wordcloud2)
+library(leaflet) # color & shape map
+library(plotly) # Pie chart
+library(MASS) # Boxplot
+library(corrplot)
+
 
 # Guide to set up Spacyr
 # See full guide: https://cran.r-project.org/web/packages/spacyr/readme/README.html
@@ -33,7 +69,20 @@ library(wordcloud2)
 #    b. python3 -m spacy download en
 library(spacyr)
 ```
-```{r}
+
+---
+
+# Data Cleaning
+
+The process of data cleaning for text analysis is given by the following:
+
+1. Retrieve the dataset from the master dataset
+2. Clean up comment/text section of the variable
+  + a. Removed all rows with invalid shape, duration, and comments/text variable.
+  + b. Some punctuations are recoded into Unicode decimal code, i.e. `,` to `&#44` and `.` to `&#46`. Comma and period are detected from the comments and convert back to their original form. Parenthesis, quotation marks, and all other unicode decimal codes are removed from the text.
+3. Removed variables that are not necessary to the analysis.
+  
+```{r warning = FALSE}
 clean_string = function(string){
   # Detect and replace '&#44'(comma) and `&#46`(period) from the string
   new_str = gsub("&#44", ",", string)
@@ -41,49 +90,34 @@ clean_string = function(string){
   new_str = gsub("&#[0-9]+|&quot|\\(|\\)"," ", new_str)
   return(new_str)
 }
+```
 
+```{r}
 df_ufo = read.csv("data/ufo_clean.csv") |>
   janitor::clean_names() |>
   drop_na(text, shape, duration_clean) |>
-  filter(text != '', length(c) > 0)
+  filter(text != '', length(c) > 0, duration_clean > 0) |>
+  mutate(
+    year = map(date_time, \(txt) as.numeric(str_extract(txt, "^[0-9]{4}"))),
+    year = unlist(year)
+  ) |>
+  dplyr::select(-city, -state, -posted, -closest_city, -duration)
+```
 
-txt = c("i saw a large fireball falling to earth in the early morning hours on  Oct.11&#442003 in Kentucky",
-         "My older brother and twin sister were leaving the only Edna theater at about 9 PM&#44...we had our bikes and I took a different route home",
-         "1949 Lackland AFB&#44 TX.  Lights racing across the sky &amp; making 90 degree turns on a dime.")
+In total, there are `r nrow(df_ufo)` observations we want to use in this analysis. To optimize the storage and runtime, we will prepare 5000 samples and convert them into tokenized words. Spacyr can detect words with similar roots, such as running, run, ran, into the same word. The root word is called `lemma`. All words are converted into lower case to avoid duplicates.
+```{r warning = FALSE}
+set.seed(1)
 
-# process documents and obtain a data.table
-
-
-cleaned_df =  df_ufo |>
-  head(100) |>
-  pull(text) |> 
-  map(clean_string) |>
-  data_frame() |>
-  rename(text = 1)
+sample_text_df =  df_ufo |>
+  sample_n(5000) |>
+  mutate(text = map(text, clean_string))
 
 ```
 
-
-
-More ideas:
-Words used by older generation vs newer generation (2000s vs 2010s vs 2020s)
-Duration vs colors
-Duration vs the usuage of "bright"
-
-```{r}
-library(tictoc)
-library(foreach)
-library(iterators)
-```
-
-
-```{r}
-result = 0
-for(i in 1:100){
-tic("Parse Text - map")
+```{r warning = FALSE}
 spacy_initialize(model = "en_core_web_sm")
 
-text_df = cleaned_df |>
+text_df = sample_text_df |>
   mutate(
     parsedtxt = map(text, spacy_parse)
   ) |>
@@ -91,147 +125,731 @@ text_df = cleaned_df |>
   mutate(
     lemma = map(lemma, \(txt) str_extract(txt, "[:alpha:]+")) |>
       tolower()
-  )
-
-spacy_finalize()
-toc()
-k = toc()
-result = result + k$toc - k$tic
-}
-result/100
-```
-
-```{r}
-result = 0
-for(i in 1:100){
-tic("Parse Text - map")
-spacy_initialize(model = "en_core_web_sm")
-
-text_df = cleaned_df |>
-  mutate(
-    parsedtxt = sapply(text, spacy_parse, simplify = FALSE)
   ) |>
-  unnest(parsedtxt) |>
-  mutate(
-    lemma = sapply(lemma, \(txt) str_extract(txt, "[:alpha:]+"), simplify = FALSE) |>
-      tolower()
-  )
+  drop_na()
 
 spacy_finalize()
-k = toc()
-result = result + k$toc - k$tic
-}
-result/100
 ```
 
-```{r}
-k$tic - k$toc
-```
+We get a size of `r nrow(text_df)` total of words from the 5000 samples.
 
+---
 
-```{r}
-result = 0
-for(i in 1:100){
-tic("Parse Text - foreach")
-spacy_initialize(model = "en_core_web_sm")
+# Color Analysis
 
-text_df = foreach(text = iter(cleaned_df$text, by = 'row'), .combine = rbind, .packages = c("spacyr")) %dopar% {
-      spacy_parse(text)
-      
-} |>
+## Data Cleaning
+
+We will use the function `str_extract`  to find the first color word in each sentence. If a text doesn't mention any colors, it will be removed from the analysis.Tthis method might pick up colors that describe items other than the UFO, like place names or surroundings.
+```{r warning = FALSE}
+colors = colors()[grepl("[[:alpha:]]$", colors())]
+
+color_df = df_ufo |>
   mutate(
-    lemma = map(lemma, \(txt) str_extract(txt, "[:alpha:]+")) |>
-      tolower()
+    color = map(text, 
+                \(str) str_extract(str, gsub(" ", "", 
+                                             paste("(?<![:alpha:])", 
+                                                   colors, "(?![:alpha:])", 
+                                                   collapse="|"))))
+  )|>
+  filter(length(color) == 0 | !is.na(color) | color != '') |>
+  mutate(
+    shape = forcats::fct_relevel(shape),
+    location = forcats::fct_relevel(location)
   )
 
-spacy_finalize()
-k = toc()
-result = result + k$toc - k$tic
-}
-result/100
+total_colors = color_df |>
+  group_by(color) |>
+  summarize() |> 
+  dplyr::pull(color)
+
+color_df = color_df |>
+  mutate(color = factor(color, total_colors))
 ```
 
+Here are the most common colors described in the dataset
+```{r warning = FALSE}
+color_freq_df = color_df |>
+  group_by(color) |>
+  summarize(freq = n()) |>
+  arrange(desc(freq))
+color_freq_df |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+```
+
+Colors linked to higher wavelengths, notably white, red, and orange, are most prevalent, followed by those commonly associated with UFOs, like blue and green. On the other hand, less frequently observed colors in both UFO sightings and regular lights, such as pink, purple, brown, grey, and yellow, occupy the lower spectrum.
+
+Using the colors we extracted from the data, we want to see if the color has any correlation with duration, shape, year, and the status of rural or urban.
+
+---
+
+## Color vs Rural/Urban
+
+### Exploratory Analysis
+
+We want to see if there is an association with the color and if the sighting is from rural or urban. Here are pie charts showing the composition of colors mentioned in rural or urban area.
+```{r}
+color_urban_df = color_df |>
+  filter(location == "urban") |>
+  group_by(color) |>
+  summarize(urban_count = n()) |>
+  arrange(desc(urban_count)) |>
+  head(10)
+
+color_rural_df = color_df |>
+  filter(location == "rural") |>
+  group_by(color) |>
+  summarize(rural_count = n()) |>
+  arrange(desc(rural_count)) |>
+  head(10)
+
+color_urban_pie = color_urban_df |>
+  plot_ly(labels = ~color, values = ~urban_count, type = 'pie', 
+          name = "Urban", marker = list(colors = ~color), 
+          domain = list(row = 0, column = 0))
+color_urban_pie = color_urban_pie |>
+  add_pie(data = color_rural_df, labels = ~color, values = ~rural_count, 
+          name = "Rural", marker = list(colors = ~color), 
+          domain = list(row = 0, column = 1))
+color_urban_pie = color_urban_pie |>
+  layout(title = 'Distribution of Colors for Urban vs Rural',
+         grid=list(rows=1, columns=2),
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, 
+                      showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, 
+                      showticklabels = FALSE))
+
+color_urban_pie
+```
+
+There is no significant difference between the two pie chart, but we will use more formal analysis with the comparison.
+
+### Regression
+
+Since both the independent and dependent variables are categorical, we will use Chi-Square test to see if there is a correlation between color in rural vs color in urban area.
+```{r}
+chisq.test(color_df$color, color_df$location)
+```
+
+It seems like there is significant evidence that there is a relationship between color and location. We will perform a logistic linear regression with color and location. Here are the results.
 
 ```{r}
-text_df |>
-  distinct(lemma) |>
+location_color_fit = glm(factor(location) ~ color, data = color_df, family = "binomial")
+
+location_color_sum = location_color_fit |>
+  broom::tidy() |>
+  mutate(term = str_remove(term, "color")) |>
+  filter(term != "(Intercept)") |>
+  rename(color = term) |>
+  left_join(color_freq_df) |>
+  arrange(desc(freq)) |>
+  dplyr::select(-freq)
+
+
+location_color_sum |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+location_color_sum |>
+  head(10) |>
+  ggplot(aes(x = color, y = estimate)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title="Color vs Likelihood to Be Rural",
+        x ="Color", 
+       y = "Coeffiecient Estimate\nColor vs Likelihood to Be Rural")
+```
+
+Grey and black has a positive effect on the likelihood of the sighting at a rural location, which could possibly to due with the surroundings of the rural setting. Colors that are more frequently mentioned, white, red, and yellow shows little to no effect on deciding if the location is rural or urban.
+
+---
+
+## Color vs Duration
+
+Different wavelength of the color can indicate low long the observers can see the "light". We will investigate if we can map duration using color.
+
+### Adjusting Dependent Variable - Duration
+
+Duration greater than 2 hours are treated as outliers and are excluded from this study.
+
+We will use box cox to transform duration into a normal shape.
+```{r}
+duration_color_df = left_join(color_df, color_freq_df)
+duration_fit = lm(duration_clean ~ 1, data = duration_color_df)
+par(mfrow = c(1,2))
+plot(duration_fit)
+par(mfrow = c(1,1))
+boxcox(duration_fit)
+```
+
+Since $\lambda$ = 0, we will use log product of the duration during plotting
+
+```{r}
+duration_color_df = duration_color_df |>
+  mutate(log_duration = log(duration_clean)) |>
+  filter(!is.infinite(log_duration), log_duration > 0)
+
+duration_fit = lm(log_duration ~ 1, data = duration_color_df)
+par(mfrow = c(1,2))
+plot(duration_fit)
+par(mfrow = c(1,1))
+boxcox(duration_fit)
+```
+
+Since the new plot has a $\lambda$ = 1, and the QQ plot approaches y = x, we will keep `log_duration` as the adjusted dependent variable.
+
+
+
+
+### Exploratory Analysis
+
+Plotting the logarithm of duration against the corresponding color count reveals a bell-shaped curve resembling a normal distribution, centered around a mean value of approximately 5. This distribution indicates that the samples are likely drawn randomly.
+```{r}
+duration_color_df |>
+  dplyr::select(log_duration, color) |>
+  mutate(value = 1) |>
+  pivot_wider(
+    names_from = color,
+    values_from = value,
+    values_fn = list(value=list)) |>
+  mutate(across(!log_duration, \(j) map(j, \(i) sum(unlist(i))))) |>
+  pivot_longer(
+    -log_duration,
+    names_to = "color",
+    values_to = "freq"
+  ) |>
+  ggplot(aes(y = as.numeric(freq), x = as.numeric(log_duration))) +
+  geom_point() +
+  labs(title="Distribution of Duration",
+        x ="Log of Duration (sec)", y = "Frequency")
+```
+
+This plot showcases the relationship between color and duration, with colors ordered by their frequency of mention. The graph suggests a logistic relationship. We want to see whether this connection is influenced by the frequency of colors appearing.
+```{r}
+color_df |>
+  left_join(color_freq_df) |>
+  arrange(desc(freq)) |>
+  ggplot(aes(x = color, y = duration_clean)) +
+  geom_point() +
+  geom_smooth(method = "glm") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title="Color vs Duration (sec)",
+        x ="Color", y = "Duration (sec)")
+```
+
+The graph below shows no relationship between frequency and duration, but the outliers of the duration increases as frequency of the color increases. This can conclude that frequency is just on the casual pathway between color and duration.
+```{r}
+duration_color_df |>
+  group_by(color) |>
+  summarize(duration_clean, freq) |>
+  ggplot(aes(x = freq, y = duration_clean)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title="Frequency of Observation vs Duration",
+        x ="Color", y = "Duration (sec)")
+```
+
+We want to test if there is any correlation between the frequency of the color mentioned and the duration of data. Here is the result from ANOVA test. 
+```{r}
+duration_color_fit = lm(duration_clean ~ color, data = color_df)
+anova(duration_color_fit) |>
+  broom::tidy() |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+```
+
+The p value suggest significant evidence that there exist a relationship between duration and color.
+
+
+### Regression
+
+Let's now evalutate the linear regression between color and duration.
+```{r}
+duration_color_fit = 
+  lm(log_duration ~ color, data = duration_color_df)
+
+duration_color_freq_fit =
+  lm(log_duration ~ color / freq, data = duration_color_df)
+
+dc_sum = summary(duration_color_fit)
+dcf_sum = summary(duration_color_freq_fit)
+
+# Get the ANOVA table
+anova(duration_color_freq_fit) |>
+  broom::tidy() |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+dcf_sum = duration_color_freq_fit |>
+  broom::tidy() |>
+  mutate(term = str_remove(term, "color")) |>
+  filter(term != "(Intercept)") |>
+  rename(color = term) |>
+  left_join(color_freq_df) |>
+  arrange(desc(freq)) |>
+  dplyr::select(-freq)
+
+broom::glance(duration_color_freq_fit) |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+backward_fit = MASS::stepAIC(duration_color_freq_fit, direction = "backward", 
+                      trace = FALSE)
+broom::glance(backward_fit) |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+backward_fit |>
+  broom::tidy() |>
+  mutate(term = str_remove(term, "color")) |>
+  rename(color = term) |>
+  filter(color != "(Intercept)") |>
+  left_join(color_freq_df) |>
+  arrange(desc(freq)) |>
+  head(10) |>
+  ggplot(aes(x = fct_reorder(color, desc(freq)), y = estimate)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title="Color vs Coefficient Estimate\nDuration (sec)",
+        x ="Color", y = "Duration (sec)")
+```
+
+Both the full regression and the backward elimination regression models exhibit a 0.042 R-square, suggesting an exceptionally weak correlation. Notably, the estimates indicate that colors like green and grey substantially decrease the duration of sightings, while the color red, conversely, increases the duration of observations.
+
+---
+
+## Color vs Shape
+
+### Exploratory Analysis
+
+```{r include = FALSE}
+icons = iconList(
+    changing = makeIcon(iconUrl = "images/icons/changing.png", 
+                        iconWidth = 9, iconHeight = 9),
+    chevron = makeIcon(iconUrl = "images/icons/chevron.png", 
+                       iconWidth = 9, iconHeight = 9),
+    cigar = makeIcon(iconUrl = "images/icons/cigar.png", 
+                     iconWidth = 9, iconHeight = 9),
+    circle = makeIcon(iconUrl = "images/icons/circle.png", 
+                      iconWidth = 9, iconHeight = 9),
+    cone = makeIcon(iconUrl = "images/icons/cone.png", 
+                    iconWidth = 9, iconHeight = 9),
+    cross = makeIcon(iconUrl = "images/icons/cross.png", 
+                     iconWidth = 9, iconHeight = 9),
+    cylinder = makeIcon(iconUrl = "images/icons/cylinder.png", 
+                        iconWidth = 9, iconHeight = 9),
+    diamond = makeIcon(iconUrl = "images/icons/diamond.png", 
+                       iconWidth = 9, iconHeight = 9),
+    disk = makeIcon(iconUrl = "images/icons/disk.png", 
+                    iconWidth = 9, iconHeight = 9),
+    egg = makeIcon(iconUrl = "images/icons/egg.png", 
+                   iconWidth = 9, iconHeight = 9),
+    fireball = makeIcon(iconUrl = "images/icons/fireball.png", 
+                        iconWidth = 9, iconHeight = 9),
+    flash = makeIcon(iconUrl = "images/icons/flash.png", 
+                     iconWidth = 9, iconHeight = 9),
+    formation = makeIcon(iconUrl = "images/icons/formation.png", 
+                         iconWidth = 9, iconHeight = 9),
+    light = makeIcon(iconUrl = "images/icons/light.png", 
+                     iconWidth = 9, iconHeight = 9),
+    other = makeIcon(iconUrl = "images/icons/other.png", 
+                     iconWidth = 9, iconHeight = 9),
+    oval = makeIcon(iconUrl = "images/icons/oval.png", 
+                    iconWidth = 9, iconHeight = 9),
+    rectangle = makeIcon(iconUrl = "images/icons/rectangle.png", 
+                         iconWidth = 9, iconHeight = 9),
+    sphere = makeIcon(iconUrl = "images/icons/sphere.png", 
+                      iconWidth = 9, iconHeight = 9),
+    teardrop = makeIcon(iconUrl = "images/icons/teardrop.png", 
+                        iconWidth = 9, iconHeight = 9),
+    triangle = makeIcon(iconUrl = "images/icons/triangle.png", 
+                        iconWidth = 9, iconHeight = 9),
+    unknown = makeIcon(iconUrl = "images/icons/unknown.png", 
+                       iconWidth = 9, iconHeight = 9)
+)
+
+```
+
+Here is an *interactive* map of the colors mentioned in the comments with their corresponding shapes with 500 samples.
+```{r out.height = "600px"}
+html_legend <- "<img src='http://leafletjs.com/examples/custom-icons/leaf-green.png'>green<br/>
+<img src='http://leafletjs.com/examples/custom-icons/leaf-red.png'>red"
+
+
+icons_legend = 
+'<img src="./images/icons/changing.png"> changing<br/>
+<img src="images/icons/chevron.png"> chevron<br/>
+<img src="images/icons/cigar.png"> cigar<br/>
+<img src="images/icons/circle.png"> circle<br/>
+<img src="images/icons/cone.png"> cone<br/>
+<img src="images/icons/cross.png"> cross<br/>
+<img src="images/icons/cylinder.png"> cylinder<br/>
+<img src="images/icons/diamond.png"> diamond<br/>
+<img src="images/icons/disk.png"> disk<br/>
+<img src="images/icons/egg.png"> eggl<br/>
+<img src="images/icons/fireball.png"> firebal<br/>
+<img src="images/icons/flash.png"> flash<br/>
+<img src="images/icons/formation.png"> formation<br/>
+<img src="images/icons/light.png"> light<br/>
+<img src="images/icons/other.png"> other<br/>
+<img src="images/icons/oval.png"> oval<br/>
+<img src="images/icons/rectangle.png"> rectangle<br/>
+<img src="images/icons/sphere.png"> sphere<br/>
+<img src="images/icons/teardrop.png"> teardrop<br/>
+<img src="images/icons/triangle.png"> triangle<br/>
+<img src="images/icons/unknown.png"> unknown'
+color_sample_df = sample_n(color_df, 500)
+map = 
+  color_sample_df |>
+  dplyr::select(city_latitude, city_longitude, color, shape) |>
+  leaflet() |>
+  addTiles() |>
+  addCircleMarkers(as.numeric(color_sample_df$city_longitude), 
+                   as.numeric(color_sample_df$city_latitude), 
+                   color = color_sample_df$color, 
+                   fillColor = ~color_sample_df$color, 
+                   radius = 10, fillOpacity = 0.6, 
+                   popup = ~color_sample_df$shape) |>
+  addMarkers( lng = as.numeric(color_sample_df$city_longitude), 
+              lat = as.numeric(color_sample_df$city_latitude), 
+              icon = ~icons[shape]) |>
+  addControl(html = icons_legend, position = "bottomright")
+
+map
+```
+
+### Correlation Analysis
+
+We will test if there is a relationship between color and shape.
+```{r}
+chisq.test(color_df$color, color_df$shape)
+```
+
+By the Chi-Square test, color and shape have significant p-value to say they are correlated.
+
+```{r}
+shape_color_fit = glm(shape ~ color, data = color_df, family = "binomial")
+shape_color_glan = shape_color_fit |>
+  broom::glance()
+
+n = color_df |>
+  group_by(color) |>
   nrow()
+
+chi = shape_color_glan$null.deviance - shape_color_glan$null.deviance
+pchisq(chi, n-1, lower.tail = TRUE)
+```
+
+We get p value equals to zero using the chi score, which is resulted from the difference between nulldeviance and deviance. Since the p value is 0 < 0.05, we can say this model is a successful model of predicting shape using colors
+
+This map illustrates the correlation between color and shape, represented by the fill of the numbers. Each number's shading reflects the count of observations sharing the same color and shape, divided by the overall frequency of that particular color.
+```{r fig.height=8}
+shape_color_df = color_df |>
+  group_by(shape, color) |>
+  summarize(obs = n())
+
+shape_freq_df = color_df |>
+  group_by(shape) |>
+  summarize(shape_freq = n())
+
+shape_color_df |>
+  left_join(color_freq_df) |>
+  left_join(shape_freq_df) |>
+  ggplot(aes(x = color, y = shape)) +
+  geom_tile(aes(fill = log(obs/(freq*shape_freq)))) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), 
+        text=element_text(size=8), legend.position = "right") +
+  labs(title="Correlation Matrix of Color and Shape",
+        x ="Color", y = "Shape", fill='Correlation') 
+```
+Less common colors like honeydew (disk), magenta (light), and khaki (egg) demonstrate a stronger correlation with specific shapes compared to other colors. There is also Conversely, rare combinations such as grey fireball, grey flash, brown light, etc., exhibit a lower correlation.
+
+---
+
+## Color vs Time of The Day
+
+### Exploratory Analysis
+
+```{r}
+color_time_df = color_df |>
+  mutate(
+    hour = map(date_time, \(text) str_extract(text, "(?<=T)[0-9][0-9]")),
+    minute = map(date_time, \(text) str_extract(text, "(?<=:)[0-9][0-9](?=:)")),
+    time = as.numeric(hour) * 60 + as.numeric(minute)
+  ) |>
+  group_by(color, time) |>
+  summarize(n = n())
 ```
 
 ```{r}
+color_time_df |>
+  ggplot(aes(x = fct_reorder(color,n), y = time)) +
+  geom_point() +
+  geom_smooth() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))  +
+  labs(title="Color vs Time of Day (sec)",
+        x ="Color", y = "Time of Day (sec)")
+```
 
+Upon examining the plot, no discernible connection emerges between color and the time of day, as the scores are uniformly distributed across all hours. Consequently, there will be no further comparison.
+
+---
+
+# Text Analysis
+
+## Exploratory Analysis
+
+Here are the wordclouds of the top nouns, adjectives, and verbs mentioned in the 5000 sample datasets.
+```{r}
 adj_df = text_df |>
   filter(pos == "ADJ") |>
   group_by(lemma) |>
   summarize(n = n()) |>
-  arrange(desc(n))
+  arrange(desc(n))|>
+  head(200)
 
 noun_df = text_df |>
   filter(pos == "NOUN") |>
   group_by(lemma) |>
   summarize(n = n()) |>
-  arrange(desc(n))
+  arrange(desc(n))|>
+  head(200)
 
 verb_df = text_df |>
   filter(pos == "VERB") |>
   group_by(lemma) |>
   summarize(n = n()) |>
-  arrange(desc(n))
-#tokens = map(cleaned_txt, spacy_tokenize, what = "sentence")
-
-#parsedtxt
-#nouns
-#tokens
-
-
+  arrange(desc(n))|>
+  head(200)
 ```
 
-```{r}
-colors = colors()[grepl("[[:alpha:]]$", colors())]
+```{r fig.width=8, fig.height=8, echo=FALSE, error=FALSE, comment=NA, results=FALSE, fig.keep='all'}
+noun_wcloud = wordcloud(words = noun_df$lemma, freq = noun_df$n, min.freq = 3,
+                        max.words=200, random.order=FALSE, rot.per=0.35,
+                        colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.7))
 
-
-color_df = df_ufo |>
-  head(5000) |>
-  mutate(
-    color = map(text, \(str) str_extract(str, gsub(" ", "", paste("(?<![:alpha:])", colors, "(?![:alpha:])", collapse="|"))))
-  )|>
-  filter(length(color) == 0 | !is.na(color) | color != '')
-
-```
-
-```{r}
-map = 
-  color_df |>
-  leaflet() |>
-  addTiles() |>
-  addCircleMarkers(as.numeric(color_df$longitude), as.numeric(color_df$latitude), color = color_df$color)
-
-map
-```
-
-```{r}
-color_df |>
-  group_by(shape) |>
-  summarize(n = n())
-```
-
-
-
-```{r}
-noun_wcloud = wordcloud(words = noun_df$lemma, freq = noun_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
-          colors=brewer.pal(8, "Dark2"))
-adj_wcloud = wordcloud(words = adj_df$lemma, freq = adj_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
-          colors=brewer.pal(8, "Dark2"))
-verb_wcloud = wordcloud(words = verb_df$lemma, freq = verb_df$n, min.freq = 3,max.words=200, random.order=FALSE, rot.per=0.35,
-          colors=brewer.pal(8, "Dark2"))
+adj_wcloud = wordcloud(words = adj_df$lemma, freq = adj_df$n, min.freq = 3,
+                       max.words=200, random.order=FALSE, rot.per=0.35,
+                       colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.7))
+verb_wcloud = wordcloud(words = verb_df$lemma, freq = verb_df$n, min.freq = 3,
+                        max.words=200, random.order=FALSE, rot.per=0.35,
+                        colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.7))
 
 noun_wcloud
 adj_wcloud
 verb_wcloud
 ```
 
+*Top Nouns*: These words primarily identify elements related to UFO sightings. They encompass the UFO itself (light, object), the setting (sky, night, minute, second), and items used to distinguish UFOs from conventional objects (star, plane, craft).
 
+*Top Verbs*: These verbs describe actions and reactions of both observers and the UFO. They encapsulate observations (see, look, watch), movement (move, fly), and perceptions (appear, disappear).
 
+*Top Adjectives*: These words are descriptive but don't fall strictly into noun or verb categories. They are being analyzed for potential correlations with UFO sighting duration. They include descriptors like brightness (bright, high, large), colors (red, white, blue, orange, green, dark), quantity (few, many), clarity (clear, visible), and peculiarity (strange, different).
 
+### Wordcloud by Year
 
+We can also check out the top adjectives mentioned by year
+```{r}
+adj_old_df = text_df |>
+  filter(pos == "ADJ") |>
+  filter(year < 2000) |>
+  group_by(lemma) |>
+  summarize(n = n())|>
+  head(1000)
 
+adj_now_df = text_df |>
+  filter(pos == "ADJ") |>
+  filter(year >= 2000) |>
+  group_by(lemma) |>
+  summarize(n = n()) |>
+  head(1000)
+```
+
+```{r  fig.width=8, fig.height=8}
+wordcloud(words = adj_old_df$lemma, freq = adj_old_df$n, min.freq = 3,
+          max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.7))
+
+wordcloud(words = adj_now_df$lemma, adj_now_df$n, min.freq = 3,
+          max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.9))
+
+```
+
+Adjectives used before 2000 exhibit greater diversity and complexity, featuring descriptors like approximate, entire, exact, round, huge, and slow. In contrast, post-2000 adjectives tend to be brief, including terms such as clear, slow, and big. The prevalence of contemporary words like anonymous in post-2000 data may be attributed to the surge in UFO reports with the rise of internet usage. This shift could also be influenced by disparities in average education levels between individuals reporting before and after 2000, coupled with the increased availability of photographic information in recent years. Additionally, post-2000 messages tend to be more concise and direct, possibly to expedite information dissemination.
+
+## Regression
+
+Here is a helper function that returns if the words mentioned in the list is in text using `str_detect`
+We will also get top 20 adjectives for further analysis.
+```{r}
+detect_presence = function(list, text){
+  return_list = c()
+  for(i in list){
+    return_list = c(return_list, str_detect(text, i))
+  }
+  return_list
+}
+
+adj_top_list = adj_df |>
+  head(20) |>
+  dplyr::pull(lemma)
+```
+
+Each of the text are checked if it contains the top 20 adjectives. We created a binary table indicating the presence of the adjective at the given observation.
+```{r}
+adj_top_df = df_ufo |> 
+  dplyr::select(duration_clean, text) |>
+  mutate(
+    text = tolower(text),
+    adj = map(text, \(txt) detect_presence(adj_top_list, txt))) |>
+  unnest_wider(adj, names_sep = "_") 
+
+adj_top_df = adj_top_df |>
+  setnames(old = colnames(adj_top_df) |> tail(20), new = adj_top_list, skip_absent = TRUE) |>
+  dplyr::select(-text)
+
+adj_top_df |>
+  head(100) |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+```
+
+We will correct the duration just as the color analysis section.
+
+```{r}
+adj_top_df = adj_top_df |>
+  mutate(log_duration = log(duration_clean))
+```
+
+Now, we want to see if there is anything related to the frequencies of words mentioned in the data vs duration, time of the day, years, and if the person lives in rural or urban area.
+
+Here are the estimates of the coefficients.
+
+```{r}
+duration_adj_fit = adj_top_df |>
+  dplyr::select(-duration_clean) |>
+  lm(log_duration ~ ., data = _)
+
+anova(duration_adj_fit) |>
+  broom::tidy() |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+summary(duration_adj_fit) |>
+  broom::tidy() |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+
+glance(duration_adj_fit) |>
+  kbl() |>
+  kable_material(c("striped", "hover")) |>
+  scroll_box(width = "100%", height = "400px")
+```
+
+The r square of this regression is 0.048, indicating there is not much correlation between adjectives and duration.
+
+We will check the linear regression using cross validation.
+```{r}
+cv_df = 
+  crossv_mc(adj_top_df, 100) |> 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)) |>
+  mutate(
+    lm = map(train, \(df) adj_top_df |>
+  dplyr::select(-duration_clean) |>
+  lm(log_duration ~ ., data = _)),
+    rmse_lm = map2_dbl(lm, test, \(mod, df) rmse(model = mod, data = df))
+  )
+
+cv_df |> 
+  dplyr::select(rmse_lm) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") |> 
+  mutate(model = fct_inorder(model)) |> 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()  +
+  labs(title="RMSE of Cross Validation Model Adj vs Duration",
+        x ="RMSE", y = "Model")
+
+adj_top_df |>
+  pivot_longer(
+    cols = -c("log_duration", "duration_clean"),
+    names_to = "adj") |>
+  filter(value == TRUE) |>
+  ggplot(aes(x = adj, y = log_duration)) +
+  geom_point() +
+  geom_smooth(mecolor = "red") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title="Top Adjectives vs Log of Duration of Sighting",
+        x ="Adjective", y = "Log of Duration (sec)")
+```
+
+With an RMSE (Root Mean Square Error) of 2.04, given the broad spectrum of both duration and color, this score is notably can be used in the analysis. It is noteworthy that common descriptors like "light" and "white" span the range of shorter durations of the sighting.
+
+### LASSO
+
+We can also find the regression between top adjectives and log duration using LASSO regression. Here are the results of the LASSO regression.
+```{r}
+x = model.matrix(log_duration ~ ., data = 
+  dplyr::select(adj_top_df, -duration_clean))[,-1]
+y = dplyr::pull(adj_top_df, log_duration)
+
+lambda = 10^(seq(3,-2, -0.1))
+
+lasso_fit =
+  glmnet(x, y, lambda = lambda)
+
+lasso_cv =
+  cv.glmnet(x, y, lambda = lambda)
+
+lambda_opt = lasso_cv$lambda.min
+
+lasso_min_fit =
+  glmnet(x, y, lambda = lambda)
+
+lasso_cv |>
+  broom::tidy() |>
+  ggplot(aes(x = log(lambda, 100), y = estimate)) +
+  geom_point()
+
+lasso_min_table = lasso_min_fit |>
+  broom::tidy() |> 
+  dplyr::select(term, lambda, estimate) |>
+  filter(term != "(Intercept)", lambda == lambda_opt) |>
+  complete(term, lambda, fill = list(estimate = 0)) |>
+  mutate(term = str_remove(term, "TRUE"))
+
+lasso_min_table |>
+  kbl() |>
+  kable_material(c("striped", "hover"))
+```
+
+We get our regression when $\lambda$ = 1.
+
+```{r}
+lasso_min_table |>
+  ggplot(aes(x = fct_reorder(term, estimate), y = estimate)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title="Top Adjectives vs Regression Coefficients of Duration",
+        x ="Adjective", y = "Coefficient Estimate")
+```
+
+The words associated with higher duration of alien sightings are `r lasso_min_table |> filter(estimate > 0) |> dplyr::pull(term) |> paste(collapse = ", ")`, and the words associated with lower duration of alien sightings are `r lasso_min_table |> filter(estimate <= 0) |> dplyr::pull(term) |> paste(collapse = ", ")`
+
+Words linked to shorter UFO sightings are general and evident (clear, large, high) with less vivid colors (dark, green), whereas longer sightings connect with detailed terms (first, second, close, bright) and less obvious descriptors (strange, small), featuring easily noticeable colors (orange, red, white, blue).
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
