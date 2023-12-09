@@ -400,8 +400,36 @@ Sightings</h1>
 
 
 <style type="text/css">
-img{
-width: 50%;
+img.center {
+  width: 75%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.column3 {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+.column2 {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.column2, .column3 p{
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 </style>
 <div id="motivation" class="section level3">
@@ -502,19 +530,18 @@ first throughout the U.S. and then by distance to large cities. The
 initial plotting of UFO sightings revealed three geographic hotspots:
 the Pacific Northwest, Northern New England, and the Arizona-New Mexico
 region.</p>
-<p>&lt;img src=”trend_space_files/figure-html/us heatmap-1.png”&gt;</p>
+<p><img src="trend_space_files/figure-html/us%20heatmap-1.png" class="center"></p>
 <p>Then, as we compared sightings made in a rural area with those made
 in a rural one, we began to see differences between these groups.
 Encounters in rural areas were longer, and had differing characteristics
 than those in urban/suburban areas. These differences were explored
 further in a comprehensive textual analysis of the reports.</p>
-<p>&lt;img src=”trend_space_files/figure-html/distance
-histogram-1.png”&gt;</p>
+<p><img src="trend_space_files/figure-html/distance%20histogram-1.png" class="center"></p>
 </div>
 <div id="trend-and-adjusted-trend-over-years-by-states"
 class="section level4">
 <h4>Trend and Adjusted Trend Over Years by States</h4>
-<p><img src="trend_time_files/figure-html/Trend%20over%20year%20by%20states-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20year%20by%20states-1.png" class="center"></p>
 <p>Following 1995, there was a significant increase in UFO sightings,
 possibly due to the internet’s quick development. Most states saw a peak
 in sightings around 2014, then a decline. Nearly all states experienced
@@ -524,7 +551,7 @@ significantly from year to year, with some states showing sharp
 increases or decreases. The number of UFO reports in California
 consistently outnumbered those in other states, possibly due to
 population effects.</p>
-<p><img src="trend_time_files/figure-html/Trend%20per%20over%20year%20by%20states-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20year%20by%20states-1.png" class="center"></p>
 <p>After adjusting for population, the overall trend mirrored the
 aggregate sighting trend, with a rapid increase post-1995 and a peak
 around 2014. Vermont consistently had the highest sightings per 1
@@ -533,13 +560,13 @@ million population, indicating a potential hotspot.</p>
 <div id="trend-and-adjusted-trend-over-months-by-states"
 class="section level4">
 <h4>Trend and Adjusted Trend Over Months by States:</h4>
-<p><img src="trend_time_files/figure-html/Trend%20over%20months%20by%20states-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20months%20by%20states-1.png" class="center"></p>
 <p>Sightings showed seasonal variations, with summer having the highest
 reported sightings in most states. Some states, such as Florida,
 experienced peak sightings in December, indicating regional variations.
 Washington State showed a unique rapid increase starting in May and a
 sharp decrease after July.</p>
-<p><img src="trend_time_files/figure-html/Trend%20per%20over%20month%20by%20states%20-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20month%20by%20states%20-1.png" class="center"></p>
 <p>Adjusting for population had a minimal impact on the trend over the
 past few months. However, Alaska showed a unique trend with the highest
 sightings per 1 million in winter, potentially related to polar
@@ -547,11 +574,11 @@ night.</p>
 </div>
 <div id="trend-over-hours-by-states" class="section level4">
 <h4>Trend Over Hours by States:</h4>
-<p><img src="trend_time_files/figure-html/Trend%20over%20hours%20by%20states%20-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20hours%20by%20states%20-1.png" class="center"></p>
 <p>UFO sightings were more commonly reported during the evening hours,
 peaking around 21:00. Sightings during daytime hours, particularly from
 6:00 to 15:00, were relatively low. Trend Over Weekdays by States:</p>
-<p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states-1.png" class="center"></p>
 <p>The average sightings increased gradually from Monday to Saturday,
 peaking on Saturday, then decreasing on Sunday. California showed a
 decline from Sunday to Monday, with an increase during the weekdays and
@@ -559,7 +586,7 @@ a peak on Saturday.</p>
 </div>
 <div id="trend-over-time-by-ufo-shapes" class="section level4">
 <h4>Trend Over Time by UFO Shapes:</h4>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" style="width:75%"></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" class="center"></p>
 <p>Light, circles, and triangles were the most observed UFO shapes,
 following a similar trend of rapid increase, peaking around 2014,
 decline in 2018, and another peak in 2020. Fireball had a peak before
@@ -568,8 +595,6 @@ decline in 2018, and another peak in 2020. Fireball had a peak before
 <div id="adjectives-used-in-the-report-before-and-after-2000"
 class="section level4">
 <h4>Adjectives Used in the Report Before and After 2000:</h4>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-28-1.png" style="width:75%">
-<img src="text_analysis_files/figure-html/unnamed-chunk-28-2.png" style="width:75%"></p>
 <p>Adjectives used before 2000 exhibit greater diversity and complexity,
 featuring descriptors like “approximate,” “entire,” “exact,” “round,”
 “huge,” and “slow.” In contrast, post-2000 adjectives tend to be brief,
@@ -581,27 +606,48 @@ and after 2000, as well as the recent increase in photographic
 information availability, may also have an impact on this shift.
 Additionally, post-2000 messages tend to be more concise and direct,
 possibly to expedite information dissemination.</p>
+<div class="row">
+  <div class="column2">
+    <img src="text_analysis_files/figure-html/unnamed-chunk-28-1.png" style="width:100%;">
+    <p>Before 2000</p>
+  </div>
+  <div class="column2">
+    <img src="text_analysis_files/figure-html/unnamed-chunk-28-2.png" style="width:100%;">
+    <p>After 2000</p>
+  </div>
+</div>
 </div>
 </div>
 <div id="text-analysis" class="section level3">
 <h3>Text Analysis</h3>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-1.png" style="width:75%"></p>
 <p><strong>Top Nouns:</strong> These words primarily identify elements
 related to UFO sightings. They encompass the UFO itself (light, object),
 the setting (sky, night, minute, second), and items used to distinguish
 UFOs from conventional objects (star, plane, craft).</p>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-3.png" style="width:75%"></p>
 <p><strong>Top Verbs:</strong> These verbs describe the actions and
 reactions of both observers and the UFO. They encapsulate observations
 (see, look, watch), movement (move, fly), and perceptions (appear,
 disappear).</p>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-2.png" style="width:75%"></p>
 <p><strong>Top Adjectives:</strong> These words are descriptive but
 don’t fall strictly into noun or verb categories. They are being
 analyzed for potential correlations with UFO sighting duration. They
 include descriptors like brightness (bright, high, large), colors (red,
 white, blue, orange, green, dark), quantity (few, many), clarity (clear,
 visible), and peculiarity (strange, different).</p>
+<div class="row">
+  <div class="column3">
+    <img src="text_analysis_files/figure-html/unnamed-chunk-25-1.png" alt="Snow" style="width:100%">
+    <p>Nouns</p>
+  </div>
+  <div class="column3">
+    <img src="text_analysis_files/figure-html/unnamed-chunk-25-3.png" alt="Forest" style="width:100%">
+    <p>Verbs</p>
+  </div>
+  <div class="column3">
+    <img src="text_analysis_files/figure-html/unnamed-chunk-25-2.png" alt="Mountains" style="width:100%">
+    <p>Adjectives</p>
+  </div>
+</div>
 <div id="correlation-regression-analysis" class="section level4">
 <h4>Correlation &amp; Regression Analysis</h4>
 <p><strong>Color vs Rural/Urban</strong> We generated a pie chart using
@@ -631,7 +677,7 @@ that colors like green and gray significantly reduce the duration of
 sightings, while the color red, conversely, increases the duration of
 observations.”</p>
 <p><strong>Color vs Shape</strong></p>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-22-1.png" style="width:75%"></p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-22-1.png" class="center"></p>
 <p>We constructed a heatmap/correlation matrix to examine the
 relationship between all color variables and shape variables. This
 matrix was adjusted by the frequency of each color. The matrix is
@@ -646,7 +692,7 @@ variables, it appears that the scores are uniformly distributed,
 indicating no discernible relationship between color and time of
 day.</p>
 <p><strong>Adjective vs. Duration</strong></p>
-<p><img src="text_analysis_files/figure-html/unnamed-chunk-35-1.png" style="width:75%"></p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-35-1.png" class="center"></p>
 <p>We conducted a series of analyses including linear regression, ANOVA
 for result assessment, followed by cross-validation-based linear
 regression, and LASSO regression. Using the coefficients we get from the
