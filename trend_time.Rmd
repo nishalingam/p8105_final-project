@@ -106,7 +106,7 @@ ufo_per_trend <- function(df){
 ```
 
 
-```{r,message = FALSE}
+```{r Trend over year by states,message = FALSE}
 ufo_year_trend <- ufo_trend_var(ufo_trend,var1="state",var2="year")
 
 ufo_year_trend_plot <- ufo_trend_plot(ufo_year_trend,"year","state")+
@@ -137,7 +137,7 @@ The overall sightings trend changed little compared to the previous one.
 
 Then we group the original data by state and month to see if there if any trend throughout months.
 
-```{r,message = FALSE}
+```{r Trend over months by states,message = FALSE}
 ufo_month_trend <- ufo_trend_var(ufo_trend,var1="state",var2="month")
 
 ufo_month_trend_plot <- 
@@ -169,7 +169,7 @@ Like what we did in the year trend, we want to reduce the impact of outlier. The
 
 ### Trend over hours by states 
 
-```{r,message = FALSE}
+```{r Trend over hours by states ,message = FALSE}
 ufo_hour_trend <- ufo_trend_var(ufo_trend,var1="state",var2="hour")
 
 ufo_hour_trend_plot <- 
@@ -195,7 +195,7 @@ After removing the outlier of California state, the trend is more clear.
 
 ### Trend over weekdays by states 
 
-```{r,message = FALSE}
+```{r Trend over weekdays by states,message = FALSE}
 ufo_weekday_trend <- ufo_trend_var(ufo_trend,var1="state",var2="weekday")
 
 
@@ -230,7 +230,7 @@ Now we may notice a trend showed by the red smooth line that the average sightin
 
 To make this statement clearer, we can view the bar plot of the sightings over weekdays.
 
-```{r,message = FALSE}
+```{r Trend over weekdays by states bar,message = FALSE}
 ufo_weekday_trend |>
   mutate(
     weekday = as.numeric(weekday)
@@ -251,7 +251,7 @@ In the previous part of this page, we discuss about the population effect on the
 
 ### Trend per 1M population over year by states
 
-```{r,message = FALSE}
+```{r Trend per over year by states,message = FALSE}
 ufo_per <- ufo_trend|>
   filter(
     year >= 1995
@@ -284,7 +284,7 @@ plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)
 
 ### Trend per 1M population over month by states 
 
-```{r,message = FALSE}
+```{r Trend per over month by states ,message = FALSE}
 ufo_month_per <- ufo_trend_var(ufo_per,"state","month")|>
   ufo_per_trend()
 
@@ -315,7 +315,7 @@ plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)
 
 ### Trend over year by shapes
 
-```{r,message = FALSE}
+```{r Trend over year by shapes,message = FALSE}
 obs_shape <- ufo_trend |>
   group_by(shape)|>
   summarise(

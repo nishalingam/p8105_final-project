@@ -512,7 +512,7 @@ ufo_year_trend_plot_rm &lt;-
   labs(title = &quot;Trend over years by states(CA Removed)&quot;)
 
 plot_grid(ufo_year_trend_plot,ufo_year_trend_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20year%20by%20states-1.png" width="672" /></p>
 <p>From the plot of each state’s UFO sightings over year, we can see
 that:</p>
 <ul>
@@ -559,7 +559,7 @@ ufo_month_trend_plot_rm &lt;-
   labs(title = &quot;Trend over month by states(CA Removed)&quot;)
 
 plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20months%20by%20states-1.png" width="672" /></p>
 <ul>
 <li>The red smooth line indicating a trend of average UFO sightings in
 all states of each month.</li>
@@ -593,7 +593,7 @@ ufo_hour_trend_plot_rm &lt;-
   labs(title = &quot;Trend over hours by states(CA Removed)&quot;)
 
 plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20hours%20by%20states%20-1.png" width="672" /></p>
 <ul>
 <li>The average sightings during 6:00 to 15:00 were relatively low.</li>
 <li>There was an sharp increase of average sightings starting from 15:00
@@ -630,7 +630,7 @@ ufo_weekday_plot_rm&lt;-
   labs(title = &quot;Trend over weekdays by states (CA Removed)&quot;)
 
 plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states-1.png" width="672" /></p>
 <p>The overall trend for all states is not clear. For California,the
 sightings declined from Sunday to Monday, then increased during weekdays
 and peaked at Saturday.</p>
@@ -650,7 +650,7 @@ sightings over weekdays.</p>
   labs(
     title = &quot;Bar plot of sightings trend of states over weekdays&quot;
   )</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states%20bar-1.png" width="672" /></p>
 <p>The bar plot visualized the trend more clear. The overall sightings
 decreased from Sunday to Monday, then increased day by day and reached
 the highest values at Saturday.</p>
@@ -691,7 +691,7 @@ ufo_year_per_plot_spec &lt;- ufo_year_per|&gt;
        y = &quot;obs per 1M&quot;)
 
 plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20year%20by%20states-1.png" width="672" /></p>
 <ul>
 <li>For sightings per 1M population, the trend looks a slightly
 different from the aggregate sightings trend.</li>
@@ -728,7 +728,7 @@ ufo_month_per_plot_spec &lt;- ufo_month_per|&gt;
        y = &quot;obs per 1M&quot;)
 
 plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20month%20by%20states%20-1.png" width="672" /></p>
 <ul>
 <li>The sightings trend over month change little after adjusting for
 population.</li>
@@ -772,7 +772,7 @@ ufo_year_shape |&gt;
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
   labs(title = &quot;Spaghetti plot of sightings trend over years by shapes&quot;)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>For most observed shapes, they have similar trend over year: the
 sightings started to increase rapidly in 1990s and, then peaked at
 around 2014, followed by an sharp decrease in 2018 and another peak in
