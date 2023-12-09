@@ -59,7 +59,7 @@ We started with basic questions such as:
 
 As our project progressed, we explored more nuanced questions.
 
-### Evolution of Questions:
+### Evolution of Questions
 * Do certain geographical areas have higher frequencies of certain types of UFO sightings?
 * Has the nature of UFO sightings changed over time? For example, a follow-up to temporal pattern analysis looks at changes in characteristics (shapes) of sightings across different decades.
 * Are there correlations between UFO sightings and other variables?
