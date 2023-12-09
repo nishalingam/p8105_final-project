@@ -67,67 +67,17 @@ We also created new variables using packages such as stringr and spacyr. The spa
 
 Our exploratory analysis included the following:
 
-1.	Initial Data Summarization: 
-
-
-Descriptive statistics: Calculate basic statistics like the number of sightings, average duration, and distributions of sightings over time. 
-
-
-
-Examples include:
-
-* Number of sightings: There are 100,802 reported UFO sightings in the dataset.
-
-* The average duration of sightings: The average duration of these sightings is approximately 451819 seconds. Notice that this high average might be influenced by the dataset's high duration values, suggesting the need for further investigation and analyses.
-
-*	Distributions of sightings over time: The distribution of sightings by year starts from 1969 and shows a consistent number each year. For the first few years, the counts are as follows:
-
-**	1969: 8760 sightings
-**	1970: 8760 sightings
-**	1971: 8760 sightings
-**	1972: 8764 sightings
-**	1973: 8760 sightings
-
-* Color frequency: The most common colors are those associated with higher wavelengths, such as white, red, and orange, with blue and green coming in second and third, respectively. On the other hand, less frequently observed colors in both UFO sightings and regular lights, such as pink, purple, brown, grey, and yellow, occupy the lower spectrum.
-
-2.	Geographical Analysis:
-
-* Create heat maps to show the geographical distributions of sightings.
-
-* Create an interactive map that includes the color mentioned in the report and the shape of the UFO.
-
-```{r, echo = FALSE, message = FALSE}
-# Create Heat Maps
-ggplot(ufo, aes(x = city_longitude, y = city_latitude)) +
-  geom_bin2d(bins = 100) +
-  scale_fill_gradient(low = "blue", high = "red") +
-  labs(title = "Heat Map of UFO Sightings", 
-       x = "Longitude", 
-       y = "Latitude")
-```
-
-
-```{r, echo = FALSE, message = FALSE}
-# Create Interactive Map
-leaflet(ufo) |>
-  addTiles() |>
-  addHeatmap(lng = ~city_longitude,
-             lat = ~city_latitude,
-             intensity = -1, 
-             radius = 15,
-             blur = 20)
-```
-
-
-
-3.	Temporal Analysis:
+1. Temporal Analysis:
 
 The frequency of sightings over time (years, months, hours of the day, weekdays) is of main concern in temporal analysis. We mainly use line charts to visualize the aggregate trends of each state over time and then use smooth lines to estimate the average sighting trend in the US. 
 
 **Trend and Adjusted Trend Over Years by States: **
+<<<<<<< HEAD
 
 <img src="trend_time_files/figure-html/Trend over year by states-1.png" style="width:75%">
 
+=======
+>>>>>>> b236e3961f69d5fc8f550967e82590e71bf73e73
 Following 1995, there was a significant increase in UFO sightings, possibly due to the internet's quick development. Most states saw a peak in sightings around 2014, then a decline. Nearly all states experienced sharp declines in sightings in 2018, and then there was an increase in 2019 and 2020. UFO sightings within individual states varied significantly from year to year, with some states showing sharp increases or decreases.  The number of UFO reports in California consistently outnumbered those in other states, possibly due to population effects.
 
 <img src="trend_time_files/figure-html/Trend per over year by states-1.png" style="width:75%">
@@ -165,6 +115,7 @@ Light, circles, and triangles were the most observed UFO shapes, following a sim
 **Adjectives Used in The Report Before and After 2000:**
 Adjectives used before 2000 exhibit greater diversity and complexity, featuring descriptors like "approximate," "entire," "exact," "round," "huge," and "slow." In contrast, post-2000 adjectives tend to be brief, including terms such as "clear," "slow," and "big." The prevalence of contemporary words like "anonymous" in post-2000 data may be attributed to the surge in UFO reports with the rise of internet usage. The difference in average education levels between those reporting before and after 2000, as well as the recent increase in photographic information availability, may also have an impact on this shift. Additionally, post-2000 messages tend to be more concise and direct, possibly to expedite information dissemination.
 
+<<<<<<< HEAD
 
 
 
@@ -237,6 +188,9 @@ ufo |>
 Statistical Tests: Conduct correlation analysis between variables like time of day, shape, duration, city_latitude, city_longitude, and sightings detail.
 
 6. Text Analysis
+=======
+2. Text Analysis
+>>>>>>> b236e3961f69d5fc8f550967e82590e71bf73e73
 
 **Top Nouns:** These words primarily identify elements related to UFO sightings. They encompass the UFO itself (light, object), the setting (sky, night, minute, second), and items used to distinguish UFOs from conventional objects (star, plane, craft).
 
@@ -245,14 +199,14 @@ Statistical Tests: Conduct correlation analysis between variables like time of d
 **Top Adjectives:** These words are descriptive but don’t fall strictly into noun or verb categories. They are being analyzed for potential correlations with UFO sighting duration. They include descriptors like brightness (bright, high, large), colors (red, white, blue, orange, green, dark), quantity (few, many), clarity (clear, visible), and peculiarity (strange, different).
 
 
-7. Regression Analysis:
-Shorter duration sightings tend to report general (clear, large, high) and evident words with less vivid colors (dark, green), whereas longer duration sightings tend to report detailed (first, second, close, bright), less obvious (strange, small), and easily noticeable colors (orange, red, white, blue).
+3. Correlation & Regression Analysis:
+
 
 ## Discussion
 
 **Findings:**
 
-The goal of our initial question was to locate areas where UFO reports were common. According to the data, sightings occur more frequently in remote locations and crowded urban areas. This implies that the more possible observers there are, the more likely it is that sighting reports will occur. But it also suggests that some geographical characteristics or other unidentified factors can contribute to the frequency of UFO encounters.
+Our initial goal was to locate areas where UFO reports were common. According to the data, sightings occur more frequently in remote locations and crowded urban areas. This implies that the more possible observers there are, the more likely it is that sighting reports will occur. But it also suggests that some geographical characteristics or other unidentified factors can contribute to the frequency of UFO encounters.
 
 Regarding the typical features of UFO reports, our research showed various observed forms and actions. But reports of "lights," "circles," and "discs" were standard, and they fit with the traditional UFO imagery that has been widely accepted in the media and popular culture.  
 
