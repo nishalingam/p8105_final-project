@@ -7,18 +7,11 @@ output:
     code_folding: hide
 ---
 
-In this page, we are going to discuss the UFO sightings trend over time. First we will look into the pattern of sightings by states over years, months, weekdays and hours.To get rid off the population effect, we also discuss calculate the sightings per 1 million of each states and then examine the trend over year and month.Then we will explore the sightings by shape over years. 
+In this page, we are going to discuss the UFO sightings trend over time. First we will look into the pattern of sightings by states over years, months, weekdays and hours. To get rid off the population effect, we also calculate the sightings per 1 million of each states and then examine the trend over year and month. Then we will explore the sightings by shape over years. 
 
 ```{r setup, message = FALSE}
 library(tidyverse)
 library(cowplot)
-
-knitr::opts_chunk$set(
-	warning = FALSE,
-	fig.width = 8, 
-  fig.height = 6,
-  out.width = "90%"
-)
 
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
@@ -64,9 +57,9 @@ ufo_trend <- read_csv("data/ufo_clean.csv")|>
 
 ```
 
-## Trend over time by states
+## Sightings trend over time by states
 
-### sightings trend over years by states
+### Trend over years by states
 
 To look into the UFO sightings trend over years by states, here we take spaghetti plots to view the total sightings of each state throughout years. 
 
@@ -117,17 +110,15 @@ ufo_per_trend <- function(df){
 ufo_year_trend <- ufo_trend_var(ufo_trend,var1="state",var2="year")
 
 ufo_year_trend_plot <- ufo_trend_plot(ufo_year_trend,"year","state")+
-  labs(title = "Spaghetti plot of sightings trend of states over years")
+  labs(title = "Trend over years by states")
 
 ufo_year_trend_plot_rm <- 
   ufo_year_trend |>
   filter(!(state %in% c("CA")) )|>
   ufo_trend_plot("year","state")+
-  labs(title = "Spaghetti plot of sightings trend of states over years(CA Removed)")
+  labs(title = "Trend over years by states(CA Removed)")
 
-ufo_year_trend_plot_rm
-
-ufo_year_trend_plot
+plot_grid(ufo_year_trend_plot,ufo_year_trend_plot_rm)
 ```
 
 From the plot of each state's UFO sightings over year, we can see that:
@@ -140,23 +131,13 @@ From the plot of each state's UFO sightings over year, we can see that:
 
 To avoid the influence of the extreme large sightings of `r ufo_year_trend |> filter(obs == max(obs)) |> pull(state)` on the overall trend, we may filter out this state and see the overall trend then.
 
-```{r,message = FALSE}
-ufo_year_trend_plot_rm <- 
-  ufo_year_trend |>
-  filter(!(state %in% c("CA")) )|>
-  ufo_trend_plot("year","state")+
-  labs(title = "Spaghetti plot of sightings trend of states over years(CA Removed)")
-
-ufo_year_trend_plot_rm
-```
-
 The overall sightings trend changed little compared to the previous one.
 
-### sightings trend of states over months
+### Trend over months by states 
 
-Then we group the original data by state and month to see if there if any trend through out months.
+Then we group the original data by state and month to see if there if any trend throughout months.
 
-```{r}
+```{r,message = FALSE}
 ufo_month_trend <- ufo_trend_var(ufo_trend,var1="state",var2="month")
 
 ufo_month_trend_plot <- 
@@ -186,7 +167,7 @@ plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)
 
 Like what we did in the year trend, we want to reduce the impact of outlier. Therefore, we remove sightings of California. The trend is more clear that sightings in most states peaked at July and then declined and reached the lowest at around February. 
 
-### Obeservations trend of states over hours
+### Trend over hours by states 
 
 ```{r,message = FALSE}
 ufo_hour_trend <- ufo_trend_var(ufo_trend,var1="state",var2="hour")
@@ -212,7 +193,7 @@ plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)
 
 After removing the outlier of California state, the trend is more clear. 
 
-### Obeservations trend of states over weekdays
+### Trend over weekdays by states 
 
 ```{r,message = FALSE}
 ufo_weekday_trend <- ufo_trend_var(ufo_trend,var1="state",var2="weekday")
@@ -264,11 +245,11 @@ ufo_weekday_trend |>
 
 The bar plot visualized the trend more clear. The overall sightings decreased from Sunday to Monday, then increased day by day and reached the highest values at Saturday.
 
-## Trend per population by state over time
+## Sightings trend per 1M population over time by state 
 
 In the previous part of this page, we discuss about the population effect on the overall trend over year. Here, we take the average of population of 2000,2010,2020 of each state, and use this average population to calculate the sightings per one million from 1995 to 2022 to get rid of the population effect, then we examine the average trend over time. We mainly discuss the trend of sightings per 1 million population over year and month here.
 
-### Trend per population by state over year
+### Trend per 1M population over year by state 
 
 ```{r,message = FALSE}
 ufo_per <- ufo_trend|>
@@ -301,7 +282,7 @@ plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)
 * The sightings remained stable for a short period after 2017 then decreased to a relatively low level.
 * The state with most sightings per 1M is Vermont. After taking population into account, the sightings in California varied in an average pace.
 
-### Trend per population by state over month
+### Trend per 1M population over month by state 
 
 ```{r,message = FALSE}
 ufo_month_per <- ufo_trend_var(ufo_per,"state","month")|>
@@ -330,7 +311,7 @@ plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)
 * Also, we can see that the change rate of California over months was relatively stable. 
 
 
-## Trends over time by shape
+## Sightings trend over time by shape
 
 ### Trend over year by shape
 
@@ -368,7 +349,7 @@ ufo_year_shape |>
 ```
 
 
-For most observed shapes, they have similar trend over year:the sightings started to increase rapidly in 1990s  and, then peaked at around 2014, followed by an sharp decrease in 2018 and another peak in 2020.
+For most observed shapes, they have similar trend over year: the sightings started to increase rapidly in 1990s  and, then peaked at around 2014, followed by an sharp decrease in 2018 and another peak in 2020.
 
 Light, circle and triangle were the most observed shape of UFO. The light shape had the most sharp change rate of all shapes.
 

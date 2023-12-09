@@ -426,21 +426,14 @@ div.tocify {
 
 <p>In this page, we are going to discuss the UFO sightings trend over
 time. First we will look into the pattern of sightings by states over
-years, months, weekdays and hours.To get rid off the population effect,
-we also discuss calculate the sightings per 1 million of each states and
-then examine the trend over year and month.Then we will explore the
+years, months, weekdays and hours. To get rid off the population effect,
+we also calculate the sightings per 1 million of each states and then
+examine the trend over year and month. Then we will explore the
 sightings by shape over years.</p>
 <pre class="r"><code>library(tidyverse)
 library(cowplot)</code></pre>
 <pre><code>## Warning: package &#39;cowplot&#39; was built under R version 4.3.2</code></pre>
-<pre class="r"><code>knitr::opts_chunk$set(
-    warning = FALSE,
-    fig.width = 8, 
-  fig.height = 6,
-  out.width = &quot;90%&quot;
-)
-
-theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+<pre class="r"><code>theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
 
 options(
   ggplot2.continuous.colour = &quot;viridis&quot;,
@@ -481,10 +474,10 @@ ufo_trend &lt;- read_csv(&quot;data/ufo_clean.csv&quot;)|&gt;
                          &quot;Friday&quot;, 
                          &quot;Saturday&quot;))
   )</code></pre>
-<div id="trend-over-time-by-states" class="section level2">
-<h2>Trend over time by states</h2>
-<div id="sightings-trend-over-years-by-states" class="section level3">
-<h3>sightings trend over years by states</h3>
+<div id="sightings-trend-over-time-by-states" class="section level2">
+<h2>Sightings trend over time by states</h2>
+<div id="trend-over-years-by-states" class="section level3">
+<h3>Trend over years by states</h3>
 <p>To look into the UFO sightings trend over years by states, here we
 take spaghetti plots to view the total sightings of each state
 throughout years.</p>
@@ -530,18 +523,16 @@ ufo_per_trend &lt;- function(df){
 <pre class="r"><code>ufo_year_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;year&quot;)
 
 ufo_year_trend_plot &lt;- ufo_trend_plot(ufo_year_trend,&quot;year&quot;,&quot;state&quot;)+
-  labs(title = &quot;Spaghetti plot of sightings trend of states over years&quot;)
+  labs(title = &quot;Trend over years by states&quot;)
 
 ufo_year_trend_plot_rm &lt;- 
   ufo_year_trend |&gt;
   filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
   ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
-  labs(title = &quot;Spaghetti plot of sightings trend of states over years(CA Removed)&quot;)
+  labs(title = &quot;Trend over years by states(CA Removed)&quot;)
 
-ufo_year_trend_plot_rm</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
-<pre class="r"><code>ufo_year_trend_plot</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-2-2.png" width="90%" /></p>
+plot_grid(ufo_year_trend_plot,ufo_year_trend_plot_rm)</code></pre>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>From the plot of each state’s UFO sightings over year, we can see
 that:</p>
 <ul>
@@ -561,25 +552,16 @@ year after 1995. This may due to the population effect.</li>
 <p>To avoid the influence of the extreme large sightings of CA on the
 overall trend, we may filter out this state and see the overall trend
 then.</p>
-<pre class="r"><code>ufo_year_trend_plot_rm &lt;- 
-  ufo_year_trend |&gt;
-  filter(!(state %in% c(&quot;CA&quot;)) )|&gt;
-  ufo_trend_plot(&quot;year&quot;,&quot;state&quot;)+
-  labs(title = &quot;Spaghetti plot of sightings trend of states over years(CA Removed)&quot;)
-
-ufo_year_trend_plot_rm</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
 <p>The overall sightings trend changed little compared to the previous
 one.</p>
 </div>
-<div id="sightings-trend-of-states-over-months" class="section level3">
-<h3>sightings trend of states over months</h3>
+<div id="trend-over-months-by-states" class="section level3">
+<h3>Trend over months by states</h3>
 <p>Then we group the original data by state and month to see if there if
-any trend through out months.</p>
-<pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_month_trend_plot &lt;- 
+any trend throughout months.</p>
+<pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)
+
+ufo_month_trend_plot &lt;- 
   ufo_month_trend |&gt;
   ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
@@ -597,9 +579,7 @@ ufo_month_trend_plot_rm &lt;-
   labs(title = &quot;Trend over month by states(CA Removed)&quot;)
 
 plot_grid(ufo_month_trend_plot,ufo_month_trend_plot_rm)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
-## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <ul>
 <li>The red smooth line indicating a trend of average UFO sightings in
 all states of each month.</li>
@@ -617,9 +597,8 @@ outlier. Therefore, we remove sightings of California. The trend is more
 clear that sightings in most states peaked at July and then declined and
 reached the lowest at around February.</p>
 </div>
-<div id="obeservations-trend-of-states-over-hours"
-class="section level3">
-<h3>Obeservations trend of states over hours</h3>
+<div id="trend-over-hours-by-states" class="section level3">
+<h3>Trend over hours by states</h3>
 <pre class="r"><code>ufo_hour_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;hour&quot;)
 
 ufo_hour_trend_plot &lt;- 
@@ -634,7 +613,7 @@ ufo_hour_trend_plot_rm &lt;-
   labs(title = &quot;Trend over hours by states(CA Removed)&quot;)
 
 plot_grid(ufo_hour_trend_plot,ufo_hour_trend_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <ul>
 <li>The average sightings during 6:00 to 15:00 were relatively low.</li>
 <li>There was an sharp increase of average sightings starting from 15:00
@@ -645,9 +624,8 @@ and peaked at around 21:00.</li>
 <p>After removing the outlier of California state, the trend is more
 clear.</p>
 </div>
-<div id="obeservations-trend-of-states-over-weekdays"
-class="section level3">
-<h3>Obeservations trend of states over weekdays</h3>
+<div id="trend-over-weekdays-by-states" class="section level3">
+<h3>Trend over weekdays by states</h3>
 <pre class="r"><code>ufo_weekday_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;weekday&quot;)
 
 
@@ -672,7 +650,7 @@ ufo_weekday_plot_rm&lt;-
   labs(title = &quot;Trend over weekdays by states (CA Removed)&quot;)
 
 plot_grid(ufo_weekday_plot,ufo_weekday_plot_rm)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The overall trend for all states is not clear. For California,the
 sightings declined from Sunday to Monday, then increased during weekdays
 and peaked at Saturday.</p>
@@ -692,15 +670,15 @@ sightings over weekdays.</p>
   labs(
     title = &quot;Bar plot of sightings trend of states over weekdays&quot;
   )</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>The bar plot visualized the trend more clear. The overall sightings
 decreased from Sunday to Monday, then increased day by day and reached
 the highest values at Saturday.</p>
 </div>
 </div>
-<div id="trend-per-population-by-state-over-time"
+<div id="sightings-trend-per-1m-population-over-time-by-state"
 class="section level2">
-<h2>Trend per population by state over time</h2>
+<h2>Sightings trend per 1M population over time by state</h2>
 <p>In the previous part of this page, we discuss about the population
 effect on the overall trend over year. Here, we take the average of
 population of 2000,2010,2020 of each state, and use this average
@@ -708,9 +686,9 @@ population to calculate the sightings per one million from 1995 to 2022
 to get rid of the population effect, then we examine the average trend
 over time. We mainly discuss the trend of sightings per 1 million
 population over year and month here.</p>
-<div id="trend-per-population-by-state-over-year"
+<div id="trend-per-1m-population-over-year-by-state"
 class="section level3">
-<h3>Trend per population by state over year</h3>
+<h3>Trend per 1M population over year by state</h3>
 <pre class="r"><code>ufo_per &lt;- ufo_trend|&gt;
   filter(
     year &gt;= 1995
@@ -733,7 +711,7 @@ ufo_year_per_plot_spec &lt;- ufo_year_per|&gt;
        y = &quot;obs per 1M&quot;)
 
 plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <ul>
 <li>For sightings per 1M population, the trend looks a slightly
 different from the aggregate sightings trend.</li>
@@ -748,9 +726,9 @@ population into account, the sightings in California varied in an
 average pace.</li>
 </ul>
 </div>
-<div id="trend-per-population-by-state-over-month"
+<div id="trend-per-1m-population-over-month-by-state"
 class="section level3">
-<h3>Trend per population by state over month</h3>
+<h3>Trend per 1M population over month by state</h3>
 <pre class="r"><code>ufo_month_per &lt;- ufo_trend_var(ufo_per,&quot;state&quot;,&quot;month&quot;)|&gt;
   ufo_per_trend()
 
@@ -770,7 +748,7 @@ ufo_month_per_plot_spec &lt;- ufo_month_per|&gt;
        y = &quot;obs per 1M&quot;)
 
 plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <ul>
 <li>The sightings trend over month change little after adjusting for
 population.</li>
@@ -783,8 +761,8 @@ relatively stable.</li>
 </ul>
 </div>
 </div>
-<div id="trends-over-time-by-shape" class="section level2">
-<h2>Trends over time by shape</h2>
+<div id="sightings-trend-over-time-by-shape" class="section level2">
+<h2>Sightings trend over time by shape</h2>
 <div id="trend-over-year-by-shape" class="section level3">
 <h3>Trend over year by shape</h3>
 <pre class="r"><code>obs_shape &lt;- ufo_trend |&gt;
@@ -814,8 +792,8 @@ ufo_year_shape |&gt;
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
   labs(title = &quot;Spaghetti plot of sightings trend of states over years&quot;)</code></pre>
-<p><img src="trend_time_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
-<p>For most observed shapes, they have similar trend over year:the
+<p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>For most observed shapes, they have similar trend over year: the
 sightings started to increase rapidly in 1990s and, then peaked at
 around 2014, followed by an sharp decrease in 2018 and another peak in
 2020.</p>
