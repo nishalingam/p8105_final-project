@@ -106,9 +106,9 @@ Examples include:
 
 2.	Geographical Analysis:
 
-Create heat maps to show the geographical distributions of sightings.
+* Create heat maps to show the geographical distributions of sightings.
 
-Create an interactive map that includes the color mentioned in the report and the shape of the UFO.
+* Create an interactive map that includes the color mentioned in the report and the shape of the UFO.
 
 ```{r, echo = FALSE, message = FALSE}
 # Create Heat Maps
@@ -164,6 +164,7 @@ Adjectives used before 2000 exhibit greater diversity and complexity, featuring 
 
 
 4.	Categorical Analysis:
+Bar Charts and Pie Charts: Examine the distribution of sightings by categories like shape of the object, duration, and text.
 
 ```{r, echo = FALSE, message = FALSE}
 # Bar Chart for Shape
@@ -512,7 +513,22 @@ Technological Changes:
 
 **Final Thoughts:**
 
-While the analysis provided valuable insights into the patterns of UFO sightings, it is essential to approach the findings cautiously. The subjectivity inherent in UFO reporting, coupled with the limitations of the clustering methods, means that our conclusions should be seen as preliminary. Further research, using more sophisticated geospatial analysis techniques and incorporating additional contextual data, is required to deepen our understanding of UFO sightings.
+We have delved deeply into the intriguing subject of UFO encounters in the United States thanks to this study. After going over a large amount of data, we’ve found some intriguing trends about the locations and times that these enigmatic occurrences are most likely to be recorded.
+
+Our results demonstrate that there are certain locations where UFO sightings occur and that the details of these encounters might differ significantly. We also observed that the quantity of sightings that have been reported has varied over time, showing an unexpected increase recently. We’re interested in learning more about the possible causes of the patterns that appear to be more active in particular years and locations.
+
+We recognize that there are some limitations to our study. UFO sightings are difficult to define since they are erratic and dependent on eyewitness reports, which are not always reliable. Also, the use of social media and technology has significantly altered how we gather and disseminate information about these encounters.
+
+After everything is said and done, we’re left curious. A mystery that captivates our curiosity even after all the evidence we’ve examined about UFO sightings is still present. We still don’t know enough about this subject, which is what makes it so fascinating. We hope that our work raises more issues and encourages more research down the road.
+
+**Acknowledgement**
+
+As we draw to the end of our exploration journey into UFO encounters, we want to express our sincere and heartfelt thanks to everyone who helped with this project. Our group members’ collaborative spirit and insightful contributions have been invaluable, your dedication and hard work have been the foundation of this analysis project.
+
+We are also incredibly grateful to Professor Jeff Goldsmith and all the TAs for all of your hard work and contributions to our education. In addition to providing guidance for this project, the understanding and information we have acquired in this class have expanded our comprehension of data and analysis and its practical applications.
+
+This class has been a journey of discovery, in which we have learned the importance of data selection, the strength of statistical analysis, and the significance of interpreting our findings in a broader context. These lessons will undoubtedly carry forward in our academic and professional pursuits.
+
 
 
 ---
