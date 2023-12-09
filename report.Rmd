@@ -125,23 +125,41 @@ leaflet(ufo) |>
 The frequency of sightings over time (years, months, hours of the day, weekdays) is of main concern in temporal analysis. We mainly use line charts to visualize the aggregate trends of each state over time and then use smooth lines to estimate the average sighting trend in the US. 
 
 **Trend and Adjusted Trend Over Years by States: **
-<img src="trend_time_files/figure-html/Trend over hours by states -1.png" style="width:75%">
+
+<img src="trend_time_files/figure-html/Trend over year by states-1.png" style="width:75%">
+
 Following 1995, there was a significant increase in UFO sightings, possibly due to the internet's quick development. Most states saw a peak in sightings around 2014, then a decline. Nearly all states experienced sharp declines in sightings in 2018, and then there was an increase in 2019 and 2020. UFO sightings within individual states varied significantly from year to year, with some states showing sharp increases or decreases.  The number of UFO reports in California consistently outnumbered those in other states, possibly due to population effects.
+
+<img src="trend_time_files/figure-html/Trend per over year by states-1.png" style="width:75%">
 
 After adjusting for population, the overall trend mirrored the aggregate sighting trend, with a rapid increase post-1995 and a peak around 2014. Vermont consistently had the highest sightings per 1 million population, indicating a potential hotspot.
 
 **Trend and Adjusted Trend Over Months by States: **
+
+<img src="trend_time_files/figure-html/Trend over months by states-1.png" style="width:75%">
+
 Sightings showed seasonal variations, with summer having the highest reported sightings in most states. Some states, such as Florida, experienced peak sightings in December, indicating regional variations. Washington State showed a unique rapid increase starting in May and a sharp decrease after July.
+
+<img src="trend_time_files/figure-html/Trend per over month by states -1.png" style="width:75%">
 
 Adjusting for population had a minimal impact on the trend over the past few months. However, Alaska showed a unique trend with the highest sightings per 1 million in winter, potentially related to polar night.
 
 **Trend Over Hours by States: **
+
+<img src="trend_time_files/figure-html/Trend over hours by states -1.png" style="width:75%">
+
 UFO sightings were more commonly reported during the evening hours, peaking around 21:00. Sightings during daytime hours, particularly from 6:00 to 15:00, were relatively low.
 
 **Trend Over Weekdays by States:**
+
+<img src="trend_time_files/figure-html/Trend over weekdays by states-1.png" style="width:75%">
+
 The average sightings increased gradually from Monday to Saturday, peaking on Saturday, then decreasing on Sunday.  California showed a decline from Sunday to Monday, with an increase during the weekdays and a peak on Saturday.
 
 **Trend Over Time by UFO Shapes:**
+
+<img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" style="width:75%">
+
 Light, circles, and triangles were the most observed UFO shapes, following a similar trend of rapid increase, peaking around 2014, decline in 2018, and another peak in 2020. Fireball had a peak before 2000, while disk sightings showed a steady increase in the 1970s.
 
 **Adjectives Used in The Report Before and After 2000:**
@@ -179,19 +197,6 @@ pie(shape_counts$n,
 ```
 
 From the bar chart and pie chart for shape, we could notice one category that stands out with a significantly higher number of sightings than the others, which is "light.”. This indicates that rather than solid objects with distinct shapes, people are likelier to claim encounters with mysterious lights when they report UFOs. It’s also important to understand that “UFO” refers to any flying object the viewer cannot identify. It doesn’t always indicate that it originated from another planet.
-
-```{r, echo = FALSE, message = FALSE}
-# Histogram for Duration
-ufo |>
-  ggplot(aes(x = duration_clean)) +
-  geom_histogram(binwidth = 10,
-                 fill = "blue",
-                 color = "black") +
-  labs(title = "HIstogram of UFO Sightings by Duration",
-       x = "Duration",
-       y = "Frequency") +
-  theme_minimal()
-```
 
 Because the `duration `is very skewed and has a wide range in the histogram, we change it to categorize the durations into intervals and then plot a bar chart.
 
