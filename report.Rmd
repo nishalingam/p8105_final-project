@@ -65,7 +65,7 @@ As our project progressed, we explored more nuanced questions.
 * Are there correlations between UFO sightings and other variables?
 * Will mentioning certain words in the report affect the duration of sightings or other variables?
 
-###Data 
+### Data 
 Our primary work was on data collected by the National UFO Reporting Center (NUFORC). [Timothy Renner](https://data.world/timothyrenner) pulled and hosted the data version we used separately. We restricted our analysis to UFO reports made within the U.S.A. and removed reports that contained inconsistent locations (some reported U.S. but showed longitudes and latitudes in South America, Europe, or Canada) or were missing fundamental values. This left us with 100,820 reports from an initial set of 141,261 reports.
 
 The duration of the UFO encounter was reported in the text and had inconsistent formatting, as well as unexpected special characters, e.g., “~8 minutes," “30 SECS," or “3 hours or more.”. We wrote a function to identify numeric time values within these strings and the appropriate time units (seconds, minutes, and hours) and convert these reports to numbers of seconds. While this approach wasn’t perfect, it allowed us to perform subsequent analyses on most of the data.
@@ -221,7 +221,7 @@ Terminologies such as "clear," "large," and "high" in reports imply that observe
 
 The observer may have preferred to use more specific terms like "first," "second," "close," and "bright" since they had more time to examine the object closely and pick up on more subtle aspects. Upon closer examination, terms like "small" and "strange" may surface, enabling a comparison of the UFO's characteristics with those of the surrounding area. Easy-to-identify colors like "orange," "red," "white," and "blue" are reported, which implies that prolonged sightings provide witnesses with sufficient opportunity to see more vibrant colors that they might otherwise miss during a brief encounter.
 
-###Limitations
+### Limitations
 
 Despite the insights achieved by the project, there are several limitations of note. The first is that we are limited by the quality of the reports themselves. Not only is the reliability of UFO witnesses in question, but the lack of a standardized reporting system means that the way reports were made was highly variable. The subjectivity of the encounter, and the requirement that the object observed be ‘unidentified’ further compounds this issue. We also do not know what reports were not made and if a lack of reporting corresponds to a lack of UFO sightings or simply an unwillingness to make that sighting known.
 
