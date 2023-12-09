@@ -125,6 +125,7 @@ leaflet(ufo) |>
 The frequency of sightings over time (years, months, hours of the day, weekdays) is of main concern in temporal analysis. We mainly use line charts to visualize the aggregate trends of each state over time and then use smooth lines to estimate the average sighting trend in the US. 
 
 **Trend and Adjusted Trend Over Years by States: **
+<img src="trend_time_files/figure-html/Trend over hours by states -1.png" style="width:75%">
 Following 1995, there was a significant increase in UFO sightings, possibly due to the internet's quick development. Most states saw a peak in sightings around 2014, then a decline. Nearly all states experienced sharp declines in sightings in 2018, and then there was an increase in 2019 and 2020. UFO sightings within individual states varied significantly from year to year, with some states showing sharp increases or decreases.  The number of UFO reports in California consistently outnumbered those in other states, possibly due to population effects.
 
 After adjusting for population, the overall trend mirrored the aggregate sighting trend, with a rapid increase post-1995 and a peak around 2014. Vermont consistently had the highest sightings per 1 million population, indicating a potential hotspot.
