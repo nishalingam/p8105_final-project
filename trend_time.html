@@ -36,8 +36,13 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<html>
+<head>
+<link rel="shortcut icon" href="images/favicon.png" />
+</head>
+</html>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -358,6 +363,9 @@ div.tocify {
     <li>
       <a href="https://ncl2127.shinyapps.io/shiny_app/">Interactive Map</a>
     </li>
+    <li>
+      <a href="https://ncl2127.shinyapps.io/shiny_app_2/">State UFO Stats: Wrapped</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -365,20 +373,8 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    About
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="about.html">About the Project</a>
-    </li>
-    <li>
-      <a href="about_us.html">About our Team</a>
-    </li>
-  </ul>
+        <li>
+  <a href="about_us.html">About the Team</a>
 </li>
 <li>
   <a href="https://github.com/nishalingam/p8105_final-project">
@@ -415,22 +411,9 @@ we also calculate the sightings per 1 million of each states and then
 examine the trend over year and month. Then we will explore the
 sightings by shape over years.</p>
 <pre class="r"><code>library(tidyverse)
-<<<<<<< HEAD
 library(cowplot)</code></pre>
 <pre><code>## Warning: package &#39;cowplot&#39; was built under R version 4.3.2</code></pre>
 <pre class="r"><code>theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
-=======
-library(cowplot)
-
-knitr::opts_chunk$set(
-    warning = FALSE,
-    fig.width = 8, 
-  fig.height = 6,
-  out.width = &quot;90%&quot;
-)
-
-theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
->>>>>>> df6fa67d77e137be18faa5b7eebd20a204c893e2
 
 options(
   ggplot2.continuous.colour = &quot;viridis&quot;,
@@ -555,18 +538,10 @@ one.</p>
 <div id="trend-over-months-by-states" class="section level3">
 <h3>Trend over months by states</h3>
 <p>Then we group the original data by state and month to see if there if
-<<<<<<< HEAD
 any trend throughout months.</p>
 <pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)
 
 ufo_month_trend_plot &lt;- 
-=======
-any trend through out months.</p>
-<pre class="r"><code>ufo_month_trend &lt;- ufo_trend_var(ufo_trend,var1=&quot;state&quot;,var2=&quot;month&quot;)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override
-## using the `.groups` argument.</code></pre>
-<pre class="r"><code>ufo_month_trend_plot &lt;- 
->>>>>>> df6fa67d77e137be18faa5b7eebd20a204c893e2
   ufo_month_trend |&gt;
   ufo_trend_plot(&quot;month&quot;,&quot;state&quot;)+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
@@ -681,9 +656,9 @@ decreased from Sunday to Monday, then increased day by day and reached
 the highest values at Saturday.</p>
 </div>
 </div>
-<div id="sightings-trend-per-1m-population-over-time-by-state"
+<div id="sightings-trend-per-1m-population-over-time-by-states"
 class="section level2">
-<h2>Sightings trend per 1M population over time by state</h2>
+<h2>Sightings trend per 1M population over time by states</h2>
 <p>In the previous part of this page, we discuss about the population
 effect on the overall trend over year. Here, we take the average of
 population of 2000,2010,2020 of each state, and use this average
@@ -691,9 +666,9 @@ population to calculate the sightings per one million from 1995 to 2022
 to get rid of the population effect, then we examine the average trend
 over time. We mainly discuss the trend of sightings per 1 million
 population over year and month here.</p>
-<div id="trend-per-1m-population-over-year-by-state"
+<div id="trend-per-1m-population-over-year-by-states"
 class="section level3">
-<h3>Trend per 1M population over year by state</h3>
+<h3>Trend per 1M population over year by states</h3>
 <pre class="r"><code>ufo_per &lt;- ufo_trend|&gt;
   filter(
     year &gt;= 1995
@@ -731,9 +706,9 @@ population into account, the sightings in California varied in an
 average pace.</li>
 </ul>
 </div>
-<div id="trend-per-1m-population-over-month-by-state"
+<div id="trend-per-1m-population-over-month-by-states"
 class="section level3">
-<h3>Trend per 1M population over month by state</h3>
+<h3>Trend per 1M population over month by states</h3>
 <pre class="r"><code>ufo_month_per &lt;- ufo_trend_var(ufo_per,&quot;state&quot;,&quot;month&quot;)|&gt;
   ufo_per_trend()
 
@@ -749,7 +724,7 @@ ufo_month_per_plot_spec &lt;- ufo_month_per|&gt;
   ggplot(aes(y = obs,x = month, color = state))+
   geom_line()+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
-  labs(title = &quot;sightings over months of3 states(per 1M)&quot;,
+  labs(title = &quot;sightings over months (3 states, per 1M)&quot;,
        y = &quot;obs per 1M&quot;)
 
 plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)</code></pre>
@@ -766,10 +741,10 @@ relatively stable.</li>
 </ul>
 </div>
 </div>
-<div id="sightings-trend-over-time-by-shape" class="section level2">
-<h2>Sightings trend over time by shape</h2>
-<div id="trend-over-year-by-shape" class="section level3">
-<h3>Trend over year by shape</h3>
+<div id="sightings-trend-over-time-by-shapes" class="section level2">
+<h2>Sightings trend over time by shapes</h2>
+<div id="trend-over-year-by-shapes" class="section level3">
+<h3>Trend over year by shapes</h3>
 <pre class="r"><code>obs_shape &lt;- ufo_trend |&gt;
   group_by(shape)|&gt;
   summarise(
@@ -796,7 +771,7 @@ ufo_year_shape |&gt;
   geom_line()+
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  labs(title = &quot;Spaghetti plot of sightings trend of states over years&quot;)</code></pre>
+  labs(title = &quot;Spaghetti plot of sightings trend over years by shapes&quot;)</code></pre>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>For most observed shapes, they have similar trend over year: the
 sightings started to increase rapidly in 1990s and, then peaked at

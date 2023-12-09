@@ -245,11 +245,11 @@ ufo_weekday_trend |>
 
 The bar plot visualized the trend more clear. The overall sightings decreased from Sunday to Monday, then increased day by day and reached the highest values at Saturday.
 
-## Sightings trend per 1M population over time by state 
+## Sightings trend per 1M population over time by states 
 
 In the previous part of this page, we discuss about the population effect on the overall trend over year. Here, we take the average of population of 2000,2010,2020 of each state, and use this average population to calculate the sightings per one million from 1995 to 2022 to get rid of the population effect, then we examine the average trend over time. We mainly discuss the trend of sightings per 1 million population over year and month here.
 
-### Trend per 1M population over year by state 
+### Trend per 1M population over year by states
 
 ```{r,message = FALSE}
 ufo_per <- ufo_trend|>
@@ -282,7 +282,7 @@ plot_grid(ufo_year_per_plot,ufo_year_per_plot_spec)
 * The sightings remained stable for a short period after 2017 then decreased to a relatively low level.
 * The state with most sightings per 1M is Vermont. After taking population into account, the sightings in California varied in an average pace.
 
-### Trend per 1M population over month by state 
+### Trend per 1M population over month by states 
 
 ```{r,message = FALSE}
 ufo_month_per <- ufo_trend_var(ufo_per,"state","month")|>
@@ -300,7 +300,7 @@ ufo_month_per_plot_spec <- ufo_month_per|>
   ggplot(aes(y = obs,x = month, color = state))+
   geom_line()+
   scale_x_continuous(breaks = 1:12, labels = month.abb)+
-  labs(title = "sightings over months of3 states(per 1M)",
+  labs(title = "sightings over months (3 states, per 1M)",
        y = "obs per 1M")
 
 plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)
@@ -311,9 +311,9 @@ plot_grid(ufo_month_per_plot,ufo_month_per_plot_spec)
 * Also, we can see that the change rate of California over months was relatively stable. 
 
 
-## Sightings trend over time by shape
+## Sightings trend over time by shapes
 
-### Trend over year by shape
+### Trend over year by shapes
 
 ```{r,message = FALSE}
 obs_shape <- ufo_trend |>
@@ -345,7 +345,7 @@ ufo_year_shape |>
   geom_line()+
   facet_grid(cols = vars(shape))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  labs(title = "Spaghetti plot of sightings trend of states over years")
+  labs(title = "Spaghetti plot of sightings trend over years by shapes")
 ```
 
 
