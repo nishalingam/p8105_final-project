@@ -35,8 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 <html>
 <head>
 <link rel="shortcut icon" href="images/favicon.png" />
@@ -399,8 +399,13 @@ Sightings</h1>
 </div>
 
 
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
+<style type="text/css">
+img{
+width: 50%;
+}
+</style>
+<div id="motivation" class="section level3">
+<h3>Motivation</h3>
 <p>Our project explores the reporting of unidentified flying objects
 (UFOs) throughout the U.S. UFOs, by their very nature, leave unanswered
 questions, some of which we hope to explore through this project. With
@@ -414,10 +419,10 @@ UFO encounters. Our project addresses three key components to provide
 this understanding: when the encounters happened, where the encounters
 happened, and what was encountered.</p>
 </div>
-<div id="related-work" class="section level2">
-<h2>Related Work</h2>
-<p>Inspired by<a href="https://nuforc.org/">National UFO Reporting
-Center</a>, researches such as <a
+<div id="related-work" class="section level3">
+<h3>Related Work</h3>
+<p>Inspired by the <a href="https://nuforc.org/">National UFO Reporting
+Center</a>, research such as <a
 href="https://www.nature.com/articles/s41599-023-01746-3">Faculty
 perceptions of unidentified aerial phenomena</a>, <a
 href="https://www.worldscientific.com/doi/10.1142/S2251171723400068">The
@@ -426,83 +431,91 @@ Multimodal Ground-Based Observatories</a>, our project seeks to expand
 on existing research using advanced statistical methods and R
 programming.</p>
 </div>
-<div id="initial-questions" class="section level2">
-<h2>Initial Questions</h2>
-<p>We started with key questions like:</p>
+<div id="initial-questions" class="section level3">
+<h3>Initial Questions</h3>
+<p>We started with basic questions such as:</p>
 <ul>
-<li><p>What are the hotspots for UFO sightings?</p></li>
-<li><p>What are the common characteristics of UFO sightings?</p></li>
-<li><p>How have reports of UFO sightings changed over time?</p></li>
-<li><p>Are there common features in these reports that can be
-quantitatively analyzed?</p></li>
+<li>What are the hotspots for UFO sightings?</li>
+<li>What are the common characteristics of UFO sightings?</li>
+<li>How have reports of UFO sightings changed over time?</li>
+<li>Are there common features in these reports that can be
+quantitatively analyzed?</li>
 </ul>
-<p>As our project progressed, we began to explore more nuanced
-questions.</p>
+<p>As our project progressed, we explored more nuanced questions.</p>
 </div>
-<div id="evolution-of-questions" class="section level2">
-<h2>Evolution of Questions:</h2>
+<div id="evolution-of-questions" class="section level3">
+<h3>Evolution of Questions:</h3>
 <ul>
-<li><p>Do certain geographical areas have higher frequencies of certain
-types of UFO sightings?</p></li>
-<li><p>Has the nature of UFO sightings changed over time? For example, a
-follow-up to temporal pattern analysis, looking at changes in
-characteristics (shapes) of sightings across different decades.</p></li>
-<li><p>Are there correlations between UFO sightings and other
-variables?</p></li>
-<li><p>Will mentioning certain words in the report affect the duration
-of sightings or other variables?</p></li>
+<li>Do certain geographical areas have higher frequencies of certain
+types of UFO sightings?</li>
+<li>Has the nature of UFO sightings changed over time? For example, a
+follow-up to temporal pattern analysis looks at changes in
+characteristics (shapes) of sightings across different decades.</li>
+<li>Are there correlations between UFO sightings and other
+variables?</li>
+<li>Will mentioning certain words in the report affect the duration of
+sightings or other variables?</li>
 </ul>
-</div>
-<div id="data" class="section level2">
-<h2>Data</h2>
-<p>Our primary work was on data collected by the National UFO Reporting
-Center (NUFORC). <a href="https://data.world/timothyrenner">Timothy
-Renner</a> pulled and hosted the data version we used separately. We
-restricted our analysis to UFO reports made within the U.S.A. and
-removed reports that contained inconsistent locations (some reported
-U.S. but showed longitudes and latitudes in South America, Europe, or
-Canada) or were missing fundamental values. This left us with 100,820
-reports from an initial set of 141,261 reports.</p>
+<p>###Data Our primary work was on data collected by the National UFO
+Reporting Center (NUFORC). <a
+href="https://data.world/timothyrenner">Timothy Renner</a> pulled and
+hosted the data version we used separately. We restricted our analysis
+to UFO reports made within the U.S.A. and removed reports that contained
+inconsistent locations (some reported U.S. but showed longitudes and
+latitudes in South America, Europe, or Canada) or were missing
+fundamental values. This left us with 100,820 reports from an initial
+set of 141,261 reports.</p>
 <p>The duration of the UFO encounter was reported in the text and had
 inconsistent formatting, as well as unexpected special characters, e.g.,
 “~8 minutes,” “30 SECS,” or “3 hours or more.”. We wrote a function to
 identify numeric time values within these strings and the appropriate
 time units (seconds, minutes, and hours) and convert these reports to
 numbers of seconds. While this approach wasn’t perfect, it allowed us to
-perform subsequent analyses on most of the data.</p>
-<p>We incorporated data from a few additional sources as well. To locate
-cities that were near the location of UFO reports, we utilized a U.S.
-city dataset from <a href="https://simplemaps.com/data/us-cities">simple
-maps</a>. We used decennial census data from the <a
+perform subsequent analyses on most of the data. We incorporated data
+from a few additional sources as well. To locate cities that were near
+the location of UFO reports, we utilized a U.S. city dataset from <a
+href="https://simplemaps.com/data/us-cities">simple maps</a>. We used
+decennial census data from the <a
 href="https://www2.census.gov/programs-surveys/popest/datasets/">U.S.
 Census Bureau</a> to control for differing populations across states. We
 also incorporated basic information about U.S. geography from R and the
 <a href="https://geojson.org/">GeoJSON dataset</a>.</p>
-<p>We also created new variables using packages such as stringr and
-spacyr. The spacyr package helps to dissect long comments into words.
-These words are automatically processed into their root word, or lemma,
-and are tagged by their parts of speech. Due to the size of the dataset,
-only 5000 random samples are used in the dataset. We created two other
-variables: color, which extracts the first appearance of color given by
-the report, and adj, which records the appearance of the top 20
-adjectives in the comments in binary form. The color analysis uses
-keywords generated from R’s built-in function color(), and the adjective
-analysis uses keywords by filtering the top 20 from the spacyr data
-frame.</p>
+<p>We also created new variables using packages such as
+<code>stringr</code> and <code>spacyr</code>. The <code>spacyr</code>
+package helps to dissect long comments into words. These words are
+automatically processed into their root word, or lemma, and are tagged
+by their parts of speech. Due to the size of the dataset, only 5000
+random samples are used in the dataset. We created two other variables:
+color, which extracts the first appearance of color given by the report,
+and adj, which records the appearance of the top 20 adjectives in the
+comments in binary form. The color analysis uses keywords generated from
+R’s built-in function color(), and the adjective analysis uses keywords
+by filtering the top 20 from the <code>spacyr</code> data frame.</p>
 </div>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory Analysis</h2>
+<div id="exploratory-analysis" class="section level3">
+<h3>Exploratory Analysis</h3>
 <p>Our exploratory analysis included the following:</p>
-<ol style="list-style-type: decimal">
-<li>Temporal Analysis:</li>
-</ol>
-<p>The frequency of sightings over time (years, months, hours of the
-day, weekdays) is of main concern in temporal analysis. We mainly use
-line charts to visualize the aggregate trends of each state over time
-and then use smooth lines to estimate the average sighting trend in the
-US.</p>
-<p><strong>Trend and Adjusted Trend Over Years by States: </strong>
-Following 1995, there was a significant increase in UFO sightings,
+<div id="trends-over-space" class="section level4">
+<h4>Trends over space</h4>
+<p>We began with an exploration of the distribution of UFO sightings,
+first throughout the U.S. and then by distance to large cities. The
+initial plotting of UFO sightings revealed three geographic hotspots:
+the Pacific Northwest, Northern New England, and the Arizona-New Mexico
+region.</p>
+<p>&lt;img src=”trend_space_files/figure-html/us heatmap-1.png”&gt;</p>
+<p>Then, as we compared sightings made in a rural area with those made
+in a rural one, we began to see differences between these groups.
+Encounters in rural areas were longer, and had differing characteristics
+than those in urban/suburban areas. These differences were explored
+further in a comprehensive textual analysis of the reports.</p>
+<p>&lt;img src=”trend_space_files/figure-html/distance
+histogram-1.png”&gt;</p>
+</div>
+<div id="trend-and-adjusted-trend-over-years-by-states"
+class="section level4">
+<h4>Trend and Adjusted Trend Over Years by States</h4>
+<p><img src="trend_time_files/figure-html/Trend%20over%20year%20by%20states-1.png" style="width:75%"></p>
+<p>Following 1995, there was a significant increase in UFO sightings,
 possibly due to the internet’s quick development. Most states saw a peak
 in sightings around 2014, then a decline. Nearly all states experienced
 sharp declines in sightings in 2018, and then there was an increase in
@@ -511,35 +524,53 @@ significantly from year to year, with some states showing sharp
 increases or decreases. The number of UFO reports in California
 consistently outnumbered those in other states, possibly due to
 population effects.</p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20year%20by%20states-1.png" style="width:75%"></p>
 <p>After adjusting for population, the overall trend mirrored the
 aggregate sighting trend, with a rapid increase post-1995 and a peak
 around 2014. Vermont consistently had the highest sightings per 1
 million population, indicating a potential hotspot.</p>
-<p><strong>Trend and Adjusted Trend Over Months by States: </strong>
-Sightings showed seasonal variations, with summer having the highest
+</div>
+<div id="trend-and-adjusted-trend-over-months-by-states"
+class="section level4">
+<h4>Trend and Adjusted Trend Over Months by States:</h4>
+<p><img src="trend_time_files/figure-html/Trend%20over%20months%20by%20states-1.png" style="width:75%"></p>
+<p>Sightings showed seasonal variations, with summer having the highest
 reported sightings in most states. Some states, such as Florida,
 experienced peak sightings in December, indicating regional variations.
 Washington State showed a unique rapid increase starting in May and a
 sharp decrease after July.</p>
+<p><img src="trend_time_files/figure-html/Trend%20per%20over%20month%20by%20states%20-1.png" style="width:75%"></p>
 <p>Adjusting for population had a minimal impact on the trend over the
 past few months. However, Alaska showed a unique trend with the highest
 sightings per 1 million in winter, potentially related to polar
 night.</p>
-<p><strong>Trend Over Hours by States: </strong> UFO sightings were more
-commonly reported during the evening hours, peaking around 21:00.
-Sightings during daytime hours, particularly from 6:00 to 15:00, were
-relatively low.</p>
-<p><strong>Trend Over Weekdays by States:</strong> The average sightings
-increased gradually from Monday to Saturday, peaking on Saturday, then
-decreasing on Sunday. California showed a decline from Sunday to Monday,
-with an increase during the weekdays and a peak on Saturday.</p>
-<p><strong>Trend Over Time by UFO Shapes:</strong> Light, circles, and
-triangles were the most observed UFO shapes, following a similar trend
-of rapid increase, peaking around 2014, decline in 2018, and another
-peak in 2020. Fireball had a peak before 2000, while disk sightings
-showed a steady increase in the 1970s.</p>
-<p><strong>Adjectives Used in The Report Before and After 2000:</strong>
-Adjectives used before 2000 exhibit greater diversity and complexity,
+</div>
+<div id="trend-over-hours-by-states" class="section level4">
+<h4>Trend Over Hours by States:</h4>
+<p><img src="trend_time_files/figure-html/Trend%20over%20hours%20by%20states%20-1.png" style="width:75%"></p>
+<p>UFO sightings were more commonly reported during the evening hours,
+peaking around 21:00. Sightings during daytime hours, particularly from
+6:00 to 15:00, were relatively low. Trend Over Weekdays by States:</p>
+<p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states-1.png" style="width:75%"></p>
+<p>The average sightings increased gradually from Monday to Saturday,
+peaking on Saturday, then decreasing on Sunday. California showed a
+decline from Sunday to Monday, with an increase during the weekdays and
+a peak on Saturday.</p>
+</div>
+<div id="trend-over-time-by-ufo-shapes" class="section level4">
+<h4>Trend Over Time by UFO Shapes:</h4>
+<p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" style="width:75%"></p>
+<p>Light, circles, and triangles were the most observed UFO shapes,
+following a similar trend of rapid increase, peaking around 2014,
+decline in 2018, and another peak in 2020. Fireball had a peak before
+2000, while disk sightings showed a steady increase in the 1970s.</p>
+</div>
+<div id="adjectives-used-in-the-report-before-and-after-2000"
+class="section level4">
+<h4>Adjectives Used in the Report Before and After 2000:</h4>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-28-1.png" style="width:75%">
+<img src="text_analysis_files/figure-html/unnamed-chunk-28-2.png" style="width:75%"></p>
+<p>Adjectives used before 2000 exhibit greater diversity and complexity,
 featuring descriptors like “approximate,” “entire,” “exact,” “round,”
 “huge,” and “slow.” In contrast, post-2000 adjectives tend to be brief,
 including terms such as “clear,” “slow,” and “big.” The prevalence of
@@ -550,41 +581,96 @@ and after 2000, as well as the recent increase in photographic
 information availability, may also have an impact on this shift.
 Additionally, post-2000 messages tend to be more concise and direct,
 possibly to expedite information dissemination.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>Text Analysis</li>
-</ol>
+</div>
+</div>
+<div id="text-analysis" class="section level3">
+<h3>Text Analysis</h3>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-1.png" style="width:75%"></p>
 <p><strong>Top Nouns:</strong> These words primarily identify elements
 related to UFO sightings. They encompass the UFO itself (light, object),
 the setting (sky, night, minute, second), and items used to distinguish
 UFOs from conventional objects (star, plane, craft).</p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-3.png" style="width:75%"></p>
 <p><strong>Top Verbs:</strong> These verbs describe the actions and
 reactions of both observers and the UFO. They encapsulate observations
 (see, look, watch), movement (move, fly), and perceptions (appear,
 disappear).</p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-25-2.png" style="width:75%"></p>
 <p><strong>Top Adjectives:</strong> These words are descriptive but
 don’t fall strictly into noun or verb categories. They are being
 analyzed for potential correlations with UFO sighting duration. They
 include descriptors like brightness (bright, high, large), colors (red,
 white, blue, orange, green, dark), quantity (few, many), clarity (clear,
 visible), and peculiarity (strange, different).</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Correlation &amp; Regression Analysis:</li>
-</ol>
+<div id="correlation-regression-analysis" class="section level4">
+<h4>Correlation &amp; Regression Analysis</h4>
+<p><strong>Color vs Rural/Urban</strong> We generated a pie chart using
+Plotly to visualize and compare the color composition differences
+between rural and urban areas. To ascertain any potential relationship
+between color and location, we conducted a Chi-Square Test, yielding a
+significant p-value of 2.39e-09. As the location variable is binary, we
+proceeded to perform a logistic regression analysis between the
+variables. Through this analysis, we uncovered that gray and black
+colors exert a positive influence on the likelihood of sightings in
+rural locations, potentially due to their alignment with rural
+surroundings. Conversely, colors frequently mentioned, such as white,
+red, and yellow, demonstrate minimal impact in distinguishing between
+rural and urban settings.</p>
+<p><strong>Color vs Duration</strong> The dependent variable, duration,
+is continuous, prompting us to apply a Box-Cox transformation for
+normalization. After this transformation, we used the logarithm of
+duration as the final dependent variable. By ANOVA analysis, we observed
+that color frequency may impact the relationship between color and
+duration. To address this, we standardized colors based on their overall
+frequency. Subsequently, we conducted a comprehensive linear regression
+analysis between duration and color, employing stepwise backward
+regression based on AIC. Both the full regression and the backward
+elimination regression models revealed an R-squared value of 0.042,
+indicating a markedly weak correlation. Notably, the estimates suggest
+that colors like green and gray significantly reduce the duration of
+sightings, while the color red, conversely, increases the duration of
+observations.”</p>
+<p><strong>Color vs Shape</strong></p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-22-1.png" style="width:75%"></p>
+<p>We constructed a heatmap/correlation matrix to examine the
+relationship between all color variables and shape variables. This
+matrix was adjusted by the frequency of each color. The matrix is
+re-weighted by the frequency of the color. Less common colors like
+honeydew (disk), magenta (light), and khaki (egg) demonstrate a stronger
+correlation with specific shapes compared to other colors. There is also
+a high correlation with common combinations such as white light, white
+fireball, etc.. Conversely, rare combinations such as gray fireball,
+gray flash, brown light, etc., exhibit a lower correlation.</p>
+<p><strong>Color vs Time of Day</strong> After plotting the two
+variables, it appears that the scores are uniformly distributed,
+indicating no discernible relationship between color and time of
+day.</p>
+<p><strong>Adjective vs. Duration</strong></p>
+<p><img src="text_analysis_files/figure-html/unnamed-chunk-35-1.png" style="width:75%"></p>
+<p>We conducted a series of analyses including linear regression, ANOVA
+for result assessment, followed by cross-validation-based linear
+regression, and LASSO regression. Using the coefficients we get from the
+LASSO regression, we discovered the following: Shorter duration
+sightings tend to report general (clear, significant, high) and evident
+words with less vivid colors (dark, green). In contrast, longer-duration
+sightings tend to report detailed (first, second, close, bright), less
+obvious (strange, small), and easily noticeable colors (orange, red,
+white, blue).</p>
 </div>
-<div id="discussion" class="section level2">
-<h2>Discussion</h2>
-<p><strong>Findings:</strong></p>
+</div>
+<div id="discussion" class="section level3">
+<h3>Discussion</h3>
 <p>Our initial goal was to locate areas where UFO reports were common.
 According to the data, sightings occur more frequently in remote
 locations and crowded urban areas. This implies that the more possible
 observers there are, the more likely it is that sighting reports will
 occur. But it also suggests that some geographical characteristics or
 other unidentified factors can contribute to the frequency of UFO
-encounters.</p>
-<p>Regarding the typical features of UFO reports, our research showed
-various observed forms and actions. But reports of “lights,” “circles,”
-and “discs” were standard, and they fit with the traditional UFO imagery
-that has been widely accepted in the media and popular culture.</p>
+encounters. Regarding the typical features of UFO reports, our research
+showed various observed forms and actions. But reports of “lights,”
+“circles,” and “discs” were standard, and they fit with the traditional
+UFO imagery that has been widely accepted in the media and popular
+culture.</p>
 <p>When exploring how reports of UFO sightings have changed over time,
 we conducted a temporal analysis that showed a noticeable increase in
 reported sightings during the late 20th century, which could be
@@ -678,115 +764,66 @@ surrounding area. Easy-to-identify colors like “orange,” “red,” “white
 and “blue” are reported, which implies that prolonged sightings provide
 witnesses with sufficient opportunity to see more vibrant colors that
 they might otherwise miss during a brief encounter.</p>
+<p>###Limitations</p>
+<p>Despite the insights achieved by the project, there are several
+limitations of note. The first is that we are limited by the quality of
+the reports themselves. Not only is the reliability of UFO witnesses in
+question, but the lack of a standardized reporting system means that the
+way reports were made was highly variable. The subjectivity of the
+encounter, and the requirement that the object observed be
+‘unidentified’ further compounds this issue. We also do not know what
+reports were not made and if a lack of reporting corresponds to a lack
+of UFO sightings or simply an unwillingness to make that sighting
+known.</p>
+<p>Additionally, we wish to acknowledge some limitations in our methods.
+We primarily worked with latitude and longitude data, which ignored
+relevant geographic features such as mountain ranges, bodies of water,
+and developed areas that might impact the probability of UFO sightings,
+as well as the distribution. Of particular note in the UFO literature is
+the impact of military bases on UFO report frequency. Additionally, we
+made the urban/suburban vs. rural areas distinction based upon distance
+to cities rather than the more precise metric of population density.
+Further, we looked at reports over several decades but did not have the
+data to control for technological changes across this timeframe, both
+with respect to flying objects (i.e., drones) and the means of observing
+them (i.e., camera improvements).</p>
+<p>In our approach to the keyword detection process of the color
+analysis, the data was approached with an aggressive matter. Only the
+first color mentioned is extracted. The color could also identify the
+surroundings or the location name, hence creating misleading results
+from the findings. As advanced as the package Spacyr can be, there still
+exist errors in identifying the parts of speech of the parsed words.
+Misspelled words may not be identified by the algorithm.</p>
 </div>
-<div id="limitations" class="section level2">
-<h2>Limitations:</h2>
-<p>Data Quality and Completeness:</p>
-<ul>
-<li><p>The statistics on UFO sightings can be improved by complete
-reporting. It’s possible that witnesses won’t report every sighting or
-that their descriptions need to be revised.</p></li>
-<li><p>The analysis may be skewed by errors in the reported data, such
-as misspelled dates, times, places, or durations.</p></li>
-</ul>
-<p>Subjectivity in Sightings:</p>
-<ul>
-<li><p>Because UFO sightings are dependent on firsthand reports, they
-are subjective. What one individual perceives as another may recognize a
-UFO as an everyday object or phenomenon.</p></li>
-<li><p>The data does not consider the validity of the witnesses or the
-circumstances surrounding the sightings.</p></li>
-</ul>
-<p>Reporting Bias:</p>
-<ul>
-<li><p>Reporting bias could exist if sightings are more common in
-regions with greater interest in UFOs or where individuals are more
-inclined to report such incidents.</p></li>
-<li><p>The number of reports can increase or decrease depending on
-public interest and media coverage, and these fluctuations may not
-always correspond with real-world UFO activity.</p></li>
-</ul>
-<p>Geospatial Analysis Limitations:</p>
-<ul>
-<li><p>Geographic sightings may not conform to the spherical and
-uniformly sized cluster assumptions made by the k-means clustering
-algorithm.</p></li>
-<li><p>Mountain ranges, bodies of water, and urban vs. rural areas are
-geographic features that should be considered when using latitude and
-longitude coordinates.</p></li>
-</ul>
-<p>Temporal Factors:</p>
-<ul>
-<li>The temporal distribution of sightings may need to be considered in
-the analysis. For instance, if the data covers several decades, sighting
-frequencies may vary over time due to population growth or advancements
-in drones and other aircraft.</li>
-</ul>
-<p>External Influences:</p>
-<ul>
-<li>The data analysis does not consider external elements that can
-affect the chance of witnessing odd phenomena, such as weather,
-visibility, or celestial events.</li>
-</ul>
-<p>Selection of Clusters:</p>
-<ul>
-<li>The number of clusters in k-means is a somewhat arbitrary decision
-that can significantly impact the outcomes. The elbow technique, for
-example, may yield a partial answer for determining the ideal number of
-clusters.</li>
-</ul>
-<p>Lack of Contextural Data:</p>
-<ul>
-<li>It is difficult to make firm judgments regarding the type or cause
-of the sightings without more contextual information (such as the
-location of nearby airports or military installations).</li>
-</ul>
-<p>Technological Changes:</p>
-<ul>
-<li>Technological advancements may impact the quantity and nature of
-reported UFO sightings. The quantity and kind of UFO sightings can be
-influenced by technological advancements over time. For instance, the
-number of unexplained objects in the sky has increased due to the
-widespread use of drones.</li>
-</ul>
-</div>
-<div id="final-thoughts" class="section level2">
-<h2>Final Thoughts:</h2>
-<p>We have delved deeply into the intriguing subject of UFO encounters
-in the United States thanks to this study. After going over a large
-amount of data, we’ve found some intriguing trends about the locations
-and times that these enigmatic occurrences are most likely to be
-recorded.</p>
-<p>Our results demonstrate that there are certain locations where UFO
-sightings occur and that the details of these encounters might differ
-significantly. We also observed that the quantity of sightings that have
-been reported has varied over time, showing an unexpected increase
-recently. We’re interested in learning more about the possible causes of
-the patterns that appear to be more active in particular years and
-locations.</p>
-<p>We recognize that there are some limitations to our study. UFO
-sightings are difficult to define since they are erratic and dependent
-on eyewitness reports, which are not always reliable. Also, the use of
-social media and technology has significantly altered how we gather and
-disseminate information about these encounters.</p>
-<p>After everything is said and done, we’re left curious. A mystery that
+<div id="final-thoughts" class="section level3">
+<h3>Final Thoughts</h3>
+<p>Our project delves into the intriguing subject of UFO sightings. By
+their very nature, these unidentified objects ask questions of the
+observer. We have used a data-driven approach to explore trends in these
+reports and open new avenues for inquiry. Our results demonstrate that
+UFO sightings are not uniform throughout the U.S., nor do they perfectly
+correlate with population density. There are certain locations where UFO
+sightings occur with higher frequency, and the heterogeneity of these
+encounters asks even more questions of us as data enthusiasts. After
+everything is said and done, we’re left curious. A mystery that
 captivates our curiosity even after all the evidence we’ve examined
 about UFO sightings is still present. We still don’t know enough about
 this subject, which is what makes it so fascinating. We hope that our
 work raises more issues and encourages more research down the road.</p>
 </div>
-<div id="acknowledgement" class="section level2">
-<h2>Acknowledgement</h2>
+<div id="acknowledgments" class="section level3">
+<h3>Acknowledgments</h3>
 <p>As we draw to the end of our exploration journey into UFO encounters,
 we want to express our sincere and heartfelt thanks to everyone who
 helped with this project. Our group members’ collaborative spirit and
 insightful contributions have been invaluable, your dedication and hard
 work have been the foundation of this analysis project.</p>
-<p>We are also incredibly grateful to Professor Jeff Goldsmith and all
-the TAs for all of your hard work and contributions to our education. In
-addition to providing guidance for this project, the understanding and
-information we have acquired in this class have expanded our
-comprehension of data and analysis and its practical applications.</p>
+<p>We are also incredibly grateful to Professor Jeff Goldsmith and the
+TAs of P8105 for all of your hard work and contributions to our
+education. In addition to providing guidance for this project, the
+understanding and information we have acquired in this class have
+expanded our comprehension of data and analysis and its practical
+applications.</p>
 <p>This class has been a journey of discovery, in which we have learned
 the importance of data selection, the strength of statistical analysis,
 and the significance of interpreting our findings in a broader context.
@@ -845,7 +882,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
