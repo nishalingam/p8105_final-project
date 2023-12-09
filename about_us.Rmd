@@ -21,7 +21,7 @@ Welcome to our project! Meet the team behind the scenes, dedicated to making thi
 
 ## Jessie Li (jkl2195) 
 
-![Jessie Li]()
+![Jessie Li](images/jessie.jpg)
 
 ## Nisha Lingam (ncl2127) 
 
