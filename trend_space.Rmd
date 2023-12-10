@@ -189,4 +189,4 @@ df_ufo |>
 
 The results of this test suggest that there is a significant difference between the average duration of the rural UFO sightings and the urban UFO sightings. We estimate that sightings in rural areas last for approximately one minute longer than sightings in urban areas (10.5 minutes vs. 9.5 minutes).
 
-
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
