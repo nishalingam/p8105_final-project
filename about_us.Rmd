@@ -69,7 +69,7 @@ Welcome to our project! Meet the team behind the scenes, dedicated to making thi
 
 ### Contact Us
 
-For more information or to get in touch with any of our team members, please [contact Us](xz3173@cumc.columbia.edu).
+For more information or to get in touch with any of our team members, please [contact Us](mailto:xz3173@cumc.columbia.edu).
 
 ---
 
