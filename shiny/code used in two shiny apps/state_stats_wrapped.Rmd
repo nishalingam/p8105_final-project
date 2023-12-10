@@ -146,7 +146,15 @@ The following commented code was used in an app.R file to create the ShinyApp ti
 <!--   }) -->
 
 <!--   output$table <- renderDataTable({ -->
-<!--     cbind(sorted(), sorted_2(), sorted_3()) -->
+<!--     datatable( -->
+<!--       cbind(sorted(), sorted_2(), sorted_3()),  -->
+<!--       rownames = FALSE, -->
+<!--       options = list( -->
+<!--         columnDefs = list( -->
+<!--           list(targets = 1, className = formatStyle('column', textAlign = 'center')) -->
+<!--         )) -->
+<!--       ) -->
+
 <!--   }) -->
 
 <!-- } -->

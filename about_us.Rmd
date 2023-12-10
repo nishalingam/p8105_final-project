@@ -45,11 +45,11 @@ Welcome to our project! Meet the team behind the scenes, dedicated to making thi
   </tr>
   
   <tr>
-    <td><h3>Nisha Lingham</h3></td>
+    <td><h3>Nisha Lingam</h3></td>
     <td rowspan="2"><img src="images/nl.jpg" class="portrait"></td>
   </tr>
   <tr>
-    <td>Nisha is...</td>
+    <td><a href="https://www.linkedin.com/in/nisha-l-420462167/">Nisha Lingam</a> is an M.S. Biostatistics student interested in environmental health and genomics. She likes to play the piano, read, and write in her spare time.</td>
   </tr>
   
   <tr>

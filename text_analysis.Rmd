@@ -137,7 +137,7 @@ We get a size of `r nrow(text_df)` total of words from the 5000 samples.
 
 # Color Analysis
 
-## Data Cleaning
+## **Data Cleaning**
 
 We will use the function `str_extract`  to find the first color word in each sentence. If a text doesn't mention any colors, it will be removed from the analysis.Tthis method might pick up colors that describe items other than the UFO, like place names or surroundings.
 ```{r warning = FALSE}
@@ -184,7 +184,7 @@ Using the colors we extracted from the data, we want to see if the color has any
 
 ---
 
-## Color vs Rural/Urban
+## **Color vs Rural/Urban**
 
 ### Exploratory Analysis
 
@@ -266,7 +266,7 @@ Grey and black has a positive effect on the likelihood of the sighting at a rura
 
 ---
 
-## Color vs Duration
+## **Color vs Duration**
 
 Different wavelength of the color can indicate low long the observers can see the "light". We will investigate if we can map duration using color.
 
@@ -424,7 +424,7 @@ Both the full regression and the backward elimination regression models exhibit 
 
 ---
 
-## Color vs Shape
+## **Color vs Shape**
 
 ### Exploratory Analysis
 
@@ -568,11 +568,12 @@ shape_color_df |>
   labs(title="Correlation Matrix of Color and Shape",
         x ="Color", y = "Shape", fill='Correlation') 
 ```
-Less common colors like honeydew (disk), magenta (light), and khaki (egg) demonstrate a stronger correlation with specific shapes compared to other colors. There is also Conversely, rare combinations such as grey fireball, grey flash, brown light, etc., exhibit a lower correlation.
+
+Less common colors like honeydew (disk), magenta (light), and khaki (egg) demonstrate a stronger correlation with specific shapes compared to other colors. There is also a high correlation with common combinations such as white light, white fireball, etc.. Conversely, rare combinations such as grey fireball, grey flash, brown light, etc., exhibit a lower correlation.
 
 ---
 
-## Color vs Time of The Day
+## **Color vs Time of The Day**
 
 ### Exploratory Analysis
 
@@ -585,9 +586,7 @@ color_time_df = color_df |>
   ) |>
   group_by(color, time) |>
   summarize(n = n())
-```
 
-```{r}
 color_time_df |>
   ggplot(aes(x = fct_reorder(color,n), y = time)) +
   geom_point() +
@@ -603,7 +602,7 @@ Upon examining the plot, no discernible connection emerges between color and the
 
 # Text Analysis
 
-## Exploratory Analysis
+## **Exploratory Analysis**
 
 Here are the wordclouds of the top nouns, adjectives, and verbs mentioned in the 5000 sample datasets.
 ```{r}
@@ -655,7 +654,7 @@ verb_wcloud
 ### Wordcloud by Year
 
 We can also check out the top adjectives mentioned by year
-```{r}
+```{r  fig.width=8, fig.height=8}
 adj_old_df = text_df |>
   filter(pos == "ADJ") |>
   filter(year < 2000) |>
@@ -669,9 +668,7 @@ adj_now_df = text_df |>
   group_by(lemma) |>
   summarize(n = n()) |>
   head(1000)
-```
 
-```{r  fig.width=8, fig.height=8}
 wordcloud(words = adj_old_df$lemma, freq = adj_old_df$n, min.freq = 3,
           max.words=200, random.order=FALSE, rot.per=0.35,
           colors=brewer.pal(8, "Dark2"), scale=c(3.5,0.7))
@@ -684,10 +681,11 @@ wordcloud(words = adj_now_df$lemma, adj_now_df$n, min.freq = 3,
 
 Adjectives used before 2000 exhibit greater diversity and complexity, featuring descriptors like approximate, entire, exact, round, huge, and slow. In contrast, post-2000 adjectives tend to be brief, including terms such as clear, slow, and big. The prevalence of contemporary words like anonymous in post-2000 data may be attributed to the surge in UFO reports with the rise of internet usage. This shift could also be influenced by disparities in average education levels between individuals reporting before and after 2000, coupled with the increased availability of photographic information in recent years. Additionally, post-2000 messages tend to be more concise and direct, possibly to expedite information dissemination.
 
-## Regression
+## **Data Cleaning**
 
-Here is a helper function that returns if the words mentioned in the list is in text using `str_detect`
-We will also get top 20 adjectives for further analysis.
+We want to see if mentioning certain adjectives will affect the duration of sighting. We will use the top 20 adjectives as our variables.
+
+Here is a helper function that returns if the words mentioned in the list is in text using `str_detect`.
 ```{r}
 detect_presence = function(list, text){
   return_list = c()
@@ -702,7 +700,7 @@ adj_top_list = adj_df |>
   dplyr::pull(lemma)
 ```
 
-Each of the text are checked if it contains the top 20 adjectives. We created a binary table indicating the presence of the adjective at the given observation.
+Each of the text are checked if it contains the top 20 adjectives. We created a binary table indicating the presence of the adjective at the given observation. Here is a preview of 100 samples of the data.
 ```{r}
 adj_top_df = df_ufo |> 
   dplyr::select(duration_clean, text) |>
@@ -717,10 +715,13 @@ adj_top_df = adj_top_df |>
 
 adj_top_df |>
   head(100) |>
+  right_join(df_ufo |> head(100)) |>
   kbl() |>
   kable_material(c("striped", "hover")) |>
   scroll_box(width = "100%", height = "400px")
 ```
+
+## **Regression**
 
 We will correct the duration just as the color analysis section.
 
@@ -782,7 +783,7 @@ cv_df |>
   mutate(model = fct_inorder(model)) |> 
   ggplot(aes(x = model, y = rmse)) + geom_violin()  +
   labs(title="RMSE of Cross Validation Model Adj vs Duration",
-        x ="RMSE", y = "Model")
+        x ="Model", y = "RMSE")
 
 adj_top_df |>
   pivot_longer(
