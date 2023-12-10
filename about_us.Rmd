@@ -13,43 +13,45 @@ img.portrait{
   float:right;
 }
 ```
-# Our Team
-
 Welcome to our project! Meet the team behind the scenes, dedicated to making this project a success.
 
 ```{=html}
 <table style="width:90%">
   <tr>
     <td><h3>Derek Lamb</h3></td>
-    <td rowspan="2"><img src="images/drl.jpg" class="portrait"></td>
+    <td></td>
   </tr>
   <tr>
     <td><a href="https://lambdr.github.io">Derek Lamb</a> is a first year student pursuing his masters in biostatistics. While not thinking about UFOs, Derek enjoys board games and attending theatre performances.</td>
+    <td><img src="images/drl.jpg" class="portrait"></td>
 
     
   </tr>
   <tr>
     <td><h3>Hongzhu Ren</h3></td>
-    <td rowspan="2"><img src="images/tony.jpg" class="portrait"></td>
+    <td></td>
   </tr>
   <tr>
     <td><a href="https://tonybia22.github.io/hr2569-p8105.github.io/">Hongzhu Ren</a> is a first year student in biostatistics MS program. Hongzhu is adicted to action figuers and videogames. (Pretty sure some of them are aliens stuff.)</td>
+    <td><img src="images/tony.jpg" class="portrait"></td>
   </tr>
   
   <tr>
     <td><h3>Jessie Li</h3></td>
-    <td rowspan="2"><img src="images/jessie.jpg" class="portrait"></td>
+    <td></td>
   </tr>
   <tr>
     <td><a href="https://jessie-k-li.github.io/">Jessie Li</a> is a Biostatistics student who loves exploring all data visualization out there. Jessie loves to doodle some anime art in her freetime.</td>
+    <td><img src="images/jessie.jpg" class="portrait"></td>
   </tr>
   
   <tr>
     <td><h3>Nisha Lingam</h3></td>
-    <td rowspan="2"><img src="images/nl.jpg" class="portrait"></td>
+    <td></td>
   </tr>
   <tr>
     <td><a href="https://www.linkedin.com/in/nisha-l-420462167/">Nisha Lingam</a> is an M.S. Biostatistics student interested in environmental health and genomics. She likes to play the piano, read, and write in her spare time.</td>
+    <td><img src="images/nl.jpg" class="portrait"></td>
   </tr>
   
   <tr>
@@ -63,9 +65,9 @@ Welcome to our project! Meet the team behind the scenes, dedicated to making thi
 </table>
 ```
 
-## Contact Us
+### Contact Us
 
-For more information or to get in touch with any of our team members, please [contact us](contact.html).
+For more information or to get in touch with any of our team members, please [contact Us](xz3173@cumc.columbia.edu).
 
 ---
 
