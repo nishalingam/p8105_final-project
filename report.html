@@ -35,8 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 <html>
 <head>
 <link rel="shortcut icon" href="images/favicon.png" />
@@ -436,7 +436,7 @@ img.center {
 <h3>Motivation</h3>
 <p>Our project explores the reporting of unidentified flying objects
 (UFOs) throughout the U.S. UFOs, by their very nature, leave unanswered
-questions, some of which we hope to explore through this project. With
+questions, some of which we hoped to explore through this project. With
 the wealth of information gathered about these phenomena and motivated
 by the <a
 href="https://www.cnn.com/2023/07/26/politics/ufo-house-hearing-congress/index.html">congressional
@@ -535,9 +535,10 @@ region.</p>
 <p><img src="trend_space_files/figure-html/us%20heatmap-1.png" class="center"></p>
 <p>Then, as we compared sightings made in a rural area with those made
 in a rural one, we began to see differences between these groups.
-Encounters in rural areas were longer, and had differing characteristics
-than those in urban/suburban areas. These differences were explored
-further in a comprehensive textual analysis of the reports.</p>
+Encounters in rural areas were longer (p-value: 3.39e-10), and had
+differing characteristics than those in urban/suburban areas (p-value:
+3.08e-7). These differences were explored further in a comprehensive
+textual analysis of the reports.</p>
 <p><img src="trend_space_files/figure-html/distance%20histogram-1.png" class="center"></p>
 </div>
 <div id="trend-and-adjusted-trend-over-years-by-states"
@@ -561,7 +562,7 @@ million population, indicating a potential hotspot.</p>
 </div>
 <div id="trend-and-adjusted-trend-over-months-by-states"
 class="section level4">
-<h4>Trend and Adjusted Trend Over Months by States:</h4>
+<h4>Trend and Adjusted Trend Over Months by States</h4>
 <p><img src="trend_time_files/figure-html/Trend%20over%20months%20by%20states-1.png" class="center"></p>
 <p>Sightings showed seasonal variations, with summer having the highest
 reported sightings in most states. Some states, such as Florida,
@@ -575,11 +576,14 @@ sightings per 1 million in winter, potentially related to polar
 night.</p>
 </div>
 <div id="trend-over-hours-by-states" class="section level4">
-<h4>Trend Over Hours by States:</h4>
+<h4>Trend Over Hours by States</h4>
 <p><img src="trend_time_files/figure-html/Trend%20over%20hours%20by%20states%20-1.png" class="center"></p>
 <p>UFO sightings were more commonly reported during the evening hours,
 peaking around 21:00. Sightings during daytime hours, particularly from
-6:00 to 15:00, were relatively low. Trend Over Weekdays by States:</p>
+6:00 to 15:00, were relatively low.</p>
+</div>
+<div id="trend-over-weekdays-by-states" class="section level4">
+<h4>Trend Over Weekdays by States</h4>
 <p><img src="trend_time_files/figure-html/Trend%20over%20weekdays%20by%20states-1.png" class="center"></p>
 <p>The average sightings increased gradually from Monday to Saturday,
 peaking on Saturday, then decreasing on Sunday. California showed a
@@ -587,7 +591,7 @@ decline from Sunday to Monday, with an increase during the weekdays and
 a peak on Saturday.</p>
 </div>
 <div id="trend-over-time-by-ufo-shapes" class="section level4">
-<h4>Trend Over Time by UFO Shapes:</h4>
+<h4>Trend Over Time by UFO Shapes</h4>
 <p><img src="trend_time_files/figure-html/unnamed-chunk-10-1.png" class="center"></p>
 <p>Light, circles, and triangles were the most observed UFO shapes,
 following a similar trend of rapid increase, peaking around 2014,
@@ -652,13 +656,11 @@ visible), and peculiarity (strange, different).</p>
 </div>
 <div id="correlation-regression-analysis" class="section level4">
 <h4>Correlation &amp; Regression Analysis</h4>
-<p><strong>Color vs Rural/Urban</strong> We generated a pie chart using
-Plotly to visualize and compare the color composition differences
-between rural and urban areas. To ascertain any potential relationship
-between color and location, we conducted a Chi-Square Test, yielding a
-significant p-value of 2.39e-09. As the location variable is binary, we
-proceeded to perform a logistic regression analysis between the
-variables. Through this analysis, we uncovered that gray and black
+<p><strong>Color vs Rural/Urban</strong> To ascertain any potential
+relationship between color and location, we conducted a Chi-Square Test,
+yielding a significant p-value of 2.39e-09. As the location variable is
+binary, we proceeded to perform a logistic regression analysis between
+the variables. Through this analysis, we uncovered that gray and black
 colors exert a positive influence on the likelihood of sightings in
 rural locations, potentially due to their alignment with rural
 surroundings. Conversely, colors frequently mentioned, such as white,
@@ -672,12 +674,12 @@ that color frequency may impact the relationship between color and
 duration. To address this, we standardized colors based on their overall
 frequency. Subsequently, we conducted a comprehensive linear regression
 analysis between duration and color, employing stepwise backward
-regression based on AIC. Both the full regression and the backward
-elimination regression models revealed an R-squared value of 0.042,
-indicating a markedly weak correlation. Notably, the estimates suggest
-that colors like green and gray significantly reduce the duration of
-sightings, while the color red, conversely, increases the duration of
-observations.”</p>
+regression based on AIC.</p>
+<p>Both the full regression and the backward elimination regression
+models revealed an R-squared value of 0.042, indicating a markedly weak
+correlation. Notably, the estimates suggest that colors like green and
+gray significantly reduce the duration of sightings, while the color
+red, conversely, increases the duration of observations.”</p>
 <p><strong>Color vs Shape</strong></p>
 <p><img src="text_analysis_files/figure-html/unnamed-chunk-22-1.png" class="center"></p>
 <p>We constructed a heatmap/correlation matrix to examine the
@@ -850,37 +852,34 @@ Misspelled words may not be identified by the algorithm.</p>
 <p>Our project delves into the intriguing subject of UFO sightings. By
 their very nature, these unidentified objects ask questions of the
 observer. We have used a data-driven approach to explore trends in these
-reports and open new avenues for inquiry. Our results demonstrate that
-UFO sightings are not uniform throughout the U.S., nor do they perfectly
-correlate with population density. There are certain locations where UFO
-sightings occur with higher frequency, and the heterogeneity of these
-encounters asks even more questions of us as data enthusiasts. After
-everything is said and done, we’re left curious. A mystery that
+reports and open new avenues for inquiry.</p>
+<p>Our results demonstrate that UFO sightings are not uniform throughout
+the U.S., nor do they perfectly correlate with population density. There
+are certain locations where UFO sightings occur with higher frequency,
+and the heterogeneity of these encounters asks even more questions of us
+as data enthusiasts.</p>
+<p>After everything is said and done, we’re left curious. A mystery that
 captivates our curiosity even after all the evidence we’ve examined
 about UFO sightings is still present. We still don’t know enough about
 this subject, which is what makes it so fascinating. We hope that our
 work raises more issues and encourages more research down the road.</p>
-</div>
-<div id="acknowledgments" class="section level3">
-<h3>Acknowledgments</h3>
+<div id="acknowledgments" class="section level4">
+<h4>Acknowledgments</h4>
 <p>As we draw to the end of our exploration journey into UFO encounters,
 we want to express our sincere and heartfelt thanks to everyone who
-helped with this project. Our group members’ collaborative spirit and
-insightful contributions have been invaluable, your dedication and hard
-work have been the foundation of this analysis project.</p>
-<p>We are also incredibly grateful to Professor Jeff Goldsmith and the
-TAs of P8105 for all of your hard work and contributions to our
-education. In addition to providing guidance for this project, the
-understanding and information we have acquired in this class have
-expanded our comprehension of data and analysis and its practical
-applications.</p>
-<p>This class has been a journey of discovery, in which we have learned
-the importance of data selection, the strength of statistical analysis,
-and the significance of interpreting our findings in a broader context.
-These lessons will undoubtedly carry forward in our academic and
-professional pursuits.</p>
+helped with this project. We are incredibly grateful to Professor Jeff
+Goldsmith and the TAs of P8105 for all of their hard work and
+contributions to our education. In addition to providing guidance for
+this project, the understanding and information we have acquired in this
+class have expanded our comprehension of data and analysis and its
+practical applications. This class has been a journey of discovery, in
+which we have learned the importance of data selection, the strength of
+statistical analysis, and the significance of interpreting our findings
+in a broader context. These lessons will undoubtedly carry forward in
+our academic and professional pursuits.</p>
 <hr />
 <p><a href="index.html">Back to Home</a></p>
+</div>
 </div>
 
 
